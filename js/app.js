@@ -169,3 +169,9 @@ $(function () {
     return false;
   });
 });
+
+let currentYear = new Date();
+let getYear = currentYear.getFullYear();
+const experience = getYear - 2016;
+document.getElementById("experience").innerHTML = experience;
+document.getElementById("full_year").innerHTML = getYear;
