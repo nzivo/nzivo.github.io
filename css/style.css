@@ -1,5 +1,40 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+/* @import url("https://fonts.googleapis.com/css?family=Poppins"); */
+/* poppins-regular - latin */
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/poppins-v15-latin-regular.eot"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../fonts/poppins-v15-latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../fonts/poppins-v15-latin-regular.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */ url("../fonts/poppins-v15-latin-regular.woff")
+      format("woff"),
+    /* Modern Browsers */ url("../fonts/poppins-v15-latin-regular.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../fonts/poppins-v15-latin-regular.svg#Poppins") format("svg"); /* Legacy iOS */
+}
+/* open-sans-regular - latin */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/open-sans-v18-latin-regular.eot"); /* IE9 Compat Modes */
+  src: local(""),
+    url("../fonts/open-sans-v18-latin-regular.eot?#iefix")
+      format("embedded-opentype"),
+    /* IE6-IE8 */ url("../fonts/open-sans-v18-latin-regular.woff2")
+      format("woff2"),
+    /* Super Modern Browsers */ url("../fonts/open-sans-v18-latin-regular.woff")
+      format("woff"),
+    /* Modern Browsers */ url("../fonts/open-sans-v18-latin-regular.ttf")
+      format("truetype"),
+    /* Safari, Android, iOS */
+      url("../fonts/open-sans-v18-latin-regular.svg#OpenSans") format("svg"); /* Legacy iOS */
+}
 * {
   margin: 0px;
   padding: 0px;
@@ -29,11 +64,11 @@ html {
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 200;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
   color: #f29f05;
   background-color: #212026;
-  background: url("../img/backgrounds/whiteYellow.svg");
+  background: url("../img/backgrounds/BlackYellow.svg");
 }
 h1,
 h2,
@@ -41,7 +76,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Poppins", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 p {
@@ -152,6 +187,7 @@ h1 {
   padding-left: 15px;
   padding-right: 15px;
   padding-top: 5px;
+  color: #393742;
 }
 
 .hr-0-margin {
@@ -182,6 +218,9 @@ h1 {
 }
 .navbar .navbar-brand {
   font-size: 1.2rem;
+}
+.navbar-brand img {
+  height: 30px;
 }
 .navbar .navbar-toggler {
   position: relative;
@@ -407,7 +446,7 @@ h1 {
   left: 0px;
   width: 100%;
   height: 100%;
-  background-color: rgba(33, 32, 38, 1);
+  background-image: url("../img/backgrounds/BlackYellow.svg");
 
   -webkit-transition: all 0.25s ease-in-out;
   -moz-transition: all 0.25s ease-in-out;
@@ -442,10 +481,9 @@ h1 {
 #search input[type="search"] {
   position: absolute;
   top: 50%;
-  width: 100%;
+  width: 75%;
   color: rgb(255, 255, 255);
   background: rgba(0, 0, 0, 0);
-  font-size: 60px;
   font-weight: 300;
   text-align: center;
   border: 0px;
@@ -455,15 +493,20 @@ h1 {
   padding-right: 30px;
   outline: none;
 }
-#search .btn {
+
+.search-btn {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 100px;
-  max-width: 200px;
+  top: 60%;
+  left: 40%;
+  width: 75px;
+  height: 75px;
   margin-top: 61px;
-  margin-left: -45px;
+  margin-left: -40px;
+  border-radius: 50%;
+  color: #212026;
+  background-color: #f29f05;
 }
+
 #search .close {
   position: fixed;
   top: 15px;
@@ -689,11 +732,17 @@ h1 {
   .home-5-title {
     font-size: 50px;
   }
+  #search input[type="search"] {
+    font-size: 40px;
+  }
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
   .home-5-title {
     font-size: 60px;
+  }
+  #search input[type="search"] {
+    font-size: 50px;
   }
 }
 
@@ -701,16 +750,25 @@ h1 {
   .home-5-title {
     font-size: 70px;
   }
+  #search input[type="search"] {
+    font-size: 60px;
+  }
 }
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .home-5-title {
     font-size: 80px;
   }
+  #search input[type="search"] {
+    font-size: 70px;
+  }
 }
 
 @media (min-width: 1200px) {
   .home-5-title {
     font-size: 90px;
+  }
+  #search input[type="search"] {
+    font-size: 80px;
   }
 }
