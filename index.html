@@ -128,17 +128,30 @@
             </div>
             <div id="search">
               <button type="button" class="close">×</button>
-              <form class="form-inline">
-                <input
-                  class="form-control"
-                  type="search"
-                  value=""
-                  placeholder="Start Typing ..."
-                />
-                <button type="submit" class="search-btn">
-                  <i class="fas fas-search" aria-hidden="true"></i>
-                </button>
-              </form>
+              <div class="search-inner">
+                <form class="search-form">
+                  <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                  <input
+                    id="search-input"
+                    class="form-control"
+                    type="search"
+                    value=""
+                    autocomplete="off"
+                    placeholder="Search sections, skills, links..."
+                  />
+                </form>
+
+                <div id="search-popular" class="search-popular">
+                  <span class="search-label">Popular</span>
+                  <div id="search-pills" class="search-pills"></div>
+                </div>
+
+                <div id="search-results" class="search-results"></div>
+
+                <p id="search-empty" class="search-empty">No results found.</p>
+
+                <div class="search-hint"><kbd>Esc</kbd> to close</div>
+              </div>
             </div>
           </nav>
           <section class="section home-5-bg" id="home">
@@ -245,7 +258,7 @@
             <div class="col-md-4">
               <h3 class="pb-3">Graphic Design</h3>
               <!-- Illustrator card -->
-              <div class="card l-bg-orange-dark">
+              <div class="card l-bg-orange-dark" id="skill-illustrator">
                 <div class="card-statistic-3 p-4">
                   <div class="card-icon card-icon-large">
                     <i class="icon-large devicon-illustrator-plain"></i>
@@ -276,7 +289,7 @@
                 </div>
               </div>
               <!-- Photoshop card -->
-              <div class="card l-bg-blue-dark">
+              <div class="card l-bg-blue-dark" id="skill-photoshop">
                 <div class="card-statistic-3 p-4">
                   <div class="card-icon card-icon-large">
                     <i class="icon-large devicon-photoshop-plain"></i>
@@ -307,7 +320,7 @@
                 </div>
               </div>
               <!-- After Effects card -->
-              <div class="card l-bg-cherry">
+              <div class="card l-bg-cherry" id="skill-aftereffects">
                 <div class="card-statistic-3 p-4">
                   <div class="card-icon card-icon-large">
                     <i class="icon-large devicon-aftereffects-plain"></i>
@@ -341,7 +354,7 @@
             <div class="col-md-4">
               <h3 class="pb-3">Development</h3>
               <!-- React card -->
-              <div class="card l-bg-react">
+              <div class="card l-bg-react" id="skill-react">
                 <div class="card-statistic-3 p-4">
                   <div class="card-icon card-icon-large">
                     <i class="icon-large devicon-react-plain"></i>
@@ -372,7 +385,7 @@
                 </div>
               </div>
               <!-- Vue card -->
-              <div class="card l-bg-vue">
+              <div class="card l-bg-vue" id="skill-vue">
                 <div class="card-statistic-3 p-4">
                   <div class="card-icon card-icon-large">
                     <i class="icon-large devicon-vuejs-plain"></i>
@@ -405,7 +418,7 @@
             </div>
             <div class="col-md-4">
               <h3 class="pb-3">CodeBases</h3>
-              <div class="card l-bg-green-dark">
+              <div class="card l-bg-green-dark" id="skill-github">
                 <div class="card-statistic-3 p-4">
                   <div class="card-icon card-icon-large">
                     <i class="icon-large devicon-github-original"></i>
