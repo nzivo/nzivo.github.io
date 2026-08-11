@@ -147,11 +147,107 @@ particlesJS(
   }
 );
 
+const searchIndex = [
+  { type: "Section", title: "Home", text: "Back to the top — intro & profile", target: "#home" },
+  { type: "Section", title: "Portfolio", text: "Design & development skill breakdown", target: "#content" },
+  { type: "Skill", title: "Illustrator", text: "Graphic design — vector illustration", target: "#skill-illustrator" },
+  { type: "Skill", title: "Photoshop", text: "Graphic design — photo editing & compositing", target: "#skill-photoshop" },
+  { type: "Skill", title: "After Effects", text: "Graphic design — motion graphics & animation", target: "#skill-aftereffects" },
+  { type: "Skill", title: "React JS", text: "Development — front-end JavaScript library", target: "#skill-react" },
+  { type: "Skill", title: "Vue JS", text: "Development — front-end JavaScript framework", target: "#skill-vue" },
+  { type: "Skill", title: "Github", text: "Codebases — open source repositories", target: "#skill-github" },
+  { type: "Social", title: "Twitter", text: "twitter.com/johnnnzivo", href: "https://twitter.com/johnnnzivo" },
+  { type: "Social", title: "Github Profile", text: "github.com/nzivo", href: "https://github.com/nzivo" },
+  { type: "Social", title: "CodePen", text: "codepen.io/johnnnzivo", href: "https://codepen.io/johnnnzivo" },
+  { type: "Social", title: "Behance", text: "behance.net/johnnnzivo", href: "https://www.behance.net/johnnnzivo" },
+];
+
+const popularSearches = ["Portfolio", "React JS", "Illustrator", "Github", "Vue JS"];
+
+function searchSite(query, limit = 8) {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+
+  return searchIndex
+    .filter(
+      (item) =>
+        item.title.toLowerCase().includes(q) || item.text.toLowerCase().includes(q)
+    )
+    .slice(0, limit);
+}
+
 $(function () {
+  const $searchOverlay = $("#search");
+  const $searchInput = $("#search-input");
+  const $searchPopular = $("#search-popular");
+  const $searchPills = $("#search-pills");
+  const $searchResults = $("#search-results");
+  const $searchEmpty = $("#search-empty");
+
+  popularSearches.forEach((label) => {
+    $("<button>", { type: "button", text: label })
+      .on("click", function () {
+        $searchInput.val(label).trigger("input").trigger("focus");
+      })
+      .appendTo($searchPills);
+  });
+
+  function goToResult(item) {
+    $searchOverlay.removeClass("open");
+    if (item.href) {
+      window.open(item.href, "_blank", "noopener");
+      return;
+    }
+    const target = document.querySelector(item.target);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function renderResults(query) {
+    const results = searchSite(query);
+    $searchResults.empty();
+
+    if (query.trim() === "") {
+      $searchPopular.show();
+      $searchResults.hide();
+      $searchEmpty.hide();
+      return;
+    }
+
+    $searchPopular.hide();
+
+    if (results.length === 0) {
+      $searchResults.hide();
+      $searchEmpty.text(`No results for "${query}".`).show();
+      return;
+    }
+
+    $searchEmpty.hide();
+    $searchResults.show();
+
+    results.forEach((item) => {
+      const $result = $("<button>", { type: "button", class: "search-result" });
+      $("<span>", { class: "search-result-tag", text: item.type }).appendTo($result);
+      const $body = $("<span>", { class: "search-result-body" });
+      $("<strong>", { text: item.title }).appendTo($body);
+      $("<span>", { text: item.text }).appendTo($body);
+      $body.appendTo($result);
+      $result.on("click", () => goToResult(item));
+      $result.appendTo($searchResults);
+    });
+  }
+
+  $searchInput.on("input", function () {
+    renderResults($(this).val());
+  });
+
   $('a[href="#search"]').on("click", function (event) {
     event.preventDefault();
-    $("#search").addClass("open");
-    $('#search > form > input[type="search"]').focus();
+    $searchOverlay.addClass("open");
+    $searchInput.val("");
+    renderResults("");
+    setTimeout(() => $searchInput.trigger("focus"), 60);
   });
 
   $("#search, #search button.close").on("click keyup", function (event) {
