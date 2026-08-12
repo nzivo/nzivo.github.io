@@ -14,6 +14,24 @@
   background: rgba(18, 16, 22, 0.92);
 }
 
+@media (max-width: 640px) {
+  .header-inner {
+    max-height: var(--header-h);
+    transition: max-height 0.2s ease, opacity 0.2s ease;
+  }
+
+  .site-header.is-over-hero {
+    border-bottom-color: transparent;
+  }
+
+  .site-header.is-over-hero .header-inner {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
+
 .header-inner {
   display: flex;
   align-items: center;
@@ -34,7 +52,14 @@
 .logo-mark {
   height: 28px;
   width: 28px;
-  object-fit: contain;
+  flex: none;
+}
+
+.logo-mark-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 11px;
+  fill: var(--accent-ink);
 }
 
 .main-nav ul {

@@ -67,6 +67,8 @@ export default function Home() {
               <img src="/images/profile.jpg" alt="Portrait of John Nzivo" />
             </div>
             <div className="hero-portrait-meta">
+              <p className="hero-name">John Nzivo</p>
+              <p className="hero-title">Consultant</p>
               <p className="hero-experience">
                 <strong>{experienceYears}+ yrs</strong> experience in
               </p>
