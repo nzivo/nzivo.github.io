@@ -237,9 +237,9 @@
 
   .hero-portrait-meta {
     height: 25%;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 4px;
-    padding: 12px 16px;
+    padding: 16px 16px 10px;
     border-top: 1px solid var(--border);
   }
 
