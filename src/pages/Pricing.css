@@ -1,0 +1,65 @@
+.pricing-head p {
+  max-width: 560px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 96px;
+}
+
+.pricing-faq {
+  max-width: 720px;
+  margin: 0 auto 96px;
+}
+
+.pricing-faq h2 {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.pricing-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pricing-faq-item {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pricing-faq-item:last-child {
+  border-bottom: none;
+}
+
+.pricing-faq-item h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.pricing-faq-item p {
+  margin-bottom: 0;
+  font-size: 14.5px;
+}
+
+.pricing-cta {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.pricing-cta h2 {
+  font-size: 26px;
+}
+
+@media (max-width: 960px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

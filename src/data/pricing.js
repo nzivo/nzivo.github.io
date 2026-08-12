@@ -1,0 +1,48 @@
+export const pricingTiers = [
+  {
+    name: 'Starter',
+    price: '$450',
+    cadence: 'per project',
+    tagline: 'A focused site or landing page, done right.',
+    features: [
+      'Up to 5 pages / sections',
+      'Responsive, modern design',
+      'Basic on-page SEO',
+      'Contact form integration',
+      '1 round of revisions',
+      '2 weeks delivery',
+    ],
+    highlight: false,
+  },
+  {
+    name: 'Professional',
+    price: '$1,200',
+    cadence: 'per project',
+    tagline: 'Custom frontend + backend for a growing product.',
+    features: [
+      'Full custom design system',
+      'Frontend + backend (API + DB)',
+      'Auth & admin dashboard',
+      'Deployment & CI setup',
+      '3 rounds of revisions',
+      '4–6 weeks delivery',
+      'Priority support for 30 days',
+    ],
+    highlight: true,
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    cadence: 'scoped engagement',
+    tagline: 'Ongoing product work, integrations, or a team extension.',
+    features: [
+      'Everything in Professional',
+      'Multi-service architecture',
+      'Third-party integrations',
+      'Performance & security audit',
+      'Dedicated weekly check-ins',
+      'Ongoing retainer available',
+    ],
+    highlight: false,
+  },
+]

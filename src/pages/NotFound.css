@@ -1,0 +1,19 @@
+.not-found-inner {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.not-found-code {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 96px;
+  font-weight: 800;
+  color: var(--accent);
+  opacity: 0.85;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.not-found-inner .btn {
+  margin-top: 12px;
+}
