@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hidden Advertising</title>
+    <style>
+      :root {
+        --bg: #eef0ec;
+        --surface: #fcfcfa;
+        --surface-2: #e5e8e1;
+        --ink: #151e2b;
+        --ink-muted: #4c5666;
+        --ink-faint: #7c8595;
+        --rule: #cfd3c9;
+        --accent: #33538f;
+        --accent-ink: #1f3766;
+        --accent-tint: #dde4f1;
+        --copper: #a85a24;
+        --copper-tint: #f3e2d1;
+        --good: #2f6f4e;
+        --bad: #a13a3a;
+        --bad-tint: #f4dede;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #11151d;
+          --surface: #171c26;
+          --surface-2: #1e2530;
+          --ink: #e8e6df;
+          --ink-muted: #a9b0bd;
+          --ink-faint: #767f8f;
+          --rule: #2b3240;
+          --accent: #8ba3dc;
+          --accent-ink: #cdd9f2;
+          --accent-tint: #202b42;
+          --copper: #e3a05f;
+          --copper-tint: #362a1c;
+          --good: #6fbf8f;
+          --bad: #e08484;
+          --bad-tint: #3a2020;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #11151d;
+        --surface: #171c26;
+        --surface-2: #1e2530;
+        --ink: #e8e6df;
+        --ink-muted: #a9b0bd;
+        --ink-faint: #767f8f;
+        --rule: #2b3240;
+        --accent: #8ba3dc;
+        --accent-ink: #cdd9f2;
+        --accent-tint: #202b42;
+        --copper: #e3a05f;
+        --copper-tint: #362a1c;
+        --good: #6fbf8f;
+        --bad: #e08484;
+        --bad-tint: #3a2020;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .sans {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      a {
+        color: var(--accent-ink);
+      }
+
+      .masthead {
+        background: var(--ink);
+        color: var(--bg);
+        padding: 3rem 1.5rem 2.4rem;
+        position: relative;
+        overflow: hidden;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .masthead {
+          background: #0a0d13;
+        }
+      }
+      :root[data-theme="dark"] .masthead {
+        background: #0a0d13;
+      }
+      .masthead::after {
+        content: "";
+        position: absolute;
+        right: -2rem;
+        top: -2.5rem;
+        width: 11rem;
+        height: 11rem;
+        border: 2px dashed #3a4256;
+        opacity: 0.4;
+        clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      }
+      .masthead-inner {
+        max-width: 780px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .eyebrow {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.72rem;
+        color: #b9c2d6;
+        margin: 0 0 0.9rem;
+      }
+      .masthead h1 {
+        font-size: clamp(2.1rem, 5vw, 3rem);
+        line-height: 1.1;
+        margin: 0 0 0.7rem;
+        text-wrap: balance;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+      .masthead .sub {
+        font-size: 1.05rem;
+        color: #cfd6e6;
+        max-width: 54ch;
+        margin: 0 0 1.6rem;
+      }
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.8rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.78rem;
+      }
+      .meta-pill {
+        border: 1px solid #3a4256;
+        color: #dbe1ee;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      main {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 5rem;
+      }
+      section + section {
+        margin-top: 3.4rem;
+      }
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        gap: 0.9rem;
+        margin-bottom: 1.3rem;
+      }
+      .section-num {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.78rem;
+        color: var(--copper);
+        letter-spacing: 0.08em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .section-head h2 {
+        font-size: 1.45rem;
+        font-weight: 400;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .rule {
+        border: none;
+        border-top: 1px solid var(--rule);
+        margin: 0 0 1.3rem;
+      }
+
+      p {
+        margin: 0 0 1rem;
+        color: var(--ink);
+        max-width: 68ch;
+      }
+      .lede {
+        font-size: 1.06rem;
+        color: var(--ink-muted);
+      }
+
+      blockquote {
+        margin: 1.6rem 0;
+        padding: 0.2rem 0 0.2rem 1.1rem;
+        border-left: 3px solid var(--accent);
+        font-style: italic;
+        color: var(--ink-muted);
+        max-width: 60ch;
+      }
+      blockquote cite {
+        display: block;
+        font-style: normal;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        color: var(--ink-faint);
+        margin-top: 0.4rem;
+      }
+
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.9rem;
+        margin: 1.4rem 0 1.8rem;
+      }
+      @media (max-width: 640px) {
+        .stat-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        padding: 0.9rem 1rem;
+      }
+      .stat .num {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--accent-ink);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .stat .num.bad {
+        color: var(--bad);
+      }
+      .stat .label {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.76rem;
+        color: var(--ink-muted);
+        margin-top: 0.35rem;
+        line-height: 1.35;
+      }
+
+      .channel {
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        background: var(--surface);
+        padding: 1.2rem 1.3rem;
+        margin-bottom: 1.1rem;
+      }
+      .channel h3 {
+        font-size: 1.05rem;
+        margin: 0 0 0.15rem;
+        color: var(--ink);
+      }
+      .channel .tag {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--copper);
+        margin-bottom: 0.7rem;
+        display: block;
+      }
+      .channel p {
+        font-size: 0.96rem;
+        margin-bottom: 0;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        background: var(--surface);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 600px;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.84rem;
+      }
+      thead th {
+        text-align: left;
+        background: var(--ink);
+        color: var(--bg);
+        font-weight: 500;
+        padding: 0.6rem 0.85rem;
+        letter-spacing: 0.02em;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) thead th {
+          background: #0a0d13;
+        }
+      }
+      :root[data-theme="dark"] thead th {
+        background: #0a0d13;
+      }
+      thead th:first-child {
+        border-top-left-radius: 3px;
+      }
+      thead th:last-child {
+        border-top-right-radius: 3px;
+      }
+      tbody td {
+        padding: 0.6rem 0.85rem;
+        border-top: 1px solid var(--rule);
+        color: var(--ink);
+        vertical-align: top;
+      }
+      tbody tr:nth-child(even) {
+        background: var(--surface-2);
+      }
+      tbody td:first-child {
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .source-note {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.74rem;
+        color: var(--ink-faint);
+        margin: 0.6rem 0 0;
+      }
+
+      ol.moves {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: move;
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+      }
+      ol.moves li {
+        counter-increment: move;
+        padding-left: 2.6rem;
+        position: relative;
+      }
+      ol.moves li::before {
+        content: counter(move, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.05rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.78rem;
+        color: var(--copper);
+        font-variant-numeric: tabular-nums;
+      }
+      ol.moves strong {
+        display: block;
+        color: var(--ink);
+        margin-bottom: 0.15rem;
+      }
+      ol.moves span {
+        color: var(--ink-muted);
+        font-size: 0.96rem;
+      }
+
+      .callout {
+        background: var(--copper-tint);
+        border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+        border-radius: 4px;
+        padding: 1rem 1.1rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.9rem;
+        color: var(--ink);
+        margin-top: 1.6rem;
+      }
+      .callout b {
+        color: var(--copper);
+      }
+
+      .li-card {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        overflow: hidden;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+      .li-head {
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem 1rem 0.6rem;
+      }
+      .li-avatar {
+        width: 2.6rem;
+        height: 2.6rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        flex: none;
+      }
+      .li-name {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .li-role {
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+      }
+      .li-time {
+        font-size: 0.72rem;
+        color: var(--ink-faint);
+      }
+      .li-body {
+        padding: 0 1rem 0.9rem;
+        font-size: 0.87rem;
+        color: var(--ink);
+        white-space: pre-wrap;
+      }
+      .li-body .hashtag,
+      .li-body .mention {
+        color: var(--accent-ink);
+        font-weight: 600;
+      }
+      .li-foot {
+        border-top: 1px solid var(--rule);
+        padding: 0.6rem 1rem;
+        display: flex;
+        gap: 1.3rem;
+        font-size: 0.78rem;
+        color: var(--ink-faint);
+      }
+
+      .sources {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 0 1.5rem 1rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+      }
+      .sources h4 {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--ink-muted);
+        margin: 0 0 0.5rem;
+      }
+      .sources ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      footer {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 1rem 1.5rem 3rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+        border-top: 1px solid var(--rule);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="masthead">
+      <div class="masthead-inner">
+        <p class="eyebrow">NR! Module &middot; Field Research</p>
+        <h1>Hidden Advertising</h1>
+        <p class="sub">
+          Tobacco advertising didn't disappear when governments banned it — it
+          moved. A field research trace of where the budget actually went,
+          grounded in WHO's 2021 Global Tobacco Epidemic Report.
+        </p>
+        <div class="meta-row">
+          <span class="meta-pill"
+            >Primary source: WHO Global Tobacco Report 2021</span
+          >
+          <span class="meta-pill">+ 4 field-research articles</span>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section id="pattern">
+        <div class="section-head">
+          <span class="section-num sans">01</span>
+          <h2>The pattern: ban one channel, the budget finds the next</h2>
+        </div>
+        <hr class="rule" />
+        <p class="lede">
+          Every source in this research converges on the same mechanism, and
+          WHO's own report states it as a formal finding, not a suspicion:
+          partial advertising bans don't reduce advertising spend — they
+          redirect it.
+        </p>
+        <blockquote>
+          "TAPS bans must be comprehensive because partial bans have little or
+          no effect. When bans are not comprehensive, tobacco companies exploit
+          legal loopholes or simply shift their investments to forms of
+          promotion that are not banned."
+          <cite>— WHO, Global Tobacco Epidemic Report 2021</cite>
+        </blockquote>
+        <p>
+          The 1998 Master Settlement Agreement banned billboards, transit ads,
+          and paid product placement in US media. None of that money left the
+          industry's marketing budget — it moved to the store, the screen, and
+          the sponsorship line, in that order.
+        </p>
+      </section>
+
+      <section id="pos">
+        <div class="section-head">
+          <span class="section-num sans">02</span>
+          <h2>Where the money actually is: the retail shelf</h2>
+        </div>
+        <hr class="rule" />
+        <div class="stat-row">
+          <div class="stat">
+            <div class="num">$8.3bn</div>
+            <div class="label">
+              spent on US retail/point-of-sale marketing in 2022 — 97% of total
+              industry marketing spend
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num">92.1%</div>
+            <div class="label">
+              of cigarette marketing expenditure was already point-of-sale
+              before this latest rise, per peer-reviewed research
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num">~3&times;</div>
+            <div class="label">
+              more cigarette marketing material found in stores adolescents shop
+              at frequently, vs. other stores in the same community
+            </div>
+          </div>
+        </div>
+        <p>
+          Point-of-sale isn't a minor channel filling a gap — it's now nearly
+          the <em>entire</em> marketing budget, built from price discounts to
+          retailers, promotional payments for shelf and checkout placement, and
+          displays positioned at youth eye-level. It's advertising that never
+          has to say a brand name on television, because it doesn't need to.
+        </p>
+      </section>
+
+      <section id="notads">
+        <div class="section-head">
+          <span class="section-num sans">03</span>
+          <h2>Advertising that isn't legally "advertising"</h2>
+        </div>
+        <hr class="rule" />
+        <div class="channel">
+          <span class="tag">Pop culture &amp; streaming</span>
+          <h3>Imagery, not placement — and therefore unregulated</h3>
+          <p>
+            Paid product placement has been banned in US media since 1998.
+            Tobacco imagery in entertainment hasn't gone anywhere: 60% of young
+            adults' favorite new movie releases in 2020, and 64% of top
+            binge-watched shows, featured tobacco imagery. Youth and young
+            adults with high exposure to that content have three times the odds
+            of starting to vape, and 37% of adolescents who start smoking cite
+            movie imagery as a factor.
+          </p>
+        </div>
+        <div class="channel">
+          <span class="tag">Digital &amp; social media</span>
+          <h3>A regulatory gap the bans weren't written for</h3>
+          <p>
+            Before crackdowns, JUUL ran banner ads on Cartoon Network and
+            Nickelodeon's websites. WHO's report flags a structural problem
+            behind cases like this: many countries' existing TAPS legislation
+            was written before the internet existed as a channel, and doesn't
+            explicitly cover online advertising, brand-sponsored contests, or
+            influencer promotion — leaving digital as a genuine legal gray zone
+            rather than a closed loophole.
+          </p>
+        </div>
+        <div class="channel">
+          <span class="tag">"Corporate social responsibility"</span>
+          <h3>Sponsorship wearing a philanthropy mask</h3>
+          <p>
+            The WHO FCTC treaty (Article 13) explicitly classifies tobacco
+            industry CSR activity as a form of sponsorship that should be banned
+            — because these programmes are typically used to build goodwill and,
+            per WHO's own language, to "convince governments to delay and
+            refrain from implementing tobacco control programmes." It's
+            advertising the industry's own compliance reports rarely have to
+            call advertising.
+          </p>
+        </div>
+      </section>
+
+      <section id="product">
+        <div class="section-head">
+          <span class="section-num sans">04</span>
+          <h2>When the product itself is the advertisement</h2>
+        </div>
+        <hr class="rule" />
+        <div class="stat-row">
+          <div class="stat">
+            <div class="num">~16,000</div>
+            <div class="label">
+              unique e-liquid flavours available in some markets, more than half
+              of them appealing specifically to children and adolescents
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num">9</div>
+            <div class="label">
+              countries worldwide that regulate ENDS (e-cigarette) flavours at
+              all
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num bad">Tested +</div>
+            <div class="label">
+              Some e-liquids labeled "zero-nicotine" have tested positive for
+              nicotine when independently verified
+            </div>
+          </div>
+        </div>
+        <p>
+          Flavour functions as marketing when a category can't otherwise
+          advertise: candy and fruit names do the persuasive work a banned
+          billboard used to do, and a "zero-nicotine" label can carry a health
+          claim the industry would never be allowed to print in an actual ad.
+        </p>
+      </section>
+
+      <section id="gap">
+        <div class="section-head">
+          <span class="section-num sans">05</span>
+          <h2>The limitation isn't the concept of a ban — it's coverage</h2>
+        </div>
+        <hr class="rule" />
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>WHO Global Tobacco Report 2021 finding</th>
+                <th>What it means</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>57 countries (21% of world population)</td>
+                <td>
+                  Have truly comprehensive TAPS bans covering all direct and
+                  indirect promotion
+                </td>
+              </tr>
+              <tr>
+                <td>40 countries (1.2bn people)</td>
+                <td>
+                  Have a complete absence of TAPS bans, or only minimal
+                  restrictions
+                </td>
+              </tr>
+              <tr>
+                <td>26 countries, 1 provision away</td>
+                <td>
+                  Missing just one of ten best-practice criteria &mdash; most
+                  commonly, a ban on advertising at point-of-sale (8 countries)
+                </td>
+              </tr>
+              <tr>
+                <td>15 countries</td>
+                <td>
+                  Ban advertising, sponsorship, <em>and</em> promotion of both
+                  ENDS devices and e-liquids together
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="source-note">
+          WHO Report on the Global Tobacco Epidemic 2021.
+        </p>
+        <p>
+          That third row is the finding worth sitting with: the single most
+          common gap among countries closest to a comprehensive ban is a ban on
+          advertising at the exact channel now carrying 97% of the industry's
+          marketing spend. The regulatory patchwork and the industry's spending
+          pattern aren't a coincidence — the spending follows the gap.
+        </p>
+      </section>
+
+      <section id="takeaway">
+        <div class="section-head">
+          <span class="section-num sans">06</span>
+          <h2>What this means for how a ban should be designed</h2>
+        </div>
+        <hr class="rule" />
+        <ol class="moves">
+          <li>
+            <strong
+              >Treat comprehensiveness as the whole strategy, not one feature of
+              it.</strong
+            ><span
+              >WHO's own evidence is explicit: partial bans have little or no
+              measurable effect, because the marketing budget simply relocates.
+              A ban that's 90% comprehensive isn't 90% as effective — it's
+              closer to fully ineffective, because the industry only needs one
+              open channel.</span
+            >
+          </li>
+          <li>
+            <strong>Write legislation for channels that don't exist yet.</strong
+            ><span
+              >The gap in digital-advertising coverage exists because older TAPS
+              laws were drafted before social media, influencers, and
+              brand-sponsored contests were marketing channels at all.
+              Comprehensive language, not itemized channel lists, is what keeps
+              up.</span
+            >
+          </li>
+          <li>
+            <strong>Name sponsorship and CSR explicitly.</strong
+            ><span
+              >Anything that lets a regulated industry build public goodwill and
+              brand affinity functions as marketing, whether or not it's labeled
+              that way — WHO's own treaty language already treats CSR as
+              sponsorship for exactly this reason.</span
+            >
+          </li>
+          <li>
+            <strong
+              >Regulate the product's own design where messaging bans stop
+              working.</strong
+            ><span
+              >Flavour bans exist because, once every other message is banned,
+              flavour naming becomes the message. Only 9 countries currently
+              regulate this — the smallest, least-enforced piece of the puzzle
+              relative to its reach into a 16,000-flavour market.</span
+            >
+          </li>
+        </ol>
+        <div class="callout">
+          <b>Bottom line —</b> "hidden advertising" isn't a separate phenomenon
+          from regulated advertising — it's the same budget, redirected to
+          wherever the regulation hasn't reached yet. The current limitation
+          isn't that advertising bans don't work; it's that almost none of them
+          are actually comprehensive enough to remove the doors the industry is
+          walking through.
+        </div>
+      </section>
+    </main>
+
+    <div class="sources">
+      <h4>Sources reviewed</h4>
+      <ul>
+        <li>
+          WHO — Report on the Global Tobacco Epidemic 2021 (primary source,
+          provided PDF)
+        </li>
+        <li>
+          CounterTobacco.org — "The War in the Store" (point-of-sale marketing)
+        </li>
+        <li>Truth Initiative — "Action Needed on Tobacco in Pop Culture"</li>
+        <li>
+          American Lung Association — "10 Bad Things [Tobacco Companies Do] to
+          Entice Kids"
+        </li>
+        <li>
+          Reaching Youth at the Point of Sale (peer-reviewed, PMC) — cigarette
+          marketing density by store type
+        </li>
+      </ul>
+    </div>
+
+    <footer>
+      Prepared for the NR! module "Field Research: Hidden Advertising"
+      assignment. All figures above are drawn from the cited public sources; the
+      BMJ Tobacco Control supplement link provided for this lecture returned an
+      access error and was not directly reviewed.
+    </footer>
+  </body>
+</html>

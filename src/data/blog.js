@@ -5,6 +5,13 @@
 
 export const blogPosts = [
   {
+    slug: "hidden-advertising",
+    file: "/blog/hidden-advertising.html",
+    title: "Hidden Advertising",
+    category: "NR! Module · Field Research",
+    summary: "Tobacco advertising didn't disappear when governments banned it — it moved. A field research trace of where the budget actually went, grounded in WHO's 2021 Global Tobacco Epidemic Report.",
+  },
+  {
     slug: "digital-shift",
     file: "/blog/digital-shift.html",
     title: "Digital Shift: the Toy Industry",
