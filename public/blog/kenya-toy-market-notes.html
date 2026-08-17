@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenya Toy Market Notes</title>
+<style>
+  :root {
+    --bg: #eef0ec; --surface: #fcfcfa; --surface-2: #e5e8e1;
+    --ink: #151e2b; --ink-muted: #4c5666; --ink-faint: #7c8595; --rule: #cfd3c9;
+    --accent: #33538f; --accent-ink: #1f3766; --accent-tint: #dde4f1;
+    --copper: #a85a24; --copper-tint: #f3e2d1; --good: #2f6f4e; --bad: #a13a3a; --bad-tint: #f4dede;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+      --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+      --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+      --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+    --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+    --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+    --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .sans { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent-ink); }
+
+  .masthead { background: var(--ink); color: var(--bg); padding: 3rem 1.5rem 2.4rem; position: relative; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .masthead { background: #0a0d13; } }
+  :root[data-theme="dark"] .masthead { background: #0a0d13; }
+  .masthead::after {
+    content: ""; position: absolute; right: -2.5rem; bottom: -3rem; width: 12rem; height: 12rem;
+    border: 2px dashed #3a4256; border-radius: 14%; transform: rotate(-12deg); opacity: 0.5;
+  }
+  .masthead-inner { max-width: 780px; margin: 0 auto; position: relative; }
+  .eyebrow {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; color: #b9c2d6; margin: 0 0 0.9rem;
+  }
+  .masthead h1 { font-size: clamp(2.1rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 0.7rem; text-wrap: balance; font-weight: 400; letter-spacing: -0.01em; }
+  .masthead .sub { font-size: 1.05rem; color: #cfd6e6; max-width: 52ch; margin: 0 0 1.6rem; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.78rem; }
+  .meta-pill { border: 1px solid #3a4256; color: #dbe1ee; padding: 0.25rem 0.65rem; border-radius: 999px; white-space: nowrap; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  section + section { margin-top: 3.4rem; }
+  .section-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.3rem; }
+  .section-num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .section-head h2 { font-size: 1.45rem; font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 0 0 1.3rem; }
+
+  p { margin: 0 0 1rem; color: var(--ink); max-width: 68ch; }
+  .lede { font-size: 1.06rem; color: var(--ink-muted); }
+
+  .disclosure {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.86rem; background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 4px; padding: 0.9rem 1.1rem; color: var(--ink); margin-bottom: 1.4rem;
+  }
+  .disclosure b { color: var(--accent-ink); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.84rem; }
+  thead th { text-align: left; background: var(--ink); color: var(--bg); font-weight: 500; padding: 0.6rem 0.85rem; letter-spacing: 0.02em; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) thead th { background: #0a0d13; } }
+  :root[data-theme="dark"] thead th { background: #0a0d13; }
+  thead th:first-child { border-top-left-radius: 3px; }
+  thead th:last-child { border-top-right-radius: 3px; }
+  tbody td { padding: 0.6rem 0.85rem; border-top: 1px solid var(--rule); color: var(--ink); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--surface-2); }
+  tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .scope-tag {
+    display: inline-block; font-size: 0.68rem; padding: 0.1rem 0.45rem; border-radius: 999px;
+    font-weight: 600; letter-spacing: 0.02em; margin-left: 0.35rem;
+  }
+  .scope-tag.local { background: var(--copper-tint); color: var(--copper); }
+  .scope-tag.global { background: var(--accent-tint); color: var(--accent-ink); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 1.2rem 1.3rem; }
+  .card h3 { font-size: 1rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--accent-ink); }
+  .card p { font-size: 0.94rem; margin-bottom: 0.7rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .tvn { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .tvn { grid-template-columns: 1fr; } }
+  .tvn-col { padding: 1.2rem 1.3rem; background: var(--surface); }
+  .tvn-col.now { background: var(--surface-2); border-left: 1px solid var(--rule); }
+  @media (max-width: 640px) { .tvn-col.now { border-left: none; border-top: 1px solid var(--rule); } }
+  .tvn-head { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--copper); margin-bottom: 0.8rem; }
+  .tvn ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .tvn li { font-size: 0.94rem; color: var(--ink); }
+  .tvn li b { color: var(--ink); }
+
+  ol.moves { margin: 0; padding: 0; list-style: none; counter-reset: move; display: flex; flex-direction: column; gap: 1.1rem; }
+  ol.moves li { counter-increment: move; padding-left: 2.6rem; position: relative; }
+  ol.moves li::before {
+    content: counter(move, decimal-leading-zero); position: absolute; left: 0; top: 0.05rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); font-variant-numeric: tabular-nums;
+  }
+  ol.moves strong { display: block; color: var(--ink); margin-bottom: 0.15rem; }
+  ol.moves span { color: var(--ink-muted); font-size: 0.96rem; }
+
+  .callout {
+    background: var(--copper-tint); border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+    border-radius: 4px; padding: 1rem 1.1rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.9rem; color: var(--ink); margin-top: 1.6rem;
+  }
+  .callout b { color: var(--copper); }
+
+  .li-card {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .li-head { display: flex; gap: 0.7rem; align-items: center; padding: 0.9rem 1rem 0.6rem; }
+  .li-avatar {
+    width: 2.6rem; height: 2.6rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; flex: none;
+  }
+  .li-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .li-role { font-size: 0.76rem; color: var(--ink-faint); }
+  .li-time { font-size: 0.72rem; color: var(--ink-faint); }
+  .li-body { padding: 0 1rem 0.9rem; font-size: 0.87rem; color: var(--ink); white-space: pre-wrap; }
+  .li-body .hashtag, .li-body .mention { color: var(--accent-ink); font-weight: 600; }
+  .li-foot { border-top: 1px solid var(--rule); padding: 0.6rem 1rem; display: flex; gap: 1.3rem; font-size: 0.78rem; color: var(--ink-faint); }
+
+  .sources {
+    max-width: 780px; margin: 0 auto; padding: 0 1.5rem 1rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint);
+  }
+  .sources h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin: 0 0 0.5rem; }
+  .sources ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+
+  footer {
+    max-width: 780px; margin: 0 auto; padding: 1rem 1.5rem 3rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">NR! Module &middot; Field Research &middot; Kenya Market</p>
+    <h1>Kenya Toy Market Notes</h1>
+    <p class="sub">The same field research repeated for the Kenyan market: Jumia, Toyzoona, and Cheza Plus locally against Toys"R"Us, Hamleys, and LEGO globally — plus a 60-year-old Nairobi chain that shows this market is at an earlier stage of the same shift.</p>
+    <div class="meta-row">
+      <span class="meta-pill">6 online stores &middot; 3 KE local + 3 global</span>
+      <span class="meta-pill">Physical: Toyworld Kenya &middot; desk research</span>
+      <span class="meta-pill">Companion to the Portugal field notes</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="scope">
+    <div class="section-head">
+      <span class="section-num sans">01</span>
+      <h2>Scope and method</h2>
+    </div>
+    <hr class="rule" />
+    <div class="disclosure"><b>How this was done —</b> this repeats the same field-research method used for the Portugal version, swapping in three Kenyan online retailers as the "local" set. All 6 online storefronts were reviewed directly (live homepage/category review, Aug 2026). The physical chain, Toyworld Kenya, was <b>not</b> visited in person — it's desk-researched from the retailer's own published branch and business information, and is labeled as such.</div>
+    <p>Online stores reviewed — <b>Local (Kenya):</b> Jumia Kenya (Toys &amp; Games), Toyzoona, Cheza Plus. <b>Global:</b> Toys"R"Us, Hamleys, LEGO — same three global benchmarks used in the Portugal comparison, to keep the two field notes directly comparable.</p>
+  </section>
+
+  <section id="online">
+    <div class="section-head">
+      <span class="section-num sans">02</span>
+      <h2>Three different toy businesses, all called "online toy store"</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Where the Portuguese retailers converged on the same licensing mix with different loyalty mechanics, Kenya's three stores turned out to be genuinely different business models sitting side by side — price-led marketplace, franchise-led specialist, and franchise-free premium-educational.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Store</th><th>Standout promotion / model</th><th>Franchise co-marketing observed</th></tr></thead>
+        <tbody>
+          <tr><td>Jumia Kenya <span class="scope-tag local">KE</span></td><td>Daily "Express/Flash Deals" (20&ndash;80% off); app-gamified voucher unlock; Jumia Prime free delivery</td><td>Minimal — LEGO, Hasbro, and Ravensburger appear as brands, but no dedicated movie/franchise campaigns</td></tr>
+          <tr><td>Toyzoona <span class="scope-tag local">KE</span></td><td>"DEALS KIBAO" sitewide discounts (20&ndash;50%); same-day Nairobi delivery, cash on delivery</td><td>LEGO, Barbie, Disney, Pok&eacute;mon, Marvel, Funko POP, Harry Potter, plus FIFA World Cup 26 merchandise</td></tr>
+          <tr><td>Cheza Plus <span class="scope-tag local">KE</span></td><td>No sitewide discounting — "Brand of the Week" curation model instead</td><td>None — deliberately franchise-free, built entirely around Hape and PolyM educational/wooden toys</td></tr>
+          <tr><td>Toys"R"Us <span class="scope-tag global">Global</span></td><td>"Geoffrey's Toy Box" house brand; shoppable video content</td><td>Homepage led by <b>Toy Story 5</b> theatrical tie-in; Marvel, DC, Star Wars playsets</td></tr>
+          <tr><td>Hamleys <span class="scope-tag global">Global</span></td><td>Up to 70% off sale; brand-specific cuts (20&ndash;25% on Numberblocks, Playmobil)</td><td>LEGO One Piece, LEGO Star Wars, Disney Wish, Harry Potter</td></tr>
+          <tr><td>LEGO <span class="scope-tag global">Global</span></td><td>AR "Digital Box" in-store scan-to-preview kiosks; app-unlocked Technic and Hidden Side sets</td><td>Star Wars, Marvel, Minecraft, Super Mario, Harry Potter, Fortnite, One Piece</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The Kenyan market shows a segmentation the Portuguese one didn't as clearly: Jumia competes purely on price and delivery logistics as one category among thousands on a general marketplace; Toyzoona competes as a toy specialist on the same licensing playbook as the global chains; Cheza Plus opts out of franchise licensing entirely and sells trust in materials and pedagogy instead. Three different answers to the same market, coexisting.</p>
+  </section>
+
+  <section id="physical">
+    <div class="section-head">
+      <span class="section-num sans">03</span>
+      <h2>Physical retail: reach first, theatre later <span class="sans" style="font-size:0.7rem;color:var(--ink-faint);font-weight:400;">(desk research, not visited)</span></h2>
+    </div>
+    <hr class="rule" />
+    <div class="card">
+      <h3>Toyworld Kenya — 60 years on distribution, not activation</h3>
+      <p>Toyworld has operated in Kenya for over 60 years and now runs six branches inside the country's leading malls — ABC Place, Yaya Centre, Village Market, Sarit Centre, Garden City in Nairobi, and City Mall in Mombasa. Its Village Market location, in particular, is positioned toward expat and upper-income families shopping for imported and educational brands.</p>
+    </div>
+    <p>Set against Hamleys' slime-making activations or LEGO's in-store AR "Digital Box," Toyworld's competitive advantage reads differently: it's built on being physically present in every major mall a target family already shops in, not on turning any single store into a destination experience. That's not a lesser strategy — it's the earlier, distribution-first stage of the same evolution Hamleys and LEGO have already moved past in more saturated, higher-rent retail markets.</p>
+  </section>
+
+  <section id="ar">
+    <div class="section-head">
+      <span class="section-num sans">04</span>
+      <h2>The AR/digital-toy gap is the real finding</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Globally, the digital shift shows up as LEGO Hidden Side's ghost-hunting AR app, Technic's app-unlocked racetracks, Nexo Knights' scannable shields, in-store AR preview kiosks, and Mattel's chip-embedded Hot Wheels id cars. None of it appeared on any of the three Kenyan storefronts reviewed.</p>
+    <p>That's worth reading as a market gap rather than a market failure. Toyzoona already carries the global franchise catalog (LEGO, Barbie, Marvel, Pokémon) at Kenyan price points — the AR/app layer that accompanies those same product lines elsewhere simply hasn't been positioned, priced, or marketed into this market yet. Whichever local distributor moves first on bringing an AR-connected line to market gets to define the category rather than compete inside an existing one.</p>
+    <div class="callout"><b>Bottom line —</b> Kenya's toy market isn't behind the digital shift so much as it's one stage earlier in it: still consolidating physical distribution and price competition, with the franchise layer already in place and the AR/digital layer still open for whoever claims it first.</div>
+  </section>
+
+</main>
+
+<div class="sources">
+  <h4>Sources reviewed</h4>
+  <ul>
+    <li><a href="https://www.jumia.co.ke/toys-games/">Jumia Kenya — Toys &amp; Games category review, Aug 2026</a></li>
+    <li><a href="https://toyzoona.net/">Toyzoona — homepage review, Aug 2026</a></li>
+    <li><a href="https://chezaplus.com/">Cheza Plus — homepage review, Aug 2026</a></li>
+    <li><a href="https://toyworldgroup.com/about-us/">Toyworld Kenya — About Us / branch listing</a></li>
+    <li><a href="https://villagemarket-kenya.com/store/toy-world/">Village Market Kenya — Toy World store listing</a></li>
+    <li><a href="https://www.toysrus.com/">Toys"R"Us — homepage review, Aug 2026</a></li>
+    <li><a href="https://www.hamleys.com/">Hamleys — homepage review, Aug 2026</a></li>
+    <li><a href="https://www.lego.com/en-gb/themes/technic/ar-app">LEGO — Technic AR App, official product page</a></li>
+  </ul>
+</div>
+
+<footer>
+  "Toys Sales" field research is NR! module coursework. This is the Kenya-market companion to the Portugal field notes, using the same method. The physical-store section is desk research, not an in-person visit.
+</footer>
+
+</body>
+</html>

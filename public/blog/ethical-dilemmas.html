@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ethical Dilemmas in Branding</title>
+<style>
+  :root {
+    --bg: #eef0ec; --surface: #fcfcfa; --surface-2: #e5e8e1;
+    --ink: #151e2b; --ink-muted: #4c5666; --ink-faint: #7c8595; --rule: #cfd3c9;
+    --accent: #33538f; --accent-ink: #1f3766; --accent-tint: #dde4f1;
+    --copper: #a85a24; --copper-tint: #f3e2d1; --good: #2f6f4e; --bad: #a13a3a; --bad-tint: #f4dede;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+      --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+      --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+      --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+    --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+    --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+    --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .sans { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent-ink); }
+
+  .masthead { background: var(--ink); color: var(--bg); padding: 3rem 1.5rem 2.4rem; position: relative; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .masthead { background: #0a0d13; } }
+  :root[data-theme="dark"] .masthead { background: #0a0d13; }
+  .masthead::after {
+    content: ""; position: absolute; right: -2rem; top: -2.5rem; width: 10rem; height: 10rem;
+    border: 2px dashed #3a4256; border-radius: 50%; opacity: 0.4;
+  }
+  .masthead::before {
+    content: ""; position: absolute; right: 1.5rem; top: 2.5rem; width: 5rem; height: 5rem;
+    border-top: 2px dashed #3a4256; border-radius: 50% 50% 0 0; opacity: 0.4;
+  }
+  .masthead-inner { max-width: 780px; margin: 0 auto; position: relative; }
+  .eyebrow {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; color: #b9c2d6; margin: 0 0 0.9rem;
+  }
+  .masthead h1 { font-size: clamp(2.1rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 0.7rem; text-wrap: balance; font-weight: 400; letter-spacing: -0.01em; }
+  .masthead .sub { font-size: 1.05rem; color: #cfd6e6; max-width: 54ch; margin: 0 0 1.6rem; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.78rem; }
+  .meta-pill { border: 1px solid #3a4256; color: #dbe1ee; padding: 0.25rem 0.65rem; border-radius: 999px; white-space: nowrap; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  section + section { margin-top: 3.4rem; }
+  .section-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.3rem; }
+  .section-num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .section-head h2 { font-size: 1.45rem; font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 0 0 1.3rem; }
+
+  p { margin: 0 0 1rem; color: var(--ink); max-width: 68ch; }
+  .lede { font-size: 1.06rem; color: var(--ink-muted); }
+
+  blockquote {
+    margin: 1.6rem 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 3px solid var(--accent);
+    font-style: italic; color: var(--ink-muted); max-width: 60ch;
+  }
+  blockquote cite {
+    display: block; font-style: normal; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-faint); margin-top: 0.4rem;
+  }
+
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin: 1.4rem 0 1.8rem; }
+  @media (max-width: 700px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+  .pillar {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 0.7rem 0.8rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .pillar.broken { background: var(--bad-tint); border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
+  .pillar .n { font-size: 0.68rem; color: var(--copper); font-variant-numeric: tabular-nums; }
+  .pillar.broken .n { color: var(--bad); }
+  .pillar .t { font-size: 0.86rem; font-weight: 600; color: var(--ink); margin-top: 0.1rem; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 1.2rem 1.3rem; }
+  .card h3 { font-size: 1rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--accent-ink); }
+  .card p { font-size: 0.94rem; margin-bottom: 0.7rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .case-file {
+    border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); margin-bottom: 1rem; overflow: hidden;
+  }
+  .case-file .head {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 0.8rem;
+    background: var(--surface-2); padding: 0.6rem 1rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .case-file .head .market { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--copper); font-weight: 600; }
+  .case-file .head .date { font-size: 0.72rem; color: var(--ink-faint); }
+  .case-file .body { padding: 0.9rem 1rem; }
+  .case-file .body p { font-size: 0.93rem; margin: 0; }
+
+  ol.moves { margin: 0; padding: 0; list-style: none; counter-reset: move; display: flex; flex-direction: column; gap: 1.1rem; }
+  ol.moves li { counter-increment: move; padding-left: 2.6rem; position: relative; }
+  ol.moves li::before {
+    content: counter(move, decimal-leading-zero); position: absolute; left: 0; top: 0.05rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); font-variant-numeric: tabular-nums;
+  }
+  ol.moves strong { display: block; color: var(--ink); margin-bottom: 0.15rem; }
+  ol.moves span { color: var(--ink-muted); font-size: 0.96rem; }
+
+  .callout {
+    background: var(--copper-tint); border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+    border-radius: 4px; padding: 1rem 1.1rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.9rem; color: var(--ink); margin-top: 1.6rem;
+  }
+  .callout b { color: var(--copper); }
+
+  .li-card {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .li-head { display: flex; gap: 0.7rem; align-items: center; padding: 0.9rem 1rem 0.6rem; }
+  .li-avatar {
+    width: 2.6rem; height: 2.6rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; flex: none;
+  }
+  .li-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .li-role { font-size: 0.76rem; color: var(--ink-faint); }
+  .li-time { font-size: 0.72rem; color: var(--ink-faint); }
+  .li-body { padding: 0 1rem 0.9rem; font-size: 0.87rem; color: var(--ink); white-space: pre-wrap; }
+  .li-body .hashtag, .li-body .mention { color: var(--accent-ink); font-weight: 600; }
+  .li-foot { border-top: 1px solid var(--rule); padding: 0.6rem 1rem; display: flex; gap: 1.3rem; font-size: 0.78rem; color: var(--ink-faint); }
+
+  .sources { max-width: 780px; margin: 0 auto; padding: 0 1.5rem 1rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint); }
+  .sources h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin: 0 0 0.5rem; }
+  .sources ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+
+  footer {
+    max-width: 780px; margin: 0 auto; padding: 1rem 1.5rem 3rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">NR! Module &middot; Problem-Solving Scenario</p>
+    <h1>Ethical Dilemmas in Branding</h1>
+    <p class="sub">The tightrope between popularity and responsibility, tested against a real company's own compliance failures and five current controversies across alcohol, sugar drinks, and gambling.</p>
+    <div class="meta-row">
+      <span class="meta-pill">Scenario: Ethical Dilemmas (fictional narratives)</span>
+      <span class="meta-pill">Grounded in PMI's real 2019 marketing audit</span>
+      <span class="meta-pill">+5 current cases, 2025&ndash;2026</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="dilemma">
+    <div class="section-head">
+      <span class="section-num sans">01</span>
+      <h2>The tightrope, in one line</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Sarah (tobacco), Michael (e-cigarettes), Emily (alcohol), and David (sugar drinks) all face the same structural problem: the marketing techniques that build the strongest brands — emotional resonance, aspirational imagery, social proof, youth-adjacent culture — are exactly the techniques most likely to reach and influence the people regulation exists to protect.</p>
+    <p>That's not a coincidence the article's four case studies happen to share. It's the actual mechanism. Brand equity is built through association, not information — and association doesn't respect an age gate the way a warning label does.</p>
+  </section>
+
+  <section id="pillars">
+    <div class="section-head">
+      <span class="section-num sans">02</span>
+      <h2>Why "ethical branding" frameworks don't fully apply here</h2>
+    </div>
+    <hr class="rule" />
+    <p>The Branding Journal's ethical branding guide proposes eight pillars a brand should satisfy: purpose, values, products/services, production, supply chain, communication, stakeholders, and community contribution. Most of these are achievable for a tobacco, alcohol, or sugar-drink company. One structurally isn't.</p>
+    <div class="pillars">
+      <div class="pillar"><div class="n">01</div><div class="t">Purpose</div></div>
+      <div class="pillar"><div class="n">02</div><div class="t">Values</div></div>
+      <div class="pillar broken"><div class="n">03</div><div class="t">Products &amp; services &mdash; genuinely beneficial, not harmful</div></div>
+      <div class="pillar"><div class="n">04</div><div class="t">Production</div></div>
+      <div class="pillar"><div class="n">05</div><div class="t">Supply chain</div></div>
+      <div class="pillar"><div class="n">06</div><div class="t">Communication &mdash; transparency, no deception</div></div>
+      <div class="pillar"><div class="n">07</div><div class="t">Stakeholders</div></div>
+      <div class="pillar"><div class="n">08</div><div class="t">Community contribution</div></div>
+    </div>
+    <p>A company can genuinely excel at pillars 1, 2, 4&ndash;8 — and PMI's own report is a good example of taking pillar 6 (communication) seriously. But pillar 3 is definitionally out of reach for a combustible tobacco product. What's actually available to these industries isn't "ethical branding" in the full sense of the framework — it's <em>ethical marketing practice</em>: honest, restrained, age-gated communication around a product that can't itself clear the bar. That's a real and valuable thing to build. It's just a narrower claim than the framework implies, and worth naming precisely rather than blurring the two.</p>
+  </section>
+
+  <section id="pmi">
+    <div class="section-head">
+      <span class="section-num sans">03</span>
+      <h2>What rigorous self-regulation actually looks like — and where it still leaks</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">PMI's 2019 "Responsible Marketing Practices" report is unusual: a company voluntarily publishing its own audit, including the parts where its own standards were breached. That transparency is itself a data point on the ethical-branding question — and the failures it discloses are more informative than the successes.</p>
+
+    <div class="split">
+      <div class="card">
+        <h3>The system, at scale</h3>
+        <p>Four non-negotiable principles (market only to adult smokers, warn of health effects, be honest, follow the law), a ban on social media marketing for combustibles since 2015, and Good Conversion Practices restricting smoke-free products to existing adult users only. 86.9% of employees trained on the code in 2018; over 30,000 people trained on smoke-free sales rules in 2019 alone.</p>
+      </div>
+      <div class="card">
+        <h3>Where it still broke</h3>
+        <p>An Indonesian mobile app collected consumers' declared age but never verified it — a real gap despite the policy requiring verification. Paid digital influencers in Russia and Europe turned out to be legal-age smokers who were nonetheless under PMI's own 25-year-old minimum for anyone appearing in its marketing.</p>
+      </div>
+    </div>
+    <blockquote>
+      "While there were a few instances when we fell short... our monitoring and compliance systems are working as intended."
+      <cite>— PMI, Responsible Marketing Practices at PMI, December 2019</cite>
+    </blockquote>
+    <p>The point isn't that PMI is uniquely lax — if anything, this is one of the more rigorous, publicly documented compliance systems in the industry, built in response to a shareholder resolution from Trinity Health. The point is that even this system leaked precisely at the edges regulation struggles to reach: third-party platforms, new digital formats, influencer marketing. That's the pattern worth watching for in every industry below.</p>
+  </section>
+
+  <section id="cases">
+    <div class="section-head">
+      <span class="section-num sans">04</span>
+      <h2>Five current cases, three more markets</h2>
+    </div>
+    <hr class="rule" />
+
+    <div class="case-file">
+      <div class="head"><span class="market">Alcohol</span><span class="date">May 2025</span></div>
+      <div class="body"><p>The UK Advertising Standards Authority reprimanded FourLoko for a social media ad promoting irresponsible drinking, breaching the CAP Code's requirement that alcohol marketing be socially responsible.</p></div>
+    </div>
+    <div class="case-file">
+      <div class="head"><span class="market">Alcohol</span><span class="date">March 2025</span></div>
+      <div class="body"><p>The ASA separately reprimanded Bargain Booze for an ad found to have particular appeal to under-18s — a distinct code breach from irresponsible-drinking messaging, showing the two failure modes (encouraging excess vs. reaching minors) recur independently.</p></div>
+    </div>
+    <div class="case-file">
+      <div class="head"><span class="market">Alcohol &mdash; zero-alcohol "shadow marketing"</span><span class="date">Australian research, 2023&ndash;24</span></div>
+      <div class="body"><p>Researchers found alcohol brands using zero-alcohol variants to advertise in settings the alcoholic product legally can't touch — nearly two-thirds of campaigns studied showed the zero-alcohol product used in traditionally alcohol-free contexts like swimming or driving. Because branding is shared with the parent alcoholic product, this builds brand affinity in unregulated territory: not a violation, a genuine gap in how the rules were written.</p></div>
+    </div>
+    <div class="case-file">
+      <div class="head"><span class="market">Sugar drinks</span><span class="date">Ongoing, US</span></div>
+      <div class="body"><p>Sugary-drink advertising in the US is disproportionately targeted at Black and Hispanic youth, and parents describe front-of-package claims on children's sugar-sweetened drinks as actively deceptive about health benefits — the same "reaches the vulnerable audience the ad wasn't nominally for" pattern seen in tobacco and alcohol, without any addictive-chemical component to explain it.</p></div>
+    </div>
+    <div class="case-file">
+      <div class="head"><span class="market">Gambling &mdash; the newest frontier</span><span class="date">2025</span></div>
+      <div class="body"><p>Sports-betting integration into live broadcasts has coincided with real integrity scandals — an NBA player pleading guilty to conspiracy for betting against his own team, another arrested in a federal gambling probe — and a measurable trust collapse: 43% of Americans now call legal sports betting bad for society, up from 34% in 2022, with 63% supporting a federal ban on in-game sportsbook ads.</p></div>
+    </div>
+  </section>
+
+  <section id="framework">
+    <div class="section-head">
+      <span class="section-num sans">05</span>
+      <h2>A working framework for the marketer actually facing this</h2>
+    </div>
+    <hr class="rule" />
+    <ol class="moves">
+      <li><strong>Separate "ethical branding" from "ethical marketing practice."</strong><span>If the product itself can't clear an honest harm bar, don't claim the brand is ethical — claim, specifically and only, that the practice around it (honesty, age-gating, restraint) is. Overclaiming here is itself the deception the frameworks warn against.</span></li>
+      <li><strong>Assume the leak is at the edge, not the center.</strong><span>PMI's own failures weren't in its core cigarette advertising — they were in a new app and a new influencer channel. Any responsible-marketing programme should treat every new platform or format as a compliance gap until proven otherwise, not as a growth channel to exploit before rules catch up.</span></li>
+      <li><strong>Watch for "adjacent product" loopholes.</strong><span>Zero-alcohol shadow marketing shows how a genuinely lower-harm product variant can be used to route brand-building through unregulated space. The same pattern is worth watching for wherever a "safer" line sits next to a regulated one — reduced-sugar, low-nicotine, "responsible gambling" tools — the adjacent product can carry the parent brand's equity past the rules built for the original.</span></li>
+      <li><strong>Treat "responsible use" campaigns as necessary but insufficient.</strong><span>Anti-drunk-driving and smoking-cessation campaigns are genuinely good — and they don't resolve the core tension, because they run alongside, not instead of, marketing built on the same emotional mechanism the campaign is trying to counteract.</span></li>
+    </ol>
+    <div class="callout"><b>Bottom line —</b> the real ethical dilemma in these markets was never "should we market the product." It's that the only tool available for building a strong brand — emotional association — is the same tool regulation exists to keep away from the people it's meant to protect. No compliance system, however rigorous, fully closes that gap; the honest position is to say so, not to claim the gap has been closed.</div>
+  </section>
+
+</main>
+
+<div class="sources">
+  <h4>Sources reviewed</h4>
+  <ul>
+    <li>MTF Institute — "Ethical Dilemmas in Marketing" (fictional case narratives, provided article)</li>
+    <li>Philip Morris International — Responsible Marketing Practices at PMI, December 2019</li>
+    <li>The Branding Journal — Ethical Branding: The Definitive Guide (2018)</li>
+    <li>ISS Governance / EUCAM — Ethical Issues with Zero-Alcohol Marketing: An Australian Case Study</li>
+    <li>The Drinks Business — Alcohol brands under fire for irresponsible social media ads (2025)</li>
+    <li>State of Childhood Obesity — Fighting Back Against Companies' Tactics to Market Sugary Drinks to Kids</li>
+    <li>Marketing of sugar-sweetened children's drinks and parents' misperceptions (peer-reviewed, PMC)</li>
+    <li>The Regulatory Review — The Challenges of Regulating Sports-Betting Advertisements (2025)</li>
+  </ul>
+</div>
+
+<footer>
+  "Ethical Dilemmas in Marketing" is NR! module coursework built around illustrative fictional case narratives. The PMI report, branding-guide framework, and current news items above are real, independently sourced material used to test the case's claims against actual industry practice.
+</footer>
+
+</body>
+</html>

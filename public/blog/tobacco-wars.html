@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tobacco Wars</title>
+<style>
+  :root {
+    --bg: #eef0ec; --surface: #fcfcfa; --surface-2: #e5e8e1;
+    --ink: #151e2b; --ink-muted: #4c5666; --ink-faint: #7c8595; --rule: #cfd3c9;
+    --accent: #33538f; --accent-ink: #1f3766; --accent-tint: #dde4f1;
+    --copper: #a85a24; --copper-tint: #f3e2d1; --good: #2f6f4e; --bad: #a13a3a; --bad-tint: #f4dede;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+      --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+      --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+      --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+    --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+    --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+    --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .sans { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent-ink); }
+
+  .masthead { background: var(--ink); color: var(--bg); padding: 3rem 1.5rem 2.4rem; position: relative; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .masthead { background: #0a0d13; } }
+  :root[data-theme="dark"] .masthead { background: #0a0d13; }
+  .masthead::after {
+    content: ""; position: absolute; right: -2.5rem; top: -3rem; width: 12rem; height: 12rem;
+    border: 2px dashed #3a4256; border-radius: 50%; opacity: 0.4;
+  }
+  .masthead-inner { max-width: 780px; margin: 0 auto; position: relative; }
+  .eyebrow {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; color: #b9c2d6; margin: 0 0 0.9rem;
+  }
+  .masthead h1 { font-size: clamp(2.1rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 0.7rem; text-wrap: balance; font-weight: 400; letter-spacing: -0.01em; }
+  .masthead .sub { font-size: 1.05rem; color: #cfd6e6; max-width: 54ch; margin: 0 0 1.6rem; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.78rem; }
+  .meta-pill { border: 1px solid #3a4256; color: #dbe1ee; padding: 0.25rem 0.65rem; border-radius: 999px; white-space: nowrap; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  section + section { margin-top: 3.4rem; }
+  .section-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.3rem; }
+  .section-num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .section-head h2 { font-size: 1.45rem; font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 0 0 1.3rem; }
+
+  p { margin: 0 0 1rem; color: var(--ink); max-width: 68ch; }
+  .lede { font-size: 1.06rem; color: var(--ink-muted); }
+
+  .disclosure {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.86rem; background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 4px; padding: 0.9rem 1.1rem; color: var(--ink); margin-bottom: 1.4rem;
+  }
+  .disclosure b { color: var(--accent-ink); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; margin: 1.4rem 0 1.8rem; }
+  @media (max-width: 640px) { .stat-row { grid-template-columns: 1fr; } }
+  .stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 0.9rem 1rem; }
+  .stat .num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.4rem; font-weight: 700; color: var(--accent-ink); font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .stat .num.good { color: var(--good); }
+  .stat .num.bad { color: var(--bad); }
+  .stat .label { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-muted); margin-top: 0.35rem; line-height: 1.35; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.84rem; }
+  thead th { text-align: left; background: var(--ink); color: var(--bg); font-weight: 500; padding: 0.6rem 0.85rem; letter-spacing: 0.02em; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) thead th { background: #0a0d13; } }
+  :root[data-theme="dark"] thead th { background: #0a0d13; }
+  thead th:first-child { border-top-left-radius: 3px; }
+  thead th:last-child { border-top-right-radius: 3px; }
+  tbody td { padding: 0.6rem 0.85rem; border-top: 1px solid var(--rule); color: var(--ink); vertical-align: top; }
+  tbody td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: var(--surface-2); }
+  tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .source-note { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.74rem; color: var(--ink-faint); margin: 0.6rem 0 0; }
+
+  .archetype { border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); padding: 1.3rem 1.4rem; margin-bottom: 1.1rem; }
+  .archetype h3 { font-size: 1.05rem; margin: 0 0 0.2rem; color: var(--ink); }
+  .archetype .who { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--copper); margin-bottom: 0.7rem; }
+  .archetype p { font-size: 0.96rem; margin-bottom: 0.6rem; }
+  .archetype .figs { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px dashed var(--rule); }
+  .archetype .figs b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 1.2rem 1.3rem; }
+  .card h3 { font-size: 1rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--accent-ink); }
+  .card p { font-size: 0.94rem; margin-bottom: 0.7rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  ol.moves { margin: 0; padding: 0; list-style: none; counter-reset: move; display: flex; flex-direction: column; gap: 1.1rem; }
+  ol.moves li { counter-increment: move; padding-left: 2.6rem; position: relative; }
+  ol.moves li::before {
+    content: counter(move, decimal-leading-zero); position: absolute; left: 0; top: 0.05rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); font-variant-numeric: tabular-nums;
+  }
+  ol.moves strong { display: block; color: var(--ink); margin-bottom: 0.15rem; }
+  ol.moves span { color: var(--ink-muted); font-size: 0.96rem; }
+
+  .callout {
+    background: var(--copper-tint); border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+    border-radius: 4px; padding: 1rem 1.1rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.9rem; color: var(--ink); margin-top: 1.6rem;
+  }
+  .callout b { color: var(--copper); }
+
+  .li-card {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .li-head { display: flex; gap: 0.7rem; align-items: center; padding: 0.9rem 1rem 0.6rem; }
+  .li-avatar {
+    width: 2.6rem; height: 2.6rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; flex: none;
+  }
+  .li-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .li-role { font-size: 0.76rem; color: var(--ink-faint); }
+  .li-time { font-size: 0.72rem; color: var(--ink-faint); }
+  .li-body { padding: 0 1rem 0.9rem; font-size: 0.87rem; color: var(--ink); white-space: pre-wrap; }
+  .li-body .hashtag, .li-body .mention { color: var(--accent-ink); font-weight: 600; }
+  .li-foot { border-top: 1px solid var(--rule); padding: 0.6rem 1rem; display: flex; gap: 1.3rem; font-size: 0.78rem; color: var(--ink-faint); }
+
+  .sources { max-width: 780px; margin: 0 auto; padding: 0 1.5rem 1rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint); }
+  .sources h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin: 0 0 0.5rem; }
+  .sources ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+
+  footer {
+    max-width: 780px; margin: 0 auto; padding: 1rem 1.5rem 3rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">NR! Module &middot; Case Study Analysis</p>
+    <h1>Tobacco Wars</h1>
+    <p class="sub">A century of fictional marketing battles, read against the real 2022 filings of Philip Morris International, BAT, and Imperial Brands — three different playbooks for the same shift to reduced-risk products.</p>
+    <div class="meta-row">
+      <span class="meta-pill">Case: Tobacco Wars (fictional)</span>
+      <span class="meta-pill">Benchmarked: PMI FY2022 10-K</span>
+      <span class="meta-pill">Benchmarked: BAT FY2022 Form 20-F</span>
+      <span class="meta-pill">Benchmarked: Imperial Brands FY2022 Annual Report</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="case">
+    <div class="section-head">
+      <span class="section-num sans">01</span>
+      <h2>The case, in one line</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">A century of pseudonymous "Big Smoke" and "Tobacco Empire" brands moving from doctor-endorsed cigarette ads, through the 1964 Surgeon General's report and the 1998 Master Settlement Agreement, to today's smokeless pivot — e-cigarettes, snus, heat-not-burn, and nicotine pouches marketed as harm reduction.</p>
+    <p>The case ends on an open question: as regulation tightens and consumer preference shifts, what does it actually take for a tobacco company to keep its market position? The real 2022 filings of the three largest listed players answer that question three different ways.</p>
+  </section>
+
+  <section id="scale">
+    <div class="section-head">
+      <span class="section-num sans">02</span>
+      <h2>Where the real market stood in FY2022</h2>
+    </div>
+    <hr class="rule" />
+    <p>Combustible cigarette volume fell at every one of the three companies in 2022 — the case's "shift" isn't hypothetical, it's already the reported trend. Reduced-risk categories grew fast everywhere, but from very different bases.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>FY2022</th><th>PMI</th><th>BAT</th><th>Imperial Brands</th></tr></thead>
+        <tbody>
+          <tr><td>Net revenue</td><td class="num">$31.76bn <span class="sans" style="color:var(--good)">▲1.1%</span></td><td class="num">&pound;27.66bn <span class="sans" style="color:var(--good)">▲7.7%</span></td><td class="num">&pound;7.79bn <span class="sans" style="color:var(--good)">▲2.7%</span></td></tr>
+          <tr><td>Combustible volume</td><td class="num">621.9bn units <span class="sans" style="color:var(--bad)">▼0.5%</span></td><td class="num">605bn sticks <span class="sans" style="color:var(--bad)">▼5.1%</span></td><td class="num">Group volume <span class="sans" style="color:var(--bad)">▼4.7%</span></td></tr>
+          <tr><td>RRP / New Category revenue</td><td class="num">32.1% of revenue <span class="sans" style="color:var(--good)">from 29.7%</span></td><td class="num">&pound;2.89bn <span class="sans" style="color:var(--good)">▲40.9%</span></td><td class="num">NGP revenue <span class="sans" style="color:var(--good)">▲10.8% cc</span></td></tr>
+          <tr><td>RRP as share of revenue</td><td class="num">32.1%</td><td class="num">~14.8%</td><td class="num">Small &amp; undisclosed separately</td></tr>
+          <tr><td>R&amp;D directed to RRP</td><td class="num">99% of R&amp;D spend</td><td class="num">~2x 2021 spend</td><td class="num">Not separately disclosed</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-note">Figures from each company's own FY2022 filing: PMI Annual Report (10-K), BAT Annual Report/Form 20-F, Imperial Brands Annual Report. cc = constant currency.</p>
+  </section>
+
+  <section id="archetypes">
+    <div class="section-head">
+      <span class="section-num sans">03</span>
+      <h2>Three strategic archetypes for the shift era</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Same industry pressure, same year — three entirely different bets, each sized to the company's own scale and balance sheet.</p>
+
+    <div class="archetype">
+      <h3>Transform</h3>
+      <div class="who">Philip Morris International</div>
+      <p>PMI has redirected almost the entire company toward smoke-free products: IQOS is sold in 73 markets with 24.9 million users, roughly 71% of whom are estimated to have fully switched off cigarettes. Since 2008, PMI has invested over $10.5 billion in smoke-free R&amp;D and manufacturing — and in 2022 that category alone reached 99% of total R&amp;D spend.</p>
+      <div class="figs"><span>Smoke-free revenue: <b>32.1%</b> of total</span><span>IQOS users: <b>24.9M</b> (+3.2M)</span><span>Cumulative investment: <b>&gt;$10.5bn</b></span></div>
+    </div>
+
+    <div class="archetype">
+      <h3>Scale, deliberately</h3>
+      <div class="who">British American Tobacco</div>
+      <p>BAT is growing New Categories fast (+40.9% revenue) while funding it internally: its "Quantum" efficiency programme delivered &pound;1.9bn in annualised cost savings since 2020, letting BAT hit its 2025 New Category profitability target a full year early — all while still growing its dividend 6.0% and returning &pound;6.9bn to shareholders.</p>
+      <div class="figs"><span>New Category revenue: <b>+40.9%</b></span><span>Profitability target: <b>1 year early</b></span><span>Shareholder returns: <b>&pound;6.9bn</b></span></div>
+    </div>
+
+    <div class="archetype">
+      <h3>Harvest and return capital</h3>
+      <div class="who">Imperial Brands</div>
+      <p>Imperial describes itself in its own filing as "the smallest of the four global tobacco players" and has chosen not to chase RRP scale at all — NGP R&amp;D isn't even separately disclosed. Instead it concentrates on five priority combustible markets (US, Germany, UK, Spain, Australia, ~70% of operating profit) — and actually <em>gained</em> cigarette share in the US (+90bps), UK (+85bps), and Australia (+20bps) in 2022, while funding a &pound;1bn buyback plus a growing dividend.</p>
+      <div class="figs"><span>US cigarette share: <b>+90bps</b>, 4th straight year of growth</span><span>Capital returned: <b>&pound;1bn buyback</b> + dividend</span><span>Net debt reduced to: <b>2.0x EBITDA</b></span></div>
+    </div>
+  </section>
+
+  <section id="regulation">
+    <div class="section-head">
+      <span class="section-num sans">04</span>
+      <h2>The regulatory squeeze now hits the substitutes too</h2>
+    </div>
+    <hr class="rule" />
+    <p>The case frames regulation as something the industry has always adapted around. The 2022 filings show that adaptation is getting harder precisely where the industry pinned its future: the reduced-risk category itself.</p>
+    <div class="split">
+      <div class="card">
+        <h3>Same year, same regulator, two companies</h3>
+        <p>The FDA issued Marketing Denial Orders against menthol variants of <b>BAT's Vuse Solo/Vibe/Ciro</b> (Jan 2023) and against <b>Imperial's myblu</b> (April 2022) within months of each other — both companies are appealing. California separately banned flavoured tobacco products in December 2022.</p>
+      </div>
+      <div class="card">
+        <h3>Litigation risk hasn't gone away</h3>
+        <p>PMI disclosed a Canadian class-action judgment of roughly CAD 15.5 billion in damages (Blais/L&eacute;tourneau), with its Canadian subsidiary under bankruptcy protection. BAT booked &pound;450m in charges tied to US DOJ/OFAC sanctions investigations, on top of &pound;612m from exiting Russia and Belarus.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="takeaway">
+    <div class="section-head">
+      <span class="section-num sans">05</span>
+      <h2>What "keeping market share" actually requires</h2>
+    </div>
+    <hr class="rule" />
+    <ol class="moves">
+      <li><strong>Size the transformation bet to the balance sheet, not to the trend.</strong><span>PMI can direct 99% of R&amp;D to smoke-free because its combustible cash flow is large enough to fund it without starving shareholders. A company Imperial's size chasing the same ratio would likely fund neither transformation nor returns well — which is exactly why Imperial doesn't try.</span></li>
+      <li><strong>Fund the new category out of efficiency, not just growth.</strong><span>BAT's route to hitting its profitability target early wasn't more revenue alone — it was &pound;1.9bn of internally generated savings freeing up reinvestment without diluting shareholder returns.</span></li>
+      <li><strong>Defending a legacy category is a legitimate strategy, not a failure to transform.</strong><span>Imperial's share gains in the US, UK, and Australia show disciplined focus on fewer markets can outperform spreading thin across every emerging category.</span></li>
+      <li><strong>Expect the regulatory fight to follow the product, not stay with cigarettes.</strong><span>Two of three companies took direct FDA enforcement action against their flagship reduced-risk products in the same year — the "safer alternative" positioning doesn't exempt a product from scrutiny, it just changes which regulator shows up.</span></li>
+    </ol>
+    <div class="callout"><b>Bottom line —</b> there is no single "correct" response to the shift toward substitutes. The efficient move is choosing, deliberately, which of the three plays your company's revenue base, cost structure, and regulatory exposure actually support — then funding it without compromising the balance sheet that makes it possible.</div>
+  </section>
+
+</main>
+
+<div class="sources">
+  <h4>Sources reviewed</h4>
+  <ul>
+    <li>Philip Morris International — FY2022 Annual Report (10-K)</li>
+    <li>British American Tobacco p.l.c. — FY2022 Annual Report / Form 20-F</li>
+    <li>Imperial Brands PLC — FY2022 Annual Report</li>
+    <li>MTF Institute — Case Study: The Tobacco Wars (fictional, 2023)</li>
+  </ul>
+</div>
+
+<footer>
+  "The Tobacco Wars" is a fictional MTF Institute case study, disclaimed as having no connection to real companies. The company data, figures, and analysis in sections 02&ndash;05 above are drawn from the real, publicly filed FY2022 annual reports of PMI, BAT, and Imperial Brands and are independent of the fictional case narrative.
+</footer>
+
+</body>
+</html>

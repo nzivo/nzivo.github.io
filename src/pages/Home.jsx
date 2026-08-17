@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { projects } from '../data/projects'
 import { pricingTiers } from '../data/pricing'
+import { blogPosts } from '../data/blog'
 import ProjectCard from '../components/ProjectCard.jsx'
 import PricingCard from '../components/PricingCard.jsx'
+import BlogCard from '../components/BlogCard.jsx'
 import Particles from '../components/Particles.jsx'
 import './Home.css'
 
@@ -36,6 +38,7 @@ const currentYear = new Date().getFullYear()
 const experienceYears = currentYear - 2016
 
 const featured = projects.filter((p) => p.featured)
+const recentPosts = blogPosts.slice(0, 3)
 
 export default function Home() {
   return (
@@ -129,6 +132,25 @@ export default function Home() {
           <div className="project-grid">
             {featured.map((p) => (
               <ProjectCard key={p.slug} project={p} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section blog-teaser">
+        <div className="container">
+          <div className="section-head featured-head">
+            <div>
+              <span className="eyebrow">Writing</span>
+              <h2>Case studies and field research</h2>
+            </div>
+            <Link to="/blog" className="btn btn-ghost btn-sm">
+              All posts
+            </Link>
+          </div>
+          <div className="blog-grid">
+            {recentPosts.map((post) => (
+              <BlogCard key={post.slug} post={post} />
             ))}
           </div>
         </div>

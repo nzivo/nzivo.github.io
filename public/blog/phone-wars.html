@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phone Wars</title>
+<style>
+  :root {
+    --bg: #eef0ec;
+    --surface: #fcfcfa;
+    --surface-2: #e5e8e1;
+    --ink: #151e2b;
+    --ink-muted: #4c5666;
+    --ink-faint: #7c8595;
+    --rule: #cfd3c9;
+    --accent: #33538f;
+    --accent-ink: #1f3766;
+    --accent-tint: #dde4f1;
+    --copper: #a85a24;
+    --copper-tint: #f3e2d1;
+    --good: #2f6f4e;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d;
+      --surface: #171c26;
+      --surface-2: #1e2530;
+      --ink: #e8e6df;
+      --ink-muted: #a9b0bd;
+      --ink-faint: #767f8f;
+      --rule: #2b3240;
+      --accent: #8ba3dc;
+      --accent-ink: #cdd9f2;
+      --accent-tint: #202b42;
+      --copper: #e3a05f;
+      --copper-tint: #362a1c;
+      --good: #6fbf8f;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #11151d;
+    --surface: #171c26;
+    --surface-2: #1e2530;
+    --ink: #e8e6df;
+    --ink-muted: #a9b0bd;
+    --ink-faint: #767f8f;
+    --rule: #2b3240;
+    --accent: #8ba3dc;
+    --accent-ink: #cdd9f2;
+    --accent-tint: #202b42;
+    --copper: #e3a05f;
+    --copper-tint: #362a1c;
+    --good: #6fbf8f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sans {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  a { color: var(--accent-ink); }
+
+  .masthead {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3rem 1.5rem 2.4rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .masthead { background: #0a0d13; }
+  }
+  :root[data-theme="dark"] .masthead { background: #0a0d13; }
+
+  .masthead-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    color: #b9c2d6;
+    margin: 0 0 0.9rem;
+  }
+
+  .masthead h1 {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    margin: 0 0 0.7rem;
+    text-wrap: balance;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .masthead .sub {
+    font-size: 1.05rem;
+    color: #cfd6e6;
+    max-width: 46ch;
+    margin: 0 0 1.6rem;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.8rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem;
+  }
+
+  .meta-pill {
+    border: 1px solid #3a4256;
+    color: #dbe1ee;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  section + section { margin-top: 3.4rem; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .section-num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem;
+    color: var(--copper);
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .section-head h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 0 0 1.3rem;
+  }
+
+  p { margin: 0 0 1rem; color: var(--ink); max-width: 66ch; }
+  .lede { font-size: 1.08rem; color: var(--ink-muted); }
+
+  ul.challenges {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  ul.challenges li {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 0.9rem;
+    align-items: baseline;
+  }
+  @media (max-width: 560px) {
+    ul.challenges li {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+  }
+  ul.challenges .tag {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--copper);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.25rem;
+  }
+  ul.challenges strong { color: var(--ink); }
+  ul.challenges span.body { color: var(--ink-muted); }
+
+  blockquote {
+    margin: 1.6rem 0;
+    padding: 0.2rem 0 0.2rem 1.1rem;
+    border-left: 3px solid var(--accent);
+    font-style: italic;
+    color: var(--ink-muted);
+    max-width: 60ch;
+  }
+  blockquote cite {
+    display: block;
+    font-style: normal;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+    margin-top: 0.4rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 560px;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.86rem;
+  }
+
+  thead th {
+    text-align: left;
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 500;
+    padding: 0.65rem 0.9rem;
+    letter-spacing: 0.02em;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) thead th { background: #0a0d13; }
+  }
+  :root[data-theme="dark"] thead th { background: #0a0d13; }
+
+  thead th:first-child { border-top-left-radius: 3px; }
+  thead th:last-child { border-top-right-radius: 3px; }
+
+  tbody td {
+    padding: 0.6rem 0.9rem;
+    border-top: 1px solid var(--rule);
+    color: var(--ink);
+    vertical-align: top;
+  }
+  tbody td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: var(--surface-2); }
+  tbody td:first-child { font-weight: 600; color: var(--ink); }
+
+  .source-note {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    margin: 0.6rem 0 0;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.3rem;
+    margin: 1.6rem 0;
+  }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1.2rem 1.3rem;
+  }
+  .card h3 {
+    font-size: 1rem;
+    margin: 0 0 0.6rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+  }
+  .card p { font-size: 0.94rem; margin-bottom: 0.7rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .stat-line {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+    border-top: 1px dashed var(--rule);
+  }
+  .stat-line:first-of-type { border-top: none; }
+  .stat-line b { color: var(--ink); font-weight: 600; }
+
+  ol.moves {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: move;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  ol.moves li {
+    counter-increment: move;
+    padding-left: 2.6rem;
+    position: relative;
+  }
+  ol.moves li::before {
+    content: counter(move, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.05rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem;
+    color: var(--copper);
+    font-variant-numeric: tabular-nums;
+  }
+  ol.moves strong { display: block; color: var(--ink); margin-bottom: 0.15rem; }
+  ol.moves span { color: var(--ink-muted); font-size: 0.96rem; }
+
+  /* LinkedIn mock card */
+  .li-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .li-head {
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+    padding: 0.9rem 1rem 0.6rem;
+  }
+  .li-avatar {
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex: none;
+  }
+  .li-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .li-role { font-size: 0.76rem; color: var(--ink-faint); }
+  .li-time { font-size: 0.72rem; color: var(--ink-faint); }
+  .li-body {
+    padding: 0 1rem 0.9rem;
+    font-size: 0.88rem;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  .li-body .hashtag, .li-body .mention { color: var(--accent-ink); font-weight: 600; }
+  .li-foot {
+    border-top: 1px solid var(--rule);
+    padding: 0.6rem 1rem;
+    display: flex;
+    gap: 1.3rem;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  .callout {
+    background: var(--copper-tint);
+    border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-top: 1.6rem;
+  }
+  .callout b { color: var(--copper); }
+
+  footer {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">NR! Module &middot; Case Study Analysis</p>
+    <h1>Phone Wars: Odyssey Tech vs. Stellar Devices</h1>
+    <p class="sub">Key challenges in the smartphone market, grounded against Apple's FY2022 Form 10-K and Microsoft's FY2022 Annual Report — the two real filings used for this assignment — plus a ready-to-post LinkedIn summary.</p>
+    <div class="meta-row">
+      <span class="meta-pill">Case: Phone Wars (fictional)</span>
+      <span class="meta-pill">Benchmarked: Apple Inc. 10-K, FY2022</span>
+      <span class="meta-pill">Benchmarked: Microsoft Corp. Annual Report, FY2022</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="challenges">
+    <div class="section-head">
+      <span class="section-num sans">01</span>
+      <h2>Key challenges in the phone market</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Odyssey Tech (software-strong, design-weak at launch) and Stellar Devices (design-led, aesthetics-first) fight across ten fronts — but five challenges recur through every phase of the case and echo almost exactly in how Apple and Microsoft describe their own competitive risk in 2022.</p>
+
+    <ul class="challenges">
+      <li>
+        <span class="tag">DESIGN&nbsp;/<br/>SOFTWARE</span>
+        <span><strong>The design–software split is a false choice by the case's own end.</strong> <span class="body">Odyssey Tech's early stumble came from shipping capability without polish; Stellar Devices' risk was the mirror image — beautiful hardware with a thinner software moat. Both had to close the gap, not pick a side.</span></span>
+      </li>
+      <li>
+        <span class="tag">PRICING&nbsp;/<br/>MARGIN</span>
+        <span><strong>Pricing wars compress margins faster than they build share.</strong> <span class="body">Periodic price cuts to defend share are explicitly called out as damaging profitability for both fictional firms — the same dynamic Apple names as a top risk factor: "aggressive price competition and resulting downward pressure on gross margins."</span></span>
+      </li>
+      <li>
+        <span class="tag">ECOSYSTEM&nbsp;/<br/>LOCK-IN</span>
+        <span><strong>The real battlefield moved from the device to the ecosystem around it.</strong> <span class="body">App stores, cloud services, and smart-home devices turned a hardware sale into a recurring-revenue relationship — exactly what Apple Services (71.7% gross margin) and Microsoft Cloud (32% revenue growth) now represent inside real balance sheets.</span></span>
+      </li>
+      <li>
+        <span class="tag">IP&nbsp;/<br/>LEGAL</span>
+        <span><strong>Design and interface patents became a second front of competition.</strong> <span class="body">The case's legal disputes over UI and design elements mirror Apple's ongoing patent litigation and its Epic Games App Store ruling, and Microsoft's own acknowledgment that "the number of claims, legal proceedings and government investigations... has generally increased over time" for the whole industry.</span></span>
+      </li>
+      <li>
+        <span class="tag">GLOBAL&nbsp;/<br/>REGULATORY</span>
+        <span><strong>Emerging-market growth now arrives bundled with regulatory exposure.</strong> <span class="body">Both fictional companies split strategy between affordability and aspiration abroad; both real filings separately flag the EU Digital Markets Act and antitrust investigations as material risks to their platform economics — growth and scrutiny are no longer separable.</span></span>
+      </li>
+    </ul>
+
+    <blockquote>
+      "Certain competitors have the resources, experience or cost structures to provide products at little or no profit or even at a loss."
+      <cite>— Apple Inc., Form 10-K, FY2022, Item 1A Risk Factors</cite>
+    </blockquote>
+  </section>
+
+  <section id="benchmark">
+    <div class="section-head">
+      <span class="section-num sans">02</span>
+      <h2>Grounding the case: Apple vs. Microsoft, FY2022</h2>
+    </div>
+    <hr class="rule" />
+    <p>Apple and Microsoft aren't smartphone-vs-smartphone rivals, but their FY2022 filings map onto the case's two archetypes better than any two phone makers would: Apple is the design-and-hardware-coherence player (Stellar Devices), Microsoft is the software-and-cloud-ecosystem player pushing into devices (Odyssey Tech) — down to Microsoft's own 10-K language naming Apple as a direct Windows, Devices, and gaming competitor.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric (FY2022)</th>
+            <th>Apple</th>
+            <th>Microsoft</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total revenue</td>
+            <td class="num">$394.3B <span class="sans" style="color:var(--good)">▲8%</span></td>
+            <td class="num">$198.3B <span class="sans" style="color:var(--good)">▲18%</span></td>
+          </tr>
+          <tr>
+            <td>Net income</td>
+            <td class="num">$99.8B</td>
+            <td class="num">$72.7B <span class="sans" style="color:var(--good)">▲19%</span></td>
+          </tr>
+          <tr>
+            <td>Gross margin</td>
+            <td class="num">43.3%</td>
+            <td class="num">~68.4%</td>
+          </tr>
+          <tr>
+            <td>R&amp;D spend</td>
+            <td class="num">$26.3B (7% of revenue)</td>
+            <td class="num">~$24.9B (18% growth)</td>
+          </tr>
+          <tr>
+            <td>Highest-margin line</td>
+            <td class="num">Services — 71.7% margin</td>
+            <td class="num">Microsoft Cloud — 70% margin</td>
+          </tr>
+          <tr>
+            <td>Device/hardware line vs. FY21</td>
+            <td class="num">iPhone $205.5B <span class="sans" style="color:var(--good)">▲7%</span></td>
+            <td class="num">Surface <span class="sans" style="color:var(--good)">▲3%</span> / Xbox content <span class="sans" style="color:var(--good)">▲3%</span></td>
+          </tr>
+          <tr>
+            <td>Named device competitors</td>
+            <td class="num">"minority market share" vs. Android OEMs</td>
+            <td class="num">Apple, Windows OEMs, Amazon, Google</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-note">Figures compiled from Apple Inc. Form 10-K (FY ended 9/24/2022) and Microsoft Corp. FY2022 Annual Report, both filed as primary sources for this assignment. Microsoft R&amp;D figure derived from the reported $3.8B / 18% year-over-year increase.</p>
+
+    <div class="split">
+      <div class="card">
+        <h3>Apple — the Stellar Devices parallel</h3>
+        <p>Apple's own 10-K admits it holds a <em>minority</em> share of the global smartphone, PC, and tablet markets, and states its strategy explicitly: compete on "design innovation, a strong third-party software and accessories ecosystem... service and support" rather than price. Services now carries almost double the margin of hardware.</p>
+        <div class="stat-line"><span>iPhone share of total revenue</span><b>52%</b></div>
+        <div class="stat-line"><span>Services revenue growth</span><b>▲14%</b></div>
+        <div class="stat-line"><span>Employees</span><b>~164,000</b></div>
+      </div>
+      <div class="card">
+        <h3>Microsoft — the Odyssey Tech parallel</h3>
+        <p>Microsoft frames devices (Surface, Xbox) as demand generators for its cloud and software ecosystem rather than the profit center itself — the same logic Odyssey Tech pursued after its slow start. Azure and other cloud services grew 45% and now anchor the whole company's growth.</p>
+        <div class="stat-line"><span>Intelligent Cloud segment growth</span><b>▲25%</b></div>
+        <div class="stat-line"><span>Azure &amp; other cloud growth</span><b>▲45%</b></div>
+        <div class="stat-line"><span>Employees</span><b>~221,000</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="moves">
+    <div class="section-head">
+      <span class="section-num sans">03</span>
+      <h2>Ways to compete from here</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Rather than another round of price cuts, both fictional firms — and their real-world counterparts — have four higher-leverage moves available.</p>
+
+    <ol class="moves">
+      <li>
+        <strong>Compete on the ecosystem's margin, not the device's price.</strong>
+        <span>Apple's Services and Microsoft's Cloud both carry roughly double their hardware gross margin. The strategic question for Odyssey Tech and Stellar Devices isn't "who wins the phone" — it's who converts more device owners into recurring software and service subscribers before the other does.</span>
+      </li>
+      <li>
+        <strong>Segment emerging markets by intent, not just price point.</strong>
+        <span>Affordability-led entry (Odyssey Tech's approach) captures volume but thin margin; aspiration-led entry (Stellar Devices' approach) captures margin but slower volume. A blended play — affordable hardware with premium software tiers — captures both, and is already visible in how Apple prices older iPhones alongside new Services tiers internationally.</span>
+      </li>
+      <li>
+        <strong>Treat sustainability and repairability as a genuine moat, not a compliance line.</strong>
+        <span>With e-waste and right-to-repair regulation tightening globally, a credible circular-hardware program (trade-in, recycled materials, longer software-support windows) becomes a real differentiator for design-perception brands like Stellar Devices — not just a CSR footnote.</span>
+      </li>
+      <li>
+        <strong>Get ahead of platform regulation instead of reacting to it.</strong>
+        <span>Both Apple and Microsoft now list antitrust and app-store/platform-fee scrutiny as material risks. A company that proactively opens parts of its ecosystem (alternative app distribution, interoperability commitments) before being forced to by regulators converts a legal risk into a trust-building move with developers and regulators alike.</span>
+      </li>
+    </ol>
+
+    <div class="callout"><b>Bottom line —</b> the case's real lesson isn't "software vs. design," it's that whichever company first turns its chosen strength into a durable, high-margin ecosystem — and treats regulation and sustainability as strategy rather than overhead — compounds its advantage long after the initial hardware gap closes.</div>
+  </section>
+
+</main>
+
+<footer>
+  Sources: Apple Inc., Annual Report on Form 10-K for fiscal year ended September 24, 2022 (SEC filing). Microsoft Corporation, Fiscal Year 2022 Annual Report. Case narrative "Phone Wars" is fictional coursework material for the NR! module.
+</footer>
+
+</body>
+</html>

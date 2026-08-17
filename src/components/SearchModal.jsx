@@ -36,9 +36,13 @@ export default function SearchModal({ open, onClose }) {
 
   const results = searchSite(query)
 
-  const goTo = (to) => {
+  const goTo = (item) => {
     onClose()
-    navigate(to)
+    if (item.external) {
+      window.location.href = item.to
+    } else {
+      navigate(item.to)
+    }
   }
 
   return createPortal(
@@ -79,7 +83,7 @@ export default function SearchModal({ open, onClose }) {
         ) : (
           <div className="search-modal-results">
             {results.map((r) => (
-              <button key={`${r.type}-${r.title}`} type="button" className="search-modal-result" onClick={() => goTo(r.to)}>
+              <button key={`${r.type}-${r.title}`} type="button" className="search-modal-result" onClick={() => goTo(r)}>
                 <span className="search-modal-result-tag">{r.type}</span>
                 <span className="search-modal-result-body">
                   <strong>{r.title}</strong>

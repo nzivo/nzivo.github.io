@@ -181,6 +181,12 @@
   gap: 24px;
 }
 
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
 .final-cta {
   text-align: center;
 }
@@ -209,7 +215,8 @@
 
   .skills-grid,
   .project-grid,
-  .pricing-grid {
+  .pricing-grid,
+  .blog-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -265,7 +272,8 @@
 
   .skills-grid,
   .project-grid,
-  .pricing-grid {
+  .pricing-grid,
+  .blog-grid {
     grid-template-columns: 1fr;
   }
 

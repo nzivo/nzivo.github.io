@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Shift</title>
+    <style>
+      :root {
+        --bg: #eef0ec;
+        --surface: #fcfcfa;
+        --surface-2: #e5e8e1;
+        --ink: #151e2b;
+        --ink-muted: #4c5666;
+        --ink-faint: #7c8595;
+        --rule: #cfd3c9;
+        --accent: #33538f;
+        --accent-ink: #1f3766;
+        --accent-tint: #dde4f1;
+        --copper: #a85a24;
+        --copper-tint: #f3e2d1;
+        --good: #2f6f4e;
+        --bad: #a13a3a;
+        --bad-tint: #f4dede;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #11151d;
+          --surface: #171c26;
+          --surface-2: #1e2530;
+          --ink: #e8e6df;
+          --ink-muted: #a9b0bd;
+          --ink-faint: #767f8f;
+          --rule: #2b3240;
+          --accent: #8ba3dc;
+          --accent-ink: #cdd9f2;
+          --accent-tint: #202b42;
+          --copper: #e3a05f;
+          --copper-tint: #362a1c;
+          --good: #6fbf8f;
+          --bad: #e08484;
+          --bad-tint: #3a2020;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #11151d;
+        --surface: #171c26;
+        --surface-2: #1e2530;
+        --ink: #e8e6df;
+        --ink-muted: #a9b0bd;
+        --ink-faint: #767f8f;
+        --rule: #2b3240;
+        --accent: #8ba3dc;
+        --accent-ink: #cdd9f2;
+        --accent-tint: #202b42;
+        --copper: #e3a05f;
+        --copper-tint: #362a1c;
+        --good: #6fbf8f;
+        --bad: #e08484;
+        --bad-tint: #3a2020;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .sans {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      a {
+        color: var(--accent-ink);
+      }
+
+      .masthead {
+        background: var(--ink);
+        color: var(--bg);
+        padding: 3rem 1.5rem 2.4rem;
+        position: relative;
+        overflow: hidden;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) .masthead {
+          background: #0a0d13;
+        }
+      }
+      :root[data-theme="dark"] .masthead {
+        background: #0a0d13;
+      }
+      .masthead::after {
+        content: "";
+        position: absolute;
+        right: -2.5rem;
+        top: -2.5rem;
+        width: 11rem;
+        height: 11rem;
+        border: 2px dashed #3a4256;
+        border-radius: 22%;
+        transform: rotate(18deg);
+        opacity: 0.5;
+      }
+      .masthead-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .eyebrow {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.72rem;
+        color: #b9c2d6;
+        margin: 0 0 0.9rem;
+      }
+      .masthead h1 {
+        font-size: clamp(2.1rem, 5vw, 3.1rem);
+        line-height: 1.08;
+        margin: 0 0 0.7rem;
+        text-wrap: balance;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+      .masthead .sub {
+        font-size: 1.05rem;
+        color: #cfd6e6;
+        max-width: 50ch;
+        margin: 0 0 1.6rem;
+      }
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.8rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.78rem;
+      }
+      .meta-pill {
+        border: 1px solid #3a4256;
+        color: #dbe1ee;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 5rem;
+      }
+      section + section {
+        margin-top: 3.4rem;
+      }
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        gap: 0.9rem;
+        margin-bottom: 1.3rem;
+      }
+      .section-num {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.78rem;
+        color: var(--copper);
+        letter-spacing: 0.08em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .section-head h2 {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .rule {
+        border: none;
+        border-top: 1px solid var(--rule);
+        margin: 0 0 1.3rem;
+      }
+
+      p {
+        margin: 0 0 1rem;
+        color: var(--ink);
+        max-width: 66ch;
+      }
+      .lede {
+        font-size: 1.08rem;
+        color: var(--ink-muted);
+      }
+
+      blockquote {
+        margin: 1.6rem 0;
+        padding: 0.2rem 0 0.2rem 1.1rem;
+        border-left: 3px solid var(--accent);
+        font-style: italic;
+        color: var(--ink-muted);
+        max-width: 60ch;
+      }
+      blockquote cite {
+        display: block;
+        font-style: normal;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        color: var(--ink-faint);
+        margin-top: 0.4rem;
+      }
+
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.9rem;
+        margin: 1.4rem 0 1.8rem;
+      }
+      @media (max-width: 640px) {
+        .stat-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        padding: 0.9rem 1rem;
+      }
+      .stat .num {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent-ink);
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .stat .num.bad {
+        color: var(--bad);
+      }
+      .stat .num.good {
+        color: var(--good);
+      }
+      .stat .label {
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.76rem;
+        color: var(--ink-muted);
+        margin-top: 0.35rem;
+        line-height: 1.35;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        background: var(--surface);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 560px;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.86rem;
+      }
+      thead th {
+        text-align: left;
+        background: var(--ink);
+        color: var(--bg);
+        font-weight: 500;
+        padding: 0.65rem 0.9rem;
+        letter-spacing: 0.02em;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) thead th {
+          background: #0a0d13;
+        }
+      }
+      :root[data-theme="dark"] thead th {
+        background: #0a0d13;
+      }
+      thead th:first-child {
+        border-top-left-radius: 3px;
+      }
+      thead th:last-child {
+        border-top-right-radius: 3px;
+      }
+      tbody td {
+        padding: 0.65rem 0.9rem;
+        border-top: 1px solid var(--rule);
+        color: var(--ink);
+        vertical-align: top;
+      }
+      tbody tr:nth-child(even) {
+        background: var(--surface-2);
+      }
+      tbody td:first-child {
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.3rem;
+        margin: 1.6rem 0;
+      }
+      @media (max-width: 640px) {
+        .split {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        padding: 1.2rem 1.3rem;
+      }
+      .card h3 {
+        font-size: 1rem;
+        margin: 0 0 0.6rem;
+        font-weight: 600;
+        color: var(--accent-ink);
+      }
+      .card.warn h3 {
+        color: var(--bad);
+      }
+      .card p {
+        font-size: 0.94rem;
+        margin-bottom: 0.7rem;
+      }
+      .card p:last-child {
+        margin-bottom: 0;
+      }
+
+      ol.moves {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: move;
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+      }
+      ol.moves li {
+        counter-increment: move;
+        padding-left: 2.6rem;
+        position: relative;
+      }
+      ol.moves li::before {
+        content: counter(move, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.05rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.78rem;
+        color: var(--copper);
+        font-variant-numeric: tabular-nums;
+      }
+      ol.moves strong {
+        display: block;
+        color: var(--ink);
+        margin-bottom: 0.15rem;
+      }
+      ol.moves span {
+        color: var(--ink-muted);
+        font-size: 0.96rem;
+      }
+
+      .callout {
+        background: var(--copper-tint);
+        border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+        border-radius: 4px;
+        padding: 1rem 1.1rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.9rem;
+        color: var(--ink);
+        margin-top: 1.6rem;
+      }
+      .callout b {
+        color: var(--copper);
+      }
+
+      .li-card {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        overflow: hidden;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+      .li-head {
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+        padding: 0.9rem 1rem 0.6rem;
+      }
+      .li-avatar {
+        width: 2.6rem;
+        height: 2.6rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        flex: none;
+      }
+      .li-name {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .li-role {
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+      }
+      .li-time {
+        font-size: 0.72rem;
+        color: var(--ink-faint);
+      }
+      .li-body {
+        padding: 0 1rem 0.9rem;
+        font-size: 0.88rem;
+        color: var(--ink);
+        white-space: pre-wrap;
+      }
+      .li-body .hashtag,
+      .li-body .mention {
+        color: var(--accent-ink);
+        font-weight: 600;
+      }
+      .li-foot {
+        border-top: 1px solid var(--rule);
+        padding: 0.6rem 1rem;
+        display: flex;
+        gap: 1.3rem;
+        font-size: 0.78rem;
+        color: var(--ink-faint);
+      }
+
+      .sources {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 1.5rem 1rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+      }
+      .sources h4 {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--ink-muted);
+        margin: 0 0 0.5rem;
+      }
+      .sources ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      footer {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 1rem 1.5rem 3rem;
+        font-family:
+          ui-sans-serif,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 0.76rem;
+        color: var(--ink-faint);
+        border-top: 1px solid var(--rule);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="masthead">
+      <div class="masthead-inner">
+        <p class="eyebrow">NR! Module &middot; Problem-Solving Scenario</p>
+        <h1>Digital Shift: the Toy Industry</h1>
+        <p class="sub">
+          Where AR/VR and hybrid play break the old marketing playbook, why "add
+          digital features" is a riskier bet than it looks, and what the toy
+          industry's real EV moment is turning out to be.
+        </p>
+        <div class="meta-row">
+          <span class="meta-pill">Scenario: Digital Shift in Toys</span>
+          <span class="meta-pill">Grounded in 6 primary sources</span>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section id="marketing">
+        <div class="section-head">
+          <span class="section-num sans">01</span>
+          <h2>The marketing paradigm has flipped direction</h2>
+        </div>
+        <hr class="rule" />
+        <p class="lede">
+          The old model sold a single object once: shelf placement, a TV spot, a
+          Christmas catalog. The new model has to sell — and keep selling — an
+          ecosystem: a physical object, an app, an online community, and a
+          stream of content that never stops after the purchase.
+        </p>
+        <p>Three concrete shifts make this harder than "add an app":</p>
+
+        <div class="stat-row">
+          <div class="stat">
+            <div class="num good">87M</div>
+            <div class="label">
+              players reached through LEGO's Fortnite tie-up — discovery now
+              happens inside someone else's platform, not a toy aisle
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num good">71%</div>
+            <div class="label">
+              of children, per LEGO's own research, now carry stories from
+              digital games <em>into</em> physical play — the influence
+              direction has reversed
+            </div>
+          </div>
+          <div class="stat">
+            <div class="num">16%</div>
+            <div class="label">
+              jump in 2020 toy sales, but with YouTube unboxings replacing TV as
+              kids' primary product-discovery channel
+            </div>
+          </div>
+        </div>
+
+        <p>
+          That reversal is the real paradigm break: brands used to launch a toy
+          and hope a cartoon or ad drove kids to it. Now the digital narrative
+          (a Fortnite island, a Minecraft build, a YouTube creator) comes first,
+          and the physical product has to earn its place as an extension of an
+          experience kids already know — which means marketing has shifted from
+          campaign-based to always-on content operations, and cross-platform
+          compatibility (iOS, Android, console, and whatever the app store
+          approves this quarter) has become a marketing constraint, not just an
+          engineering one.
+        </p>
+
+        <blockquote>
+          "LEGO games have become extensions of the LEGO System in Play" —
+          builders move seamlessly between creating in the real world and
+          building in the digital one.
+          <cite
+            >— Fredrik Loving, SVP &amp; Head of LEGO GAME, LEGO.com
+            newsroom</cite
+          >
+        </blockquote>
+      </section>
+
+      <section id="dilemma">
+        <div class="section-head">
+          <span class="section-num sans">02</span>
+          <h2>
+            The real risk isn't adding AR/VR — it's whose platform you depend on
+          </h2>
+        </div>
+        <hr class="rule" />
+        <p>
+          The scenario frames this as a binary: modernize with AR/VR and risk
+          pushing kids toward fully digital play, or stay physical and risk
+          looking dated. The FY2025–26 numbers from Hasbro and Mattel suggest
+          the binary is wrong — digital isn't the threat itself, dependency on
+          someone else's digital ecosystem is.
+        </p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hasbro, recent quarter</th>
+                <th>Traditional toys</th>
+                <th>Owned digital gaming (Wizards of the Coast)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Revenue growth</td>
+                <td class="bad" style="color: var(--bad)">▼20%</td>
+                <td style="color: var(--good)">▲86%</td>
+              </tr>
+              <tr>
+                <td>Operating margin</td>
+                <td>—</td>
+                <td>45%, up from ~24% a year earlier</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p
+          class="sans"
+          style="
+            font-size: 0.78rem;
+            color: var(--ink-faint);
+            margin-top: 0.5rem;
+          "
+        >
+          Source: CNBC, "Hasbro vs Mattel: Toy industry pressures make digital
+          the star," Feb 2026.
+        </p>
+
+        <div class="split">
+          <div class="card warn">
+            <h3>Failure mode A — stay purely physical</h3>
+            <p>
+              Toys R Us didn't lose to AR/VR — it lost because it outsourced its
+              own e-commerce to Amazon in the early 2000s and never rebuilt
+              digital retail capability in-house. By the time it needed to
+              compete on its own digital terms, the debt from its 2005 leveraged
+              buyout left no room to catch up. It filed for bankruptcy in 2017
+              and liquidated its US stores in 2018.
+            </p>
+          </div>
+          <div class="card warn">
+            <h3>Failure mode B — digitize into someone else's house</h3>
+            <p>
+              A toy that only functions as a login screen inside Fortnite,
+              Roblox, or Minecraft builds engagement for the platform, not
+              necessarily brand equity for the toy. If the digital layer isn't
+              owned, the brand is one algorithm change or licensing
+              renegotiation away from losing the relationship it just spent
+              years building with that child.
+            </p>
+          </div>
+        </div>
+
+        <p>
+          Hasbro's numbers make the third option visible: Wizards of the Coast
+          isn't an app bolted onto old toys, it's an
+          <em>owned</em> digital-games business (Magic: The Gathering, Dungeons
+          &amp; Dragons digital tools) that competes directly with the
+          video-game industry on its own turf, at software margins. That's a
+          materially different bet than adding AR to a dinosaur toy.
+        </p>
+      </section>
+
+      <section id="parallel">
+        <div class="section-head">
+          <span class="section-num sans">03</span>
+          <h2>Is this really the toy industry's EV moment?</h2>
+        </div>
+        <hr class="rule" />
+        <p class="lede">
+          Partly — but the sharper parallel isn't the petrol-to-electric
+          transition; it's the retailer that never made any transition at all.
+        </p>
+        <p>
+          The EV analogy implies every player eventually gets there, just on
+          different timelines, the way most automakers now field electric
+          line-ups. Toys R Us is the more useful warning: it shows that "adapt
+          eventually" isn't guaranteed to be survivable. A five-to-ten-year lag
+          on digital capability didn't cost it market share — it ended the
+          company.
+        </p>
+
+        <ol class="moves">
+          <li>
+            <strong>Don't treat "digitize every toy" as the goal.</strong
+            ><span
+              >Pandemic-era data shows real, durable demand for screen-free,
+              tactile, STEM, and sustainability-led play — a segment that AR/VR
+              features don't serve and shouldn't be forced onto.</span
+            >
+          </li>
+          <li>
+            <strong
+              >Build (or buy) owned digital-game capability, not app
+              add-ons.</strong
+            ><span
+              >Hasbro's margin data is the clearest evidence in this analysis:
+              an owned games studio competes at software economics; a companion
+              app to a physical toy mostly doesn't.</span
+            >
+          </li>
+          <li>
+            <strong>Run a barbell portfolio, not a single bet.</strong
+            ><span
+              >Keep tactile/physical lines strong for the parents and kids
+              actively choosing less screen time, while building genuinely
+              competitive digital-game IP for the segment already living inside
+              Fortnite, Roblox, and Minecraft — and measure each half on its own
+              economics.</span
+            >
+          </li>
+          <li>
+            <strong
+              >Treat platform dependency as a strategic risk to manage, not a
+              marketing channel to chase.</strong
+            ><span
+              >Collaborations like LEGO Fortnite are valuable for reach, but
+              should be paired with investment in owned digital properties the
+              brand fully controls — the same way an automaker uses a
+              battery-supplier partnership to get to market faster while still
+              building its own EV platform.</span
+            >
+          </li>
+        </ol>
+
+        <div class="callout">
+          <b>Bottom line —</b> the toy industry doesn't need every product to go
+          digital. It needs a clear answer to one question per line: does this
+          experience live on a platform we own, or one we're a guest on — and
+          can the business model survive either answer if the guest arrangement
+          ends?
+        </div>
+      </section>
+    </main>
+
+    <div class="sources">
+      <h4>Sources reviewed</h4>
+      <ul>
+        <li>
+          <a href="https://drawandcode.com/sectors/immersive-in-toys-industry/"
+            >Draw &amp; Code — Immersive Technology in the Toys Industry</a
+          >
+        </li>
+        <li>
+          <a href="https://drawandcode.com/projects/merge-cube/"
+            >Draw &amp; Code — Merge Cube project case study</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.forbes.com/sites/richardkestenbaum/2021/04/20/how-the-pandemic-has-changed-the-toy-business-and-the-latest-trends-in-toys/"
+            >Forbes — How the Pandemic Has Changed the Toy Business (Kestenbaum,
+            2021)</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.cnbc.com/2026/02/21/hasbro-vs-mattel-toy-industry-pressures-make-digital-the-star.html"
+            >CNBC — Hasbro vs Mattel: Toy Industry Pressures Make Digital the
+            Star (2026)</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.lego.com/en-us/aboutus/news/2025/december/game-on-30-years-of-lego-video-games"
+            >LEGO.com — Game On: 30 Years of LEGO Video Games (2025)</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.inc.com/jason-albanese/the-death-of-a-toy-retailer-how-a-lack-of-digital-transformation-helped-destroy-toys-r-us.html"
+            >Inc. — The Death of a Toy Retailer: Toys R Us (Albanese)</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <footer>
+      "Digital Shift" is NR! module coursework built around a fictional
+      narrative referencing real toy brands. Analysis, figures, and
+      recommendations above reflect original commentary and public reporting
+      current as of August 2026.
+    </footer>
+  </body>
+</html>

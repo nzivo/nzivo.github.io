@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toy Store Field Notes</title>
+<style>
+  :root {
+    --bg: #eef0ec; --surface: #fcfcfa; --surface-2: #e5e8e1;
+    --ink: #151e2b; --ink-muted: #4c5666; --ink-faint: #7c8595; --rule: #cfd3c9;
+    --accent: #33538f; --accent-ink: #1f3766; --accent-tint: #dde4f1;
+    --copper: #a85a24; --copper-tint: #f3e2d1; --good: #2f6f4e; --bad: #a13a3a; --bad-tint: #f4dede;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+      --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+      --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+      --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #11151d; --surface: #171c26; --surface-2: #1e2530;
+    --ink: #e8e6df; --ink-muted: #a9b0bd; --ink-faint: #767f8f; --rule: #2b3240;
+    --accent: #8ba3dc; --accent-ink: #cdd9f2; --accent-tint: #202b42;
+    --copper: #e3a05f; --copper-tint: #362a1c; --good: #6fbf8f; --bad: #e08484; --bad-tint: #3a2020;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .sans { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent-ink); }
+
+  .masthead { background: var(--ink); color: var(--bg); padding: 3rem 1.5rem 2.4rem; position: relative; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .masthead { background: #0a0d13; } }
+  :root[data-theme="dark"] .masthead { background: #0a0d13; }
+  .masthead::after {
+    content: ""; position: absolute; right: -2.5rem; bottom: -3rem; width: 12rem; height: 12rem;
+    border: 2px dashed #3a4256; border-radius: 14%; transform: rotate(-12deg); opacity: 0.5;
+  }
+  .masthead-inner { max-width: 780px; margin: 0 auto; position: relative; }
+  .eyebrow {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; color: #b9c2d6; margin: 0 0 0.9rem;
+  }
+  .masthead h1 { font-size: clamp(2.1rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 0.7rem; text-wrap: balance; font-weight: 400; letter-spacing: -0.01em; }
+  .masthead .sub { font-size: 1.05rem; color: #cfd6e6; max-width: 52ch; margin: 0 0 1.6rem; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.78rem; }
+  .meta-pill { border: 1px solid #3a4256; color: #dbe1ee; padding: 0.25rem 0.65rem; border-radius: 999px; white-space: nowrap; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  section + section { margin-top: 3.4rem; }
+  .section-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.3rem; }
+  .section-num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .section-head h2 { font-size: 1.45rem; font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 0 0 1.3rem; }
+
+  p { margin: 0 0 1rem; color: var(--ink); max-width: 68ch; }
+  .lede { font-size: 1.06rem; color: var(--ink-muted); }
+
+  .disclosure {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.86rem; background: var(--accent-tint); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 4px; padding: 0.9rem 1.1rem; color: var(--ink); margin-bottom: 1.4rem;
+  }
+  .disclosure b { color: var(--accent-ink); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 620px; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.84rem; }
+  thead th { text-align: left; background: var(--ink); color: var(--bg); font-weight: 500; padding: 0.6rem 0.85rem; letter-spacing: 0.02em; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) thead th { background: #0a0d13; } }
+  :root[data-theme="dark"] thead th { background: #0a0d13; }
+  thead th:first-child { border-top-left-radius: 3px; }
+  thead th:last-child { border-top-right-radius: 3px; }
+  tbody td { padding: 0.6rem 0.85rem; border-top: 1px solid var(--rule); color: var(--ink); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--surface-2); }
+  tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .scope-tag {
+    display: inline-block; font-size: 0.68rem; padding: 0.1rem 0.45rem; border-radius: 999px;
+    font-weight: 600; letter-spacing: 0.02em; margin-left: 0.35rem;
+  }
+  .scope-tag.local { background: var(--copper-tint); color: var(--copper); }
+  .scope-tag.global { background: var(--accent-tint); color: var(--accent-ink); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 1.2rem 1.3rem; }
+  .card h3 { font-size: 1rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--accent-ink); }
+  .card p { font-size: 0.94rem; margin-bottom: 0.7rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* then vs now */
+  .tvn { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .tvn { grid-template-columns: 1fr; } }
+  .tvn-col { padding: 1.2rem 1.3rem; background: var(--surface); }
+  .tvn-col.now { background: var(--surface-2); border-left: 1px solid var(--rule); }
+  @media (max-width: 640px) { .tvn-col.now { border-left: none; border-top: 1px solid var(--rule); } }
+  .tvn-head {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--copper); margin-bottom: 0.8rem;
+  }
+  .tvn ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .tvn li { font-size: 0.94rem; color: var(--ink); }
+  .tvn li b { color: var(--ink); }
+
+  ol.moves { margin: 0; padding: 0; list-style: none; counter-reset: move; display: flex; flex-direction: column; gap: 1.1rem; }
+  ol.moves li { counter-increment: move; padding-left: 2.6rem; position: relative; }
+  ol.moves li::before {
+    content: counter(move, decimal-leading-zero); position: absolute; left: 0; top: 0.05rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); font-variant-numeric: tabular-nums;
+  }
+  ol.moves strong { display: block; color: var(--ink); margin-bottom: 0.15rem; }
+  ol.moves span { color: var(--ink-muted); font-size: 0.96rem; }
+
+  .callout {
+    background: var(--copper-tint); border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+    border-radius: 4px; padding: 1rem 1.1rem; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.9rem; color: var(--ink); margin-top: 1.6rem;
+  }
+  .callout b { color: var(--copper); }
+
+  .li-card {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .li-head { display: flex; gap: 0.7rem; align-items: center; padding: 0.9rem 1rem 0.6rem; }
+  .li-avatar {
+    width: 2.6rem; height: 2.6rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; flex: none;
+  }
+  .li-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .li-role { font-size: 0.76rem; color: var(--ink-faint); }
+  .li-time { font-size: 0.72rem; color: var(--ink-faint); }
+  .li-body { padding: 0 1rem 0.9rem; font-size: 0.87rem; color: var(--ink); white-space: pre-wrap; }
+  .li-body .hashtag, .li-body .mention { color: var(--accent-ink); font-weight: 600; }
+  .li-foot { border-top: 1px solid var(--rule); padding: 0.6rem 1rem; display: flex; gap: 1.3rem; font-size: 0.78rem; color: var(--ink-faint); }
+
+  .sources {
+    max-width: 780px; margin: 0 auto; padding: 0 1.5rem 1rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint);
+  }
+  .sources h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin: 0 0 0.5rem; }
+  .sources ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+
+  footer {
+    max-width: 780px; margin: 0 auto; padding: 1rem 1.5rem 3rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.76rem; color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">NR! Module &middot; Field Research</p>
+    <h1>Toy Store Field Notes</h1>
+    <p class="sub">Promotion, bundling, and franchise co-marketing across six online toy retailers and three physical chains — held up against a 1990s toy shelf.</p>
+    <div class="meta-row">
+      <span class="meta-pill">6 online stores &middot; 3 PT local + 3 global</span>
+      <span class="meta-pill">3 physical chains &middot; desk research</span>
+      <span class="meta-pill">Baseline: 1990s childhood</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="scope">
+    <div class="section-head">
+      <span class="section-num sans">01</span>
+      <h2>Scope and method</h2>
+    </div>
+    <hr class="rule" />
+    <div class="disclosure"><b>How this was done —</b> the 6 online stores below were reviewed directly (live homepage review, Aug 2026): 3 Portuguese retailers and 3 global chains, matching the assignment's local/global split. The 3 physical chains were <b>not</b> visited in person — they're desk-researched from current retailer press coverage and each chain's own published in-store programs, and are labeled as such throughout. The "childhood" column reflects general, widely-shared 1990s toy-marketing touchstones rather than one specific person's memory, and is written to be personalized before posting.</div>
+    <p>Online stores reviewed — <b>Local (Portugal):</b> Drim.pt, Brincatoys.pt, Magia do Brinquedo. <b>Global:</b> Toys"R"Us (toysrus.com), Hamleys (hamleys.com), LEGO (lego.com/pt-pt and lego.com AR programs).</p>
+  </section>
+
+  <section id="online">
+    <div class="section-head">
+      <span class="section-num sans">02</span>
+      <h2>What the 6 storefronts are actually selling</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Every store, local or global, leads with the same three levers: percentage-off flash sales, franchise licensing stacked across multiple properties at once, and a loyalty or omnichannel hook — not the toy's own features.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Store</th><th>Standout promotion / bundle</th><th>Franchise co-marketing observed</th></tr></thead>
+        <tbody>
+          <tr><td>Drim.pt <span class="scope-tag local">PT</span></td><td>Blanket 60% discount tier; "Kidult" category for adult collectors</td><td>Star Wars, Disney, Marvel, Monster High, Super Mario</td></tr>
+          <tr><td>Brincatoys.pt <span class="scope-tag local">PT</span></td><td>"Brinca Prime" loyalty — 4% cashback, 8% on month-end weekends; 2-hour in-store pickup</td><td>Bluey, Minecraft, Pokémon, Sonic, Godzilla x Kong, Barbie Signature</td></tr>
+          <tr><td>Magia do Brinquedo <span class="scope-tag local">PT</span></td><td>Small-catalog, family-retailer feel; free shipping over &euro;80</td><td>LEGO Harry Potter / Star Wars / Minecraft / Super Mario themes only — no independent campaigns</td></tr>
+          <tr><td>Toys"R"Us <span class="scope-tag global">Global</span></td><td>"Geoffrey's Toy Box" house brand; shoppable "Toys in Action" video content</td><td>Homepage led by <b>Toy Story 5</b> theatrical tie-in; Marvel, DC, Star Wars playsets</td></tr>
+          <tr><td>Hamleys <span class="scope-tag global">Global</span></td><td>Up to 70% off sale; brand-specific cuts (20&ndash;25% on Numberblocks, Playmobil)</td><td>LEGO One Piece, LEGO Star Wars, Disney Wish, Harry Potter</td></tr>
+          <tr><td>LEGO <span class="scope-tag global">Global</span></td><td>AR "Digital Box" in-store scan-to-preview kiosks; app-unlocked Technic and Hidden Side sets</td><td>Star Wars, Marvel, Minecraft, Super Mario, Harry Potter, Fortnite, One Piece</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The pattern that stands out: no store, local or global, sells a single franchise anymore. Every catalog runs 4&ndash;6 licensed universes in parallel, and the local Portuguese retailers mirror the global players' licensing mix almost exactly — the difference between them is loyalty mechanics and delivery speed, not what's on the shelf.</p>
+  </section>
+
+  <section id="physical">
+    <div class="section-head">
+      <span class="section-num sans">03</span>
+      <h2>Physical retail: from shelf-space to experience <span class="sans" style="font-size:0.7rem;color:var(--ink-faint);font-weight:400;">(desk research, not visited)</span></h2>
+    </div>
+    <hr class="rule" />
+    <p>Three chains illustrate the same shift from a different angle: the physical store's job has moved from "hold inventory" to "manufacture an experience e-commerce can't replicate."</p>
+
+    <div class="split">
+      <div class="card">
+        <h3>Hamleys — theatre as retail</h3>
+        <p>The Regent Street flagship runs a "Gootopia" slime-making activation, in-store performers, meet-and-greets, and even a branded sightseeing bus tour through London. The toys are almost secondary to the visit itself.</p>
+      </div>
+      <div class="card">
+        <h3>LEGO — the AR fitting room</h3>
+        <p>In-store "Digital Box" kiosks let a shopper hold a physical set box up to a screen and watch a full 3D animated build appear before they buy — augmented reality used as a try-before-you-buy tool, not just a post-purchase feature.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.3rem;">
+      <h3>Toys"R"Us — the shop-in-shop pivot</h3>
+      <p>Rather than rebuild standalone stores after its 2018 collapse, the brand relaunched as 450+ branded shop-in-shops inside Macy's locations across the US, alongside a handful of destination flagships (American Dream, Mall of America). It re-entered physical retail by embedding inside someone else's foot traffic, not by competing for its own square footage.</p>
+    </div>
+  </section>
+
+  <section id="ar">
+    <div class="section-head">
+      <span class="section-num sans">04</span>
+      <h2>AR and digital toys observed</h2>
+    </div>
+    <hr class="rule" />
+    <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.6rem;">
+      <li><b>LEGO Hidden Side</b> — physical haunted-house sets paired with a ghost-hunting AR app that overlays hidden characters and puzzles onto the real model.</li>
+      <li><b>LEGO Technic AR</b> — pull-back Technic vehicles unlock AR racetracks and steering challenges through a companion app.</li>
+      <li><b>LEGO Nexo Knights</b> — scannable in-box shields upgrade a companion game's in-app powers, linking the physical purchase directly to digital progression.</li>
+      <li><b>LEGO in-store Digital Box</b> — AR retail kiosk turning any shelf box into a rotatable 3D preview before purchase.</li>
+      <li><b>Mattel Hot Wheels id</b> — physical die-cast cars with embedded chips that scan into a racing app to unlock stats, ghost-racing, and digital challenges.</li>
+      <li><b>Merge Cube</b> — a palm-sized physical cube that acts as a marker-based AR display/controller, sold through Walmart and online, used across multiple third-party game titles for younger players.</li>
+    </ul>
+  </section>
+
+  <section id="thenvsnow">
+    <div class="section-head">
+      <span class="section-num sans">05</span>
+      <h2>Then vs. now — a 1990s toy shelf vs. today's</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">Growing up in the 1990s, the toys that mattered were things like a Game Boy, a shelf of Beanie Babies, LEGO Space or Ninja Turtles sets, and Saturday-morning cartoon tie-in figures. <em>(Swap in your own specific toys/brands here before posting — this frame is built to be personalized.)</em></p>
+
+    <div class="tvn">
+      <div class="tvn-col then">
+        <div class="tvn-head sans">1990s</div>
+        <ul>
+          <li><b>Discovery</b> — Saturday-morning cartoons, TV ads, and the printed holiday catalog "wish book," circled in pencil.</li>
+          <li><b>Purchase</b> — one transaction, one object; nothing to install, unlock, or update afterward.</li>
+          <li><b>Franchise tie-in</b> — a single license per toy line (Star Wars figures, Ninja Turtles vehicles), tied to a movie's theatrical run.</li>
+          <li><b>Scarcity</b> — playground word-of-mouth and real shelf shortages (Beanie Babies, Tickle Me Elmo).</li>
+          <li><b>Physical store</b> — the destination itself; browsing the aisle <em>was</em> the entertainment.</li>
+        </ul>
+      </div>
+      <div class="tvn-col now">
+        <div class="tvn-head sans">Today</div>
+        <ul>
+          <li><b>Discovery</b> — YouTube unboxings, TikTok, and in-game crossovers (LEGO inside Fortnite) reach kids before a store ever does.</li>
+          <li><b>Purchase</b> — the box is step one; an app, loyalty account, or AR layer continues the experience indefinitely.</li>
+          <li><b>Franchise tie-in</b> — 4&ndash;6 licensed universes running in every catalog simultaneously, independent of any single release date.</li>
+          <li><b>Scarcity</b> — engineered flash discounts (60&ndash;70% sales) and loyalty-tier cashback replace organic shortage.</li>
+          <li><b>Physical store</b> — a branded activation (slime labs, AR kiosks) or a shop-in-shop riding someone else's foot traffic, not a standalone destination.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="sources">
+  <h4>Sources reviewed</h4>
+  <ul>
+    <li><a href="https://www.toysrus.com/">Toys"R"Us — homepage review, Aug 2026</a></li>
+    <li><a href="https://www.hamleys.com/">Hamleys — homepage review, Aug 2026</a></li>
+    <li><a href="https://www.drim.pt/">Drim.pt — homepage review, Aug 2026</a></li>
+    <li><a href="https://brincatoys.pt/">Brincatoys.pt — homepage review, Aug 2026</a></li>
+    <li><a href="https://www.magiadobrinquedo.pt/">Magia do Brinquedo — homepage review, Aug 2026</a></li>
+    <li><a href="https://www.retaildive.com/news/toys-r-us-brand-to-open-400-shop-in-shops-in-macys-stores/605244/">Retail Dive — Toys"R"Us shop-in-shops inside Macy's</a></li>
+    <li><a href="https://www.lego.com/en-gb/themes/technic/ar-app">LEGO — Technic AR App, official product page</a></li>
+    <li><a href="https://retailwire.com/discussion/lego-brings-ar-to-an-empty-store/">RetailWire — LEGO in-store AR ("Digital Box")</a></li>
+  </ul>
+</div>
+
+<footer>
+  "Toys Sales" field research is NR! module coursework. The physical-store section is explicitly desk research, not an in-person visit; the 1990s comparison is a general reference frame intended for personalization before publishing.
+</footer>
+
+</body>
+</html>

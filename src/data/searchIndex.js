@@ -1,10 +1,12 @@
 import { projects } from './projects'
 import { pricingTiers } from './pricing'
+import { blogPosts } from './blog'
 
 const pages = [
   { type: 'Page', title: 'Home', text: 'Intro, skills, and featured work.', to: '/' },
   { type: 'Page', title: 'Projects', text: 'Frontend, backend, and fullstack project showcase.', to: '/projects' },
   { type: 'Page', title: 'Pricing', text: 'Service packages and rates.', to: '/pricing' },
+  { type: 'Page', title: 'Blog', text: 'Case studies, field research, and write-ups.', to: '/blog' },
   { type: 'Page', title: 'Resume', text: 'Download or view my resume.', to: '/resume' },
   { type: 'Page', title: 'Contact', text: 'Get in touch about a project.', to: '/contact' },
 ]
@@ -31,7 +33,15 @@ const pricingEntries = pricingTiers.map((t) => ({
   to: '/pricing',
 }))
 
-export const searchIndex = [...pages, ...skills, ...projectEntries, ...pricingEntries]
+const blogEntries = blogPosts.map((p) => ({
+  type: 'Blog',
+  title: p.title,
+  text: p.summary,
+  to: p.file,
+  external: true,
+}))
+
+export const searchIndex = [...pages, ...skills, ...projectEntries, ...pricingEntries, ...blogEntries]
 
 export function searchSite(query, limit = 8) {
   const q = query.trim().toLowerCase()

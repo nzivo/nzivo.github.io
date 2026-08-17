@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missing Director</title>
+<style>
+  :root {
+    --bg: #eef0ec;
+    --surface: #fcfcfa;
+    --surface-2: #e5e8e1;
+    --ink: #151e2b;
+    --ink-muted: #4c5666;
+    --ink-faint: #7c8595;
+    --rule: #cfd3c9;
+    --accent: #33538f;
+    --accent-ink: #1f3766;
+    --accent-tint: #dde4f1;
+    --copper: #a85a24;
+    --copper-tint: #f3e2d1;
+    --good: #2f6f4e;
+    --bad: #a13a3a;
+    --bad-tint: #f4dede;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #11151d;
+      --surface: #171c26;
+      --surface-2: #1e2530;
+      --ink: #e8e6df;
+      --ink-muted: #a9b0bd;
+      --ink-faint: #767f8f;
+      --rule: #2b3240;
+      --accent: #8ba3dc;
+      --accent-ink: #cdd9f2;
+      --accent-tint: #202b42;
+      --copper: #e3a05f;
+      --copper-tint: #362a1c;
+      --good: #6fbf8f;
+      --bad: #e08484;
+      --bad-tint: #3a2020;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #11151d;
+    --surface: #171c26;
+    --surface-2: #1e2530;
+    --ink: #e8e6df;
+    --ink-muted: #a9b0bd;
+    --ink-faint: #767f8f;
+    --rule: #2b3240;
+    --accent: #8ba3dc;
+    --accent-ink: #cdd9f2;
+    --accent-tint: #202b42;
+    --copper: #e3a05f;
+    --copper-tint: #362a1c;
+    --good: #6fbf8f;
+    --bad: #e08484;
+    --bad-tint: #3a2020;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sans { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent-ink); }
+
+  .masthead {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3rem 1.5rem 2.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .masthead { background: #0a0d13; } }
+  :root[data-theme="dark"] .masthead { background: #0a0d13; }
+
+  .masthead::after {
+    content: "";
+    position: absolute;
+    right: -3rem;
+    bottom: -3rem;
+    width: 14rem;
+    height: 14rem;
+    border: 2px dashed #3a4256;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  .masthead-inner { max-width: 760px; margin: 0 auto; position: relative; }
+
+  .eyebrow {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    color: #b9c2d6;
+    margin: 0 0 0.9rem;
+  }
+
+  .masthead h1 {
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.08;
+    margin: 0 0 0.7rem;
+    text-wrap: balance;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .masthead .sub {
+    font-size: 1.05rem;
+    color: #cfd6e6;
+    max-width: 48ch;
+    margin: 0 0 1.6rem;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.8rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem;
+  }
+
+  .meta-pill {
+    border: 1px solid #3a4256;
+    color: #dbe1ee;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  main { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+  section + section { margin-top: 3.4rem; }
+
+  .section-head { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.3rem; }
+  .section-num {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .section-head h2 { font-size: 1.5rem; font-weight: 400; margin: 0; letter-spacing: -0.01em; }
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 0 0 1.3rem; }
+
+  p { margin: 0 0 1rem; color: var(--ink); max-width: 66ch; }
+  .lede { font-size: 1.08rem; color: var(--ink-muted); }
+
+  blockquote {
+    margin: 1.6rem 0; padding: 0.2rem 0 0.2rem 1.1rem;
+    border-left: 3px solid var(--accent); font-style: italic; color: var(--ink-muted); max-width: 60ch;
+  }
+  blockquote cite {
+    display: block; font-style: normal;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-faint); margin-top: 0.4rem;
+  }
+
+  /* single point of failure diagram */
+  .sof {
+    display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.82rem; margin: 1.4rem 0 1.8rem; padding: 1.1rem;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;
+  }
+  .sof .node {
+    padding: 0.4rem 0.7rem; border-radius: 4px; border: 1px solid var(--rule);
+    background: var(--surface-2); color: var(--ink-muted); white-space: nowrap;
+  }
+  .sof .node.hub {
+    background: var(--copper-tint); border-color: color-mix(in srgb, var(--copper) 40%, transparent);
+    color: var(--copper); font-weight: 700;
+  }
+  .sof .arrow { color: var(--ink-faint); }
+
+  /* loss table */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); }
+  table {
+    border-collapse: collapse; width: 100%; min-width: 560px;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.86rem;
+  }
+  thead th {
+    text-align: left; background: var(--ink); color: var(--bg);
+    font-weight: 500; padding: 0.65rem 0.9rem; letter-spacing: 0.02em;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) thead th { background: #0a0d13; } }
+  :root[data-theme="dark"] thead th { background: #0a0d13; }
+  thead th:first-child { border-top-left-radius: 3px; }
+  thead th:last-child { border-top-right-radius: 3px; }
+  tbody td { padding: 0.65rem 0.9rem; border-top: 1px solid var(--rule); color: var(--ink); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--surface-2); }
+  tbody td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+  .badge {
+    display: inline-block; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px;
+    font-weight: 600; letter-spacing: 0.02em;
+  }
+  .badge.op { background: var(--bad-tint); color: var(--bad); }
+  .badge.fin { background: var(--copper-tint); color: var(--copper); }
+  .badge.people { background: var(--accent-tint); color: var(--accent-ink); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; margin: 1.6rem 0; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 1.2rem 1.3rem;
+  }
+  .card h3 { font-size: 1rem; margin: 0 0 0.6rem; font-weight: 600; color: var(--accent-ink); }
+  .card p { font-size: 0.94rem; margin-bottom: 0.7rem; }
+  .card p:last-child { margin-bottom: 0; }
+
+  ol.moves {
+    margin: 0; padding: 0; list-style: none; counter-reset: move;
+    display: flex; flex-direction: column; gap: 1.1rem;
+  }
+  ol.moves li { counter-increment: move; padding-left: 2.6rem; position: relative; }
+  ol.moves li::before {
+    content: counter(move, decimal-leading-zero); position: absolute; left: 0; top: 0.05rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.78rem; color: var(--copper); font-variant-numeric: tabular-nums;
+  }
+  ol.moves strong { display: block; color: var(--ink); margin-bottom: 0.15rem; }
+  ol.moves span { color: var(--ink-muted); font-size: 0.96rem; }
+
+  .new-tag {
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em;
+    background: var(--accent-tint); color: var(--accent-ink);
+    padding: 0.1rem 0.4rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle;
+  }
+
+  .callout {
+    background: var(--copper-tint);
+    border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+    border-radius: 4px; padding: 1rem 1.1rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.9rem; color: var(--ink); margin-top: 1.6rem;
+  }
+  .callout b { color: var(--copper); }
+
+  /* LinkedIn mock card */
+  .li-card {
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .li-head { display: flex; gap: 0.7rem; align-items: center; padding: 0.9rem 1rem 0.6rem; }
+  .li-avatar {
+    width: 2.6rem; height: 2.6rem; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.95rem; flex: none;
+  }
+  .li-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+  .li-role { font-size: 0.76rem; color: var(--ink-faint); }
+  .li-time { font-size: 0.72rem; color: var(--ink-faint); }
+  .li-body { padding: 0 1rem 0.9rem; font-size: 0.88rem; color: var(--ink); white-space: pre-wrap; }
+  .li-body .hashtag, .li-body .mention { color: var(--accent-ink); font-weight: 600; }
+  .li-foot {
+    border-top: 1px solid var(--rule); padding: 0.6rem 1rem;
+    display: flex; gap: 1.3rem; font-size: 0.78rem; color: var(--ink-faint);
+  }
+
+  footer {
+    max-width: 760px; margin: 0 auto; padding: 0 1.5rem 3rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.76rem; color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-inner">
+    <p class="eyebrow">NR! Module &middot; Problem-Solving Scenario</p>
+    <h1>The Missing Director</h1>
+    <p class="sub">A key-person risk reading of the manufacturing company that centralized every decision in one CEO — where the real losses show up, and the protections that go beyond the scenario's own fixes.</p>
+    <div class="meta-row">
+      <span class="meta-pill">Scenario: The Missing Director (fictional)</span>
+      <span class="meta-pill">Lens: key-person risk &amp; governance</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section id="diagnosis">
+    <div class="section-head">
+      <span class="section-num sans">01</span>
+      <h2>What actually broke</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">The scenario reads as a burnout story, but the burnout is a symptom. The structural failure happened earlier: the company built a single point of failure on purpose, by design, in the name of efficiency.</p>
+    <p>Centralizing decisions and stripping middle managers of authority didn't just make the CEO overloaded — it made every process in the company <em>dependent</em> on that one person staying present, informed, and well. The moment he left, the company didn't lose a manager; it lost its entire decision-making capacity at once, because nothing had been built to route around him.</p>
+
+    <div class="sof">
+      <span class="node">Suppliers</span><span class="arrow">→</span>
+      <span class="node">Projects</span><span class="arrow">→</span>
+      <span class="node hub">CEO (sole authority)</span><span class="arrow">←</span>
+      <span class="node">Middle managers</span><span class="arrow">←</span>
+      <span class="node">Owners</span>
+    </div>
+
+    <blockquote>
+      "Middle managers are caught in a paradox — their authority was stripped by the previous CEO, leaving them ill-equipped to make crucial decisions in his absence."
+      <cite>— The Missing Director, Act 3</cite>
+    </blockquote>
+  </section>
+
+  <section id="losses">
+    <div class="section-head">
+      <span class="section-num sans">02</span>
+      <h2>Where the loss actually lands</h2>
+    </div>
+    <hr class="rule" />
+    <p>"The company struggled" understates it. Six distinct forms of loss compound on top of each other in the weeks after a sole decision-maker disappears — and most of them outlast the month the case describes.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Where it shows up</th><th>Why it compounds</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge op">Operational</span></td>
+            <td>Stalled projects, confused suppliers, unapproved purchase orders</td>
+            <td>No one holds sign-off authority, so work doesn't fail loudly — it just quietly stops.</td>
+          </tr>
+          <tr>
+            <td><span class="badge fin">Financial &amp; legal</span></td>
+            <td>Bank mandates, loan covenants, and contracts tied to a named signatory</td>
+            <td>"Key person" clauses in credit agreements can trigger covenant review or default risk — this is rarely just an inconvenience.</td>
+          </tr>
+          <tr>
+            <td><span class="badge people">Human capital</span></td>
+            <td>Demotivated, disempowered middle managers</td>
+            <td>The people the company most needs to step up were trained, for a year, not to.</td>
+          </tr>
+          <tr>
+            <td><span class="badge people">Tacit knowledge</span></td>
+            <td>Client history, informal supplier terms, undocumented decisions</td>
+            <td>If it only ever lived in one person's head, it leaves the building with them.</td>
+          </tr>
+          <tr>
+            <td><span class="badge fin">Reputational</span></td>
+            <td>Supplier and customer confidence, owner credibility with lenders/investors</td>
+            <td>External parties read internal chaos as a signal about the whole company, not just one role.</td>
+          </tr>
+          <tr>
+            <td><span class="badge op">Strategic</span></td>
+            <td>Missed market windows, delayed decisions, competitor advantage</td>
+            <td>Paralysis is invisible on a balance sheet until a competitor fills the gap.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="protections">
+    <div class="section-head">
+      <span class="section-num sans">03</span>
+      <h2>Protecting against it</h2>
+    </div>
+    <hr class="rule" />
+    <p class="lede">The scenario's own seven fixes — distributed decision rights, cross-training, documentation, succession planning, agile principles, technology, and a culture of ownership — are the right foundation. Two protections worth adding sit above that foundation, at the governance level.</p>
+
+    <div class="split">
+      <div class="card">
+        <h3>A documented Delegation of Authority matrix</h3>
+        <p>Verbal delegation isn't delegation the bank, a court, or a supplier will recognize under pressure. A DoA matrix names, in writing, who can approve what spend, sign what contract, and act as alternate signatory — filed with legal counsel and the company's bank <em>before</em> it's needed, not improvised on crisis day.</p>
+      </div>
+      <div class="card">
+        <h3>Treating burnout as a governance risk</h3>
+        <p>The scenario frames the CEO's exit as a personal breakdown. Structurally, it's the predictable output of a system with no upper bound on one role's control. Protecting the company from over-reliance on one leader also means protecting that leader from carrying unlimited authority — workload and decision-load audits belong at board level, not just HR.</p>
+      </div>
+    </div>
+
+    <ol class="moves">
+      <li><strong>Distribute decision rights by design, not just after a crisis.</strong><span>Middle managers keep real authority within their domain from day one — centralization should be the exception that gets escalated, not the default operating mode.</span></li>
+      <li><strong>Fund key-person insurance for irreplaceable roles.<span class="new-tag">added</span></strong><span>A financial buffer that covers the cost of an emergency search, interim leadership, and lost momentum while the succession plan actually activates.</span></li>
+      <li><strong>Pre-agree a crisis playbook, not just a succession list.</strong><span>Naming a potential successor isn't the same as defining what happens on day one of an unplanned absence: who convenes, who signs, who communicates to suppliers and clients within 48 hours.</span></li>
+      <li><strong>Keep a living knowledge base, not a person's inbox.</strong><span>SOPs and documentation only protect the company if they're centrally stored, version-controlled, and reviewed — not scattered across one executive's email and memory.</span></li>
+      <li><strong>Give the board a cadence independent of the CEO.</strong><span class="new-tag">added</span><span>Regular owner/board reviews of strategic decisions mean the company's direction was never solely a function of one person's judgment in the first place.</span></li>
+    </ol>
+
+    <div class="callout"><b>Bottom line —</b> resilience isn't the absence of a strong leader; it's a structure engineered to survive losing one — financially, legally, operationally, and culturally — without the loss ever becoming existential.</div>
+  </section>
+
+</main>
+
+<footer>
+  "The Missing Director" is a fictional problem-solving scenario used as NR! module coursework. Analysis and recommendations above are original commentary prepared for this assignment.
+</footer>
+
+</body>
+</html>
