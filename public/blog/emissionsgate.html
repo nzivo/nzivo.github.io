@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emissionsgate</title>
+<meta name="color-scheme" content="light dark">
+<style>
+  :root{
+    --bg: #eef1f4;
+    --surface: #ffffff;
+    --surface-2: #e4e9ed;
+    --ink: #16232f;
+    --ink-soft: #4b5a68;
+    --rule: #c7d0d6;
+    --accent: #b8720f;
+    --accent-ink: #7a4c0f;
+    --blue: #3b6ea5;
+    --danger: #a83a2f;
+    --good: #3f7d58;
+    --mast-bg: #101820;
+    --mast-ink: #eef1f4;
+    --mast-rule: #2c3945;
+    --shadow: 0 1px 2px rgba(16,24,32,.06), 0 8px 24px rgba(16,24,32,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0d1319;
+      --surface: #161f28;
+      --surface-2: #1d2732;
+      --ink: #e8edf1;
+      --ink-soft: #a9b7c2;
+      --rule: #2c3945;
+      --accent: #e0a526;
+      --accent-ink: #f1c46a;
+      --blue: #7fa9cf;
+      --danger: #e2665c;
+      --good: #6bbd8c;
+      --mast-bg: #05080b;
+      --mast-ink: #eef1f4;
+      --mast-rule: #24303b;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0d1319;
+    --surface: #161f28;
+    --surface-2: #1d2732;
+    --ink: #e8edf1;
+    --ink-soft: #a9b7c2;
+    --rule: #2c3945;
+    --accent: #e0a526;
+    --accent-ink: #f1c46a;
+    --blue: #7fa9cf;
+    --danger: #e2665c;
+    --good: #6bbd8c;
+    --mast-bg: #05080b;
+    --mast-ink: #eef1f4;
+    --mast-rule: #24303b;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 28px rgba(0,0,0,.35);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ -webkit-text-size-adjust: 100%; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Sitka Text", Charter, "Iowan Old Style", Georgia, serif;
+    line-height: 1.62;
+    font-size: 17px;
+  }
+  .display{
+    font-family: Bahnschrift, "SF Compact Display", "Segoe UI Semibold", "Arial Narrow", sans-serif;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+  .mono{
+    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .label{
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .11em;
+    font-size: .72rem;
+    font-weight: 600;
+  }
+  a{ color: var(--blue); }
+  @media (prefers-reduced-motion: reduce){ *{ animation: none !important; transition: none !important; } }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    background: var(--mast-bg);
+    color: var(--mast-ink);
+    padding: 3.4rem 1.5rem 2.6rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--mast-rule);
+  }
+  .mast-inner{
+    max-width: 880px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+  }
+  .mast-eyebrow{
+    color: var(--accent-ink);
+    margin-bottom: .9rem;
+  }
+  .mast-title{
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.04;
+    margin: 0 0 .8rem;
+    text-wrap: balance;
+  }
+  .mast-sub{
+    font-family: "Sitka Text", Charter, Georgia, serif;
+    color: #c7d0d6;
+    font-size: 1.05rem;
+    max-width: 46ch;
+    margin: 0;
+  }
+  /* gauge */
+  .gauge{
+    width: 148px; height: 148px;
+    border-radius: 50%;
+    position: relative;
+    flex: none;
+    background:
+      conic-gradient(from 210deg,
+        var(--good) 0deg 55deg,
+        var(--accent) 55deg 95deg,
+        var(--danger) 95deg 120deg,
+        #223040 120deg 360deg);
+    display: grid; place-items: center;
+  }
+  .gauge::before{
+    content:"";
+    position:absolute; inset: 14px;
+    border-radius: 50%;
+    background: var(--mast-bg);
+    border: 1px solid var(--mast-rule);
+  }
+  .gauge-needle{
+    position:absolute; left: 50%; top: 50%;
+    width: 3px; height: 54px;
+    background: #eef1f4;
+    transform-origin: 50% 100%;
+    transform: translate(-50%,-100%) rotate(74deg);
+    border-radius: 2px;
+  }
+  .gauge-needle::after{
+    content:""; position:absolute; left:50%; bottom:-6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #eef1f4; transform: translateX(-50%);
+  }
+  .gauge-label{
+    position:absolute; bottom: -1.7rem; left:50%; transform: translateX(-50%);
+    color: var(--danger); white-space: nowrap;
+  }
+
+  /* ---------- layout ---------- */
+  .wrap{ max-width: 880px; margin: 0 auto; padding: 0 1.5rem; }
+  .disclosure{
+    max-width: 880px; margin: 0 auto; padding: 1rem 1.5rem;
+  }
+  .disclosure-box{
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: .95rem 1.15rem;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: .86rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .disclosure-box b{ color: var(--ink); }
+
+  section.stage{ padding: 2.6rem 0; border-top: 1px solid var(--rule); }
+  section.stage:first-of-type{ border-top: none; }
+
+  .stage-head{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    margin-bottom: 1.1rem;
+  }
+  .stage-tag{
+    font-family: Bahnschrift, "SF Compact Display", "Segoe UI Semibold", sans-serif;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--accent-ink);
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    padding: .3rem .65rem;
+    border-radius: 999px;
+    font-size: .74rem;
+    white-space: nowrap;
+    align-self: center;
+  }
+  h2.stage-title{
+    font-size: 1.55rem;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .stage-kicker{
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink-soft);
+    font-size: .92rem;
+    margin: -.4rem 0 1.2rem;
+  }
+  p{ margin: 0 0 1rem; max-width: 68ch; }
+  .stage p:last-child{ margin-bottom: 0; }
+
+  .callout{
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, var(--surface)), var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--rule));
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    margin: 1.3rem 0;
+    box-shadow: var(--shadow);
+  }
+  .callout .label{ color: var(--accent-ink); margin-bottom: .35rem; display:block; }
+
+  /* data table */
+  .tbl-wrap{ overflow-x: auto; margin: 1.2rem 0; border-radius: 10px; border: 1px solid var(--rule); box-shadow: var(--shadow); }
+  table{ border-collapse: collapse; width: 100%; min-width: 560px; background: var(--surface); }
+  th, td{ padding: .68rem .9rem; text-align: left; border-bottom: 1px solid var(--rule); font-size: .92rem; }
+  thead th{
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase; letter-spacing: .07em; font-size: .68rem;
+    color: var(--ink-soft); background: var(--surface-2);
+  }
+  td.num, th.num{ font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; text-align: right; }
+  tbody tr:last-child td{ border-bottom: none; }
+  tbody tr:hover{ background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+  /* reform grid */
+  .reform-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1.2rem 0;
+    box-shadow: var(--shadow);
+  }
+  .reform-cell{ background: var(--surface); padding: 1rem 1.1rem; }
+  .reform-grid .reform-head{
+    background: var(--surface-2);
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    text-transform: uppercase; letter-spacing: .07em; font-size: .68rem; color: var(--ink-soft);
+    font-weight: 600;
+  }
+  .reform-cell .k{ font-size: .93rem; }
+  .reform-cell.gap{ border-left: 3px solid var(--danger); }
+  .reform-cell.fix{ border-left: 3px solid var(--blue); }
+  .reform-cell.evidence{ border-left: 3px solid var(--good); }
+  @media (max-width: 720px){
+    .reform-grid{ grid-template-columns: 1fr; }
+    .reform-grid .reform-head:nth-child(2), .reform-grid .reform-head:nth-child(3){ display:none; }
+  }
+
+  .discuss-list{ list-style: none; padding: 0; margin: 1.1rem 0 0; display: grid; gap: .8rem; }
+  .discuss-list li{
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: .85rem 1.05rem;
+    font-size: .96rem;
+  }
+  .discuss-list b{ display:block; font-family: ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; font-size: .74rem; text-transform: uppercase; letter-spacing:.08em; color: var(--blue); margin-bottom: .3rem; }
+
+  footer.source-footer{
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--rule);
+    padding: 1.4rem 0 2.6rem;
+    line-height: 1.6;
+  }
+
+  /* ---------- LinkedIn card ---------- */
+  .li-wrap{ padding: 1.6rem 0 3rem; }
+  .li-eyebrow{ margin-bottom: .8rem; }
+  .li-card{
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .li-head{ display:flex; gap: .75rem; align-items:center; padding: 1rem 1.1rem .7rem; }
+  .li-avatar{
+    width: 44px; height:44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--accent));
+    color: #fff; display:grid; place-items:center; font-weight:700; font-size: .95rem; flex: none;
+  }
+  .li-name{ font-weight: 600; font-size: .93rem; color: var(--ink); }
+  .li-meta{ font-size: .78rem; color: var(--ink-soft); }
+  .li-body{ padding: .2rem 1.1rem 1rem; font-size: .93rem; color: var(--ink); line-height: 1.55; white-space: pre-wrap; }
+  .mention, .hashtag{ color: var(--blue); font-weight: 600; }
+  .li-footer{
+    display:flex; gap: 1.4rem; padding: .7rem 1.1rem; border-top: 1px solid var(--rule);
+    color: var(--ink-soft); font-size: .82rem; font-weight: 600;
+  }
+
+  @media (max-width: 560px){
+    .mast-inner{ grid-template-columns: 1fr; text-align: left; }
+    .gauge{ width: 108px; height: 108px; }
+    .gauge-needle{ height: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="mast-inner">
+    <div>
+      <div class="label mast-eyebrow">Case Study Analysis · Leadership &amp; Governance</div>
+      <h1 class="display mast-title">Emissionsgate</h1>
+      <p class="mast-sub">A fictitious AutoCorp benchmarked against Volkswagen Group's real FY2022 Annual Report — what compliance actually costs, and what fixing it actually looks like.</p>
+    </div>
+    <div class="gauge" aria-hidden="true">
+      <div class="gauge-needle"></div>
+      <span class="gauge-label label">redline</span>
+    </div>
+  </div>
+</header>
+
+<div class="disclosure">
+  <div class="disclosure-box">
+    <b>How this was built.</b> The AutoCorp / Sarah Mitchell narrative is entirely fictitious, as specified in the assignment brief, and is not connected to any real company or person. Everything under the <b>Diagnostic</b> and <b>Retrofit</b> stages below is drawn from Volkswagen Group's real, published <b>2022 Annual Report</b> (VW+Annual+Report+2022.pdf) — it is the closest real-world analogue to the case, since Volkswagen's own 2015 "Dieselgate" emissions-cheating scandal is the evident real-world template the fictitious case is modelled on. Figures are cited inline; page-level sourcing is listed in the footer.
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">01</span>
+      <h2 class="stage-title">Ignition — the pressure that starts every cover-up</h2>
+    </div>
+    <p class="stage-kicker">The case: AutoCorp (fictitious)</p>
+    <p>AutoCorp built its identity on performance and design leadership. When emissions regulation tightened globally, the company faced a real engineering constraint: hitting compliance limits without giving up the power and responsiveness its brand was sold on. That constraint was solvable through legitimate paths — smaller-displacement turbo engines, hybridization, longer development cycles. AutoCorp's leadership chose the faster path instead: adjust what the test measures, not what the car does.</p>
+    <p>This is the pattern worth naming, because it is not unique to cars. A real operating constraint meets a short-reporting-period incentive structure, and someone proposes a fix that satisfies the metric without satisfying the underlying requirement. The emissions test is the mechanism here; the same shape recurs in mis-sold financial products, falsified safety data, and inflated user-growth numbers elsewhere.</p>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">02</span>
+      <h2 class="stage-title">Misfire — where leadership actually failed</h2>
+    </div>
+    <p>The failure at AutoCorp was not a single rogue engineer. The case describes closed-door executive discussions where the ethical dimension was raised, understood, and then set aside under pressure to protect quarterly targets and bonus thresholds. That is the leadership failure specifically: not ignorance of the ethics, but a decision process with no structural mechanism to let the ethical objection outrank the financial one.</p>
+    <div class="callout">
+      <span class="label">The mechanism, stated plainly</span>
+      CEO Sarah Mitchell's team had the information needed to choose transparency. What they lacked was a governance structure — a compliance function with real authority, a reporting line independent of the business units it oversees — that could have stopped the decision before it reached the market. Ethical awareness without structural authority does not prevent misconduct; it just means the misconduct was informed.
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">03</span>
+      <h2 class="stage-title">Check engine — how concealment fails</h2>
+    </div>
+    <p>AutoCorp's scheme ended the way most large-scale corporate concealment ends: an internal whistleblower, not an external auditor or regulator, made first contact. The company's first instinct — deny, and attribute the allegation to competitor sabotage — bought a few news cycles and then collapsed under mounting technical evidence. Denial followed by capitulation is close to the worst possible sequence: it forfeits the credibility a company needs most once it does eventually admit fault, and it signals to the market that leadership's first move under pressure is concealment, not correction.</p>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">04</span>
+      <h2 class="stage-title">Recall — the fallout, generalized</h2>
+    </div>
+    <p>The case traces four channels of damage, and each has a real-world counterpart worth naming precisely, because "reputational damage" is usually where student analyses stop being specific:</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Channel</th><th>What actually breaks</th></tr></thead>
+        <tbody>
+          <tr><td>Financial</td><td>Market value, share price, and — as the Volkswagen figures below show — a multi-year cash drain from fines, recalls, and litigation that outlasts the news cycle by a decade.</td></tr>
+          <tr><td>Talent</td><td>Engineers and executives who did not sign up to be associated with a fraud case leave voluntarily, hollowing out exactly the technical capability needed to rebuild.</td></tr>
+          <tr><td>Competitive</td><td>Rivals reposition around the gap you just opened — "ethical," "transparent," "compliant" become their marketing, at your expense.</td></tr>
+          <tr><td>Regulatory</td><td>Oversight tightens for the whole industry, not just the offending firm — the cost of one company's shortcut is paid by every competitor's compliance budget.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">05</span>
+      <h2 class="stage-title">Diagnostic — what this actually cost, in real numbers</h2>
+    </div>
+    <p class="stage-kicker">Volkswagen Group, FY2022 Annual Report — seven years after Dieselgate became public</p>
+    <p>Volkswagen's 2015 diesel-emissions scandal is the obvious real-world template behind this case. What its 2022 annual report shows is the part case studies rarely get to illustrate with real figures: the cost of concealment does not end when the story leaves the headlines. It becomes a recurring line item.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Figure (FY2022)</th><th class="num">Value</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td>Group sales revenue</td><td class="num">€279.2bn <span style="color:var(--good)">+11.6%</span></td><td>The business recovered and grew — concealment does not sink a company of this size.</td></tr>
+          <tr><td>Diesel-issue special items</td><td class="num">–€0.4bn</td><td>A negative charge against operating result, still being booked <b>seven years</b> after the scandal broke (–€0.8bn in 2021).</td></tr>
+          <tr><td>Contingent liabilities</td><td class="num">€10.6bn</td><td>Disclosed primarily as legal risk "in connection with the diesel issue" — money already set aside for cases not yet resolved.</td></tr>
+          <tr><td>Cash outflow trend</td><td class="num">↑ vs 2021</td><td>Diesel-related cash outflows <i>rose</i> year-on-year in 2022 — the bill was still growing, not shrinking.</td></tr>
+          <tr><td>US settlement commitment</td><td class="num">€0.5bn</td><td>Ring-fenced specifically for zero-emission-vehicle infrastructure and public awareness — a court-ordered, not voluntary, sustainability investment.</td></tr>
+          <tr><td>R&amp;D spend</td><td class="num">€25.1bn <span style="color:var(--good)">+21.3%</span></td><td>8.1% of Automotive Division revenue, weighted toward electrification under the "NEW AUTO" strategy — the actual technical fix, a decade late.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Read together, these numbers say something more precise than "scandals are expensive." They say the bill does not close. A one-time decision to cheat an emissions test in the 2000s was still generating disclosed legal risk, cash outflow, and a dedicated report line in a 2022 annual report — a cost horizon of well over a decade, against whatever near-term margin the original shortcut protected.</p>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">06</span>
+      <h2 class="stage-title">Retrofit — what leadership actually rebuilt</h2>
+    </div>
+    <p class="stage-kicker">Not PR — structural change, evidenced in the same annual report</p>
+    <p>The assignment asks for proposed leadership activities to avoid a repeat. Rather than propose these in the abstract, here is what Volkswagen's real governance structure looked like before 2015 and what it discloses now — because the difference is the actual answer to the assignment question.</p>
+    <div class="tbl-wrap">
+      <div class="reform-grid">
+        <div class="reform-cell reform-head">Structural gap, pre-2015</div>
+        <div class="reform-cell reform-head">Real fix Volkswagen made</div>
+        <div class="reform-cell reform-head">Evidence in the FY2022 report</div>
+
+        <div class="reform-cell gap"><span class="k">No board-level owner for compliance — legal and ethics sat inside functions with production and sales targets.</span></div>
+        <div class="reform-cell fix"><span class="k">Created a standalone Board of Management function: <b>Integrity and Legal Affairs</b>, reporting at the same level as Finance and Technology.</span></div>
+        <div class="reform-cell evidence"><span class="k">Function held by Hiltrud Dorothea Werner (2017–Jan 2022), then Dr. Manfred Düss (from Feb 2022) — a named, permanent Board seat.</span></div>
+
+        <div class="reform-cell gap"><span class="k">Compliance activity was fragmented across HR, legal, and risk teams with no single accountable program.</span></div>
+        <div class="reform-cell fix"><span class="k">Launched <b>Together4Integrity (T4I)</b> — eleven key initiatives unifying integrity, culture, compliance, risk and HR under one Group-wide program.</span></div>
+        <div class="reform-cell evidence"><span class="k">Named "a central pillar of the NEW AUTO Group strategy," with a public target of full rollout by 2025 and standing reports to the Board.</span></div>
+
+        <div class="reform-cell gap"><span class="k">No safe, protected channel for an employee to report suspected wrongdoing internally before it became a regulator's problem.</span></div>
+        <div class="reform-cell fix"><span class="k">Built a Group-wide <b>whistleblower system</b> as the central point of contact for reporting serious rule-breaking.</span></div>
+        <div class="reform-cell evidence"><span class="k">Described in the 2022 report as core infrastructure of the compliance management system, not an ad-hoc hotline.</span></div>
+
+        <div class="reform-cell gap"><span class="k">Reputational and ESG standing had no formal recovery path — trust was assumed, not measured.</span></div>
+        <div class="reform-cell fix"><span class="k">Completed an independent <b>Monitorship</b> and pursued reinstatement to the UN Global Compact as an explicit, trackable milestone.</span></div>
+        <div class="reform-cell evidence"><span class="k">Report states ESG ratings were "downgraded significantly" post-scandal and improved specifically after Monitorship completion.</span></div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="label">The proposal, for AutoCorp</span>
+      Sarah Mitchell's team needs exactly this shape of fix, not a communications plan: a compliance officer with Board-level standing and a reporting line independent of the units under review; a named, public, multi-year integrity program with milestones the market can check; a whistleblower channel that existed <i>before</i> the crisis, not one built in response to it; and remuneration structures that price in long-horizon legal and reputational risk, not just this quarter's volume and margin.
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="stage-head">
+      <span class="stage-tag mono">07</span>
+      <h2 class="stage-title">Reflection &amp; discussion</h2>
+    </div>
+    <ul class="discuss-list">
+      <li><b>Feasibility</b>Would an "ethical oversight committee" have real teeth at AutoCorp, or does it become a second layer of process that gets worked around under enough pressure — the same way the original emissions decision was?</li>
+      <li><b>Power dynamics</b>Volkswagen's Integrity and Legal Affairs function reports at Board level specifically because a compliance officer without Board standing cannot override a business-unit head under quarterly pressure. Does AutoCorp's proposed committee have that standing, or is it advisory only?</li>
+      <li><b>Incentives vs. innovation</b>Rebalancing incentive metrics away from short-term volume risks slowing product cycles. Volkswagen's answer was to redirect the freed capital into R&amp;D (€25.1bn, +21.3%) rather than cut spend — is that a realistic trade for AutoCorp, or does it require the cash cushion only a company AutoCorp's size may not have?</li>
+      <li><b>Trust is not linear</b>Volkswagen's own disclosures show diesel-related legal costs were still rising in 2022, seven years on. What would actually convince a skeptical customer or regulator that AutoCorp's reforms are real rather than cosmetic — and how long should that take?</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="source-footer">
+  <div class="wrap" style="padding:0;">
+    Sources: MTF fictitious case study "The Emissionsgate Scandal" (AutoCorp / Sarah Mitchell — not connected to any real company); Volkswagen AG, <i>Volkswagen Group Annual Report 2022</i> (VW+Annual+Report+2022.pdf) — Financial Data (IFRSs) summary, Management Report (diesel-issue special items, contingent liabilities, R&amp;D costs), and Corporate Governance / Compliance sections (Code of Conduct, whistleblower system, Together4Integrity, Board-level Integrity and Legal Affairs function).
+  </div>
+</footer>
+
+<div class="li-wrap wrap">
+  <div class="label li-eyebrow">Ready to publish — LinkedIn</div>
+  <div class="li-card">
+    <div class="li-head">
+      <div class="li-avatar">JN</div>
+      <div>
+        <div class="li-name">John Nzivo</div>
+        <div class="li-meta">MBA Candidate, Institute of Management, Technology and Finance · now</div>
+      </div>
+    </div>
+    <div class="li-body">Case study: the "Emissionsgate" scandal, and what actually fixes it.
+
+The fictitious case (AutoCorp) follows a familiar shape: a real engineering constraint, a leadership team that discussed the ethics and set them aside under quarterly pressure, a whistleblower who forced the truth out, and a company that denied first and admitted later — the worst possible order.
+
+To ground the "how do you prevent this" question in something real, I benchmarked it against Volkswagen's actual 2022 Annual Report — the real-world case this one is clearly modelled on. Two things stood out:
+
+The bill never closes. VW is still booking diesel-issue costs as a named line item seven years after 2015 — a €10.6bn contingent liability, and cash outflows that were still rising in 2022, not falling.
+
+The real fix was structural, not cosmetic. VW created a standalone Board-level "Integrity and Legal Affairs" function, launched a named multi-year compliance program (Together4Integrity, 11 initiatives, public 2025 rollout target), and built a whistleblower channel as core infrastructure — not a PR response.
+
+The lesson for any leadership team: ethical awareness without structural authority doesn't prevent misconduct, it just means the misconduct was informed. Compliance needs a seat at the table before the crisis, not after.
+
+<span class="mention">@Institute of Management, Technology and Finance</span> <span class="hashtag">#MTF</span> <span class="hashtag">#Business</span> <span class="hashtag">#MBA</span></div>
+    <div class="li-footer">
+      <span>👍 Like</span><span>💬 Comment</span><span>↗ Share</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

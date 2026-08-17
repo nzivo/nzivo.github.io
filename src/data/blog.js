@@ -5,6 +5,13 @@
 
 export const blogPosts = [
   {
+    slug: "emissionsgate",
+    file: "/blog/emissionsgate.html",
+    title: "Emissionsgate",
+    category: "",
+    summary: "A fictitious AutoCorp benchmarked against Volkswagen Group's real FY2022 Annual Report — what compliance actually costs, and what fixing it actually looks like.",
+  },
+  {
     slug: "hidden-advertising",
     file: "/blog/hidden-advertising.html",
     title: "Hidden Advertising",
