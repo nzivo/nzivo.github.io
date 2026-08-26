@@ -4,6 +4,9 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+  schedule:
+    # Refreshes the analytics snapshot every 6 hours even with no code changes.
+    - cron: '0 */6 * * *'
 
 permissions:
   contents: read
@@ -26,6 +29,15 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      # Fetches the analytics snapshot BEFORE the build so Vite copies it out
+      # of public/ into dist/. GOATCOUNTER_API_TOKEN is intentionally not
+      # VITE_-prefixed — it must stay out of the client bundle entirely; only
+      # this CI step ever sees it.
+      - run: node scripts/fetch-analytics.mjs
+        env:
+          GOATCOUNTER_API_TOKEN: ${{ secrets.GOATCOUNTER_API_TOKEN }}
+
       - run: npm run build
         env:
           VITE_FORMSPREE_ENDPOINT: ${{ secrets.VITE_FORMSPREE_ENDPOINT }}
