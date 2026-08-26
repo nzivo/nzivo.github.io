@@ -1,0 +1,51 @@
+{
+    slug: 'senti-salary-advance-whatsapp-bot',
+    title: 'Senti Salary Advance WhatsApp Bot',
+    category: 'Backend',
+    tags: ['FastAPI', 'Python', 'WhatsApp Business API', 'MySQL', 'Redis', 'AWS Rekognition', 'M-Pesa STK Push', 'SQLAlchemy (async)'],
+    summary: 'A FastAPI webhook service that runs the entire Senti salary-advance journey — registration, KYC, loan requests, and repayment — as a conversation inside WhatsApp.',
+    description:
+      "The WhatsApp channel for Senti's micro-credit product: a webhook-driven FastAPI service that turns incoming WhatsApp messages into a stateful registration and lending conversation. New users accept Terms & Conditions, confirm their MSISDN and email, then photograph the front and back of their Kenyan National ID; AWS Rekognition OCR extracts the ID number, name, date of birth and sex, and the extracted ID number is cross-checked against the profile record before the upload is accepted — a mismatch flags the profile for manual review instead of silently continuing. Once verified, employment status and income band capture completes onboarding and hands off to a menu for applying for a loan, checking balance, repaying via M-Pesa STK push, or reaching support, with an SMS-delivered OTP gating loan disbursement. A Redis-backed session layer tracks conversation state and short-lived tokens per MSISDN, deduplicates webhook callbacks by message ID, and dispatches into service-layer state machines (register_service, loan_service, payment_service) that talk to MySQL via async SQLAlchemy and to the core Senti API for accounts, loans, PIN and payouts. A companion set of admin endpoints lists and filters WhatsApp registrations, serves uploaded ID images, and lets an operator approve or cancel a pending registration.",
+    images: [],
+    live: '#',
+    repo: 'https://github.com/Roamtech-Solutions/lending-whatsapp-bot',
+    featured: true,
+    siteLayout: `
+WhatsApp Business API — inbound webhook (HTTPS POST, JSON)
+  POST /receive-whatsapp     dedupes by message_id, routes text/image/location by session
+  POST /send-whatsapp        queues an outbound WhatsApp message (background task)
+
+Conversation flow (register_service — per-MSISDN session state in Redis + MySQL)
+  Onboarding
+    ├─ Terms & Conditions       accept / decline
+    ├─ Number confirmation      use detected MSISDN or supply a Safaricom number
+    ├─ Email capture
+    ├─ ID front upload           → IDVerificationService OCR (AWS Rekognition)
+    ├─ ID back upload            → OCR id_number cross-checked against profile
+    │                              mismatch → id_verification = pending_review (upload blocked)
+    ├─ Alternative contact number (optional)
+    └─ Employment status + monthly income band
+  Main Menu — "You're all set!"
+    ├─ Apply for Loan            package → duration → amount → purpose → summary → confirm
+    │                              OTP via SMS → M-Pesa disbursement (payment_service)
+    ├─ Check Loan Balance         amount due, due date
+    ├─ Repay Loan                 full / partial → M-Pesa STK push → PIN entry
+    └─ Talk to Support
+
+Admin / review API (profiles router)
+  POST /upload-id-front, /upload-id-back   ID capture + OCR verification
+  GET  /whatsapp-registrations             list + filter registrations, per-step status
+  GET  /whatsapp-registrations/stats       funnel counts by onboarding step
+  POST /whatsapp-registrations/approve     approve a pending registration
+  POST /whatsapp-registrations/cancel      cancel a registration
+  GET  /id-images/{filename}               serve an uploaded ID image
+  GET  /health                             service + DB health
+
+External systems
+  MySQL (profiles, whatsapp_sessions, processed_callbacks)
+  Redis            session / profile / token TTL cache
+  AWS Rekognition  ID front & back OCR
+  Senti Core API   register, loans, PIN, payouts (api/v5/*)
+  SMS Gateway      OTP + PIN delivery
+`,
+  }

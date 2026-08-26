@@ -4,7 +4,7 @@ import { blogPosts } from '../data/blog'
 import BlogCard from '../components/BlogCard.jsx'
 import './Blog.css'
 
-const PER_PAGE = 10
+const PER_PAGE = 9
 
 export default function Blog() {
   const [searchParams, setSearchParams] = useSearchParams()

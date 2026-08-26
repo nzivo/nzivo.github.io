@@ -1,44 +1,45 @@
-import { Link } from 'react-router-dom'
-import { projects } from '../data/projects'
-import { pricingTiers } from '../data/pricing'
-import { blogPosts } from '../data/blog'
-import ProjectCard from '../components/ProjectCard.jsx'
-import PricingCard from '../components/PricingCard.jsx'
-import BlogCard from '../components/BlogCard.jsx'
-import Particles from '../components/Particles.jsx'
-import './Home.css'
-
-const skills = [
-  { name: 'React', level: 85 },
-  { name: 'Vue.js', level: 80 },
-  { name: 'Node.js', level: 80 },
-  { name: 'Illustrator', level: 90 },
-  { name: 'Photoshop', level: 90 },
-  { name: 'After Effects', level: 80 },
-]
+import { Link } from "react-router-dom";
+import { projects } from "../data/projects";
+import { pricingTiers } from "../data/pricing";
+import { blogPosts } from "../data/blog";
+import ProjectCard from "../components/ProjectCard.jsx";
+import PricingCard from "../components/PricingCard.jsx";
+import BlogCard from "../components/BlogCard.jsx";
+import Particles from "../components/Particles.jsx";
+import "./Home.css";
 
 const heroIcons = [
-  { icon: 'html5', label: 'HTML5' },
-  { icon: 'css3', label: 'CSS3' },
-  { icon: 'javascript', label: 'JavaScript' },
-  { icon: 'react', label: 'React' },
-  { icon: 'vuejs', label: 'Vue.js' },
-  { icon: 'python', label: 'Python' },
-  { icon: 'java', label: 'Java' },
-  { icon: 'sql', label: 'SQL' },
-  { icon: 'postgresql', label: 'PostgreSQL' },
-  { icon: 'docker', label: 'Docker' },
-  { icon: 'kubernetes', label: 'Kubernetes' },
-  { icon: 'photoshop', label: 'Photoshop' },
-  { icon: 'illustrator', label: 'Illustrator' },
-  { icon: 'xd', label: 'XD' },
-]
+  { icon: "html5", label: "HTML5" },
+  { icon: "css3", label: "CSS3" },
+  { icon: "javascript", label: "JavaScript" },
+  { icon: "react", label: "React" },
+  { icon: "vuejs", label: "Vue.js" },
+  { icon: "python", label: "Python" },
+  { icon: "java", label: "Java" },
+  { icon: "sql", label: "SQL" },
+  { icon: "postgresql", label: "PostgreSQL" },
+  { icon: "docker", label: "Docker" },
+  { icon: "kubernetes", label: "Kubernetes" },
+  { icon: "photoshop", label: "Photoshop" },
+  { icon: "illustrator", label: "Illustrator" },
+  { icon: "xd", label: "XD" },
+];
 
-const currentYear = new Date().getFullYear()
-const experienceYears = currentYear - 2016
+const currentYear = new Date().getFullYear();
+const experienceYears = currentYear - 2016;
 
-const latestProjects = projects.slice(0, 3)
-const recentPosts = blogPosts.slice(0, 3)
+const latestProjects = projects.slice(0, 3);
+const recentPosts = blogPosts.slice(0, 3);
+
+const toolkitTags = (() => {
+  const counts = new Map();
+  projects.forEach((p) =>
+    p.tags.forEach((t) => counts.set(t, (counts.get(t) || 0) + 1)),
+  );
+  return Array.from(counts.entries()).sort(
+    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+  );
+})();
 
 export default function Home() {
   return (
@@ -48,12 +49,11 @@ export default function Home() {
         <div className="container hero-inner">
           <div className="hero-copy">
             <span className="eyebrow">Designer &amp; Developer</span>
-            <h1>
-              I build interfaces and the backends that power them.
-            </h1>
+            <h1>I build interfaces and the backends that power them.</h1>
             <p className="hero-lede">
-              John Nzivo — frontend, backend, and full-stack work, plus the design that ties it
-              together. Available for project-based work and ongoing engagements.
+              John Nzivo — frontend, backend, and full-stack work, plus the
+              design that ties it together. Available for project-based work and
+              ongoing engagements.
             </p>
             <div className="hero-actions">
               <Link to="/projects" className="btn btn-primary">
@@ -102,17 +102,15 @@ export default function Home() {
             <span className="eyebrow">Toolkit</span>
             <h2>Design and development, under one roof</h2>
           </div>
-          <div className="skills-grid">
-            {skills.map((s) => (
-              <div key={s.name} className="skill-item">
-                <div className="skill-item-head">
-                  <span>{s.name}</span>
-                  <span>{s.level}%</span>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-bar-fill" style={{ width: `${s.level}%` }} />
-                </div>
-              </div>
+          <div className="toolkit-tags">
+            {toolkitTags.map(([t, count]) => (
+              <Link
+                key={t}
+                to={`/projects?tag=${encodeURIComponent(t)}`}
+                className="toolkit-tag"
+              >
+                {t} <span className="toolkit-tag-count">{count}</span>
+              </Link>
             ))}
           </div>
         </div>
@@ -173,12 +171,15 @@ export default function Home() {
       <section className="section final-cta">
         <div className="container final-cta-inner">
           <h2>Have a project in mind?</h2>
-          <p>Tell me what you're building — I'll get back to you within a day or two.</p>
+          <p>
+            Tell me what you're building — I'll get back to you within a day or
+            two.
+          </p>
           <Link to="/contact" className="btn btn-primary">
             Start a conversation
           </Link>
         </div>
       </section>
     </>
-  )
+  );
 }
