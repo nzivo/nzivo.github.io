@@ -13,6 +13,19 @@ function formatWhen(iso) {
   })
 }
 
+function sampleReasonText(snapshot) {
+  switch (snapshot.sampleReason) {
+    case 'no-token':
+      return "GOATCOUNTER_API_TOKEN wasn't set for this build."
+    case 'no-site-code':
+      return 'goatcounterCode in site.config.json is still the placeholder.'
+    case 'api-error':
+      return `the GoatCounter API call failed${snapshot.sampleError ? `: ${snapshot.sampleError}` : '.'}`
+    default:
+      return "nothing live has been fetched yet."
+  }
+}
+
 export default function Insights() {
   const [snapshot, setSnapshot] = useState(null)
   const [error, setError] = useState(false)
@@ -57,7 +70,7 @@ export default function Insights() {
 
         {snapshot.sample && (
           <div className="insights-sample-banner">
-            Showing sample data — GOATCOUNTER_API_TOKEN isn't set for this build, so nothing live has been fetched yet.
+            Showing sample data — {sampleReasonText(snapshot)}
           </div>
         )}
 

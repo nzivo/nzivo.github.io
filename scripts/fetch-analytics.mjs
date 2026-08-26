@@ -39,7 +39,7 @@ async function apiGet(pathname, params = {}) {
   return res.json()
 }
 
-function sampleSnapshot() {
+function sampleSnapshot(reason) {
   const daily = Array.from({ length: RANGE_DAYS }, (_, i) => {
     const d = new Date()
     d.setUTCDate(d.getUTCDate() - (RANGE_DAYS - 1 - i))
@@ -47,6 +47,7 @@ function sampleSnapshot() {
   })
   return {
     sample: true,
+    sampleReason: reason,
     generatedAt: new Date().toISOString(),
     rangeDays: RANGE_DAYS,
     totalVisits: daily.reduce((sum, d) => sum + d.count, 0),
@@ -111,8 +112,9 @@ async function run() {
   mkdirSync(path.dirname(outFile), { recursive: true })
 
   if (!configured) {
-    writeFileSync(outFile, JSON.stringify(sampleSnapshot(), null, 2))
-    console.log('[analytics] GOATCOUNTER_API_TOKEN not set — wrote sample data to public/analytics-snapshot.json')
+    const reason = !CODE || CODE === 'YOUR_GOATCOUNTER_CODE' ? 'no-site-code' : 'no-token'
+    writeFileSync(outFile, JSON.stringify(sampleSnapshot(reason), null, 2))
+    console.log(`[analytics] not configured (${reason}) — wrote sample data to public/analytics-snapshot.json`)
     return
   }
 
@@ -122,7 +124,9 @@ async function run() {
     console.log(`[analytics] wrote live snapshot (${snapshot.totalVisits} visits / ${RANGE_DAYS}d) to public/analytics-snapshot.json`)
   } catch (err) {
     console.error('[analytics] fetch failed, falling back to sample data:', err.message)
-    writeFileSync(outFile, JSON.stringify(sampleSnapshot(), null, 2))
+    const snapshot = sampleSnapshot('api-error')
+    snapshot.sampleError = err.message
+    writeFileSync(outFile, JSON.stringify(snapshot, null, 2))
   }
 }
 
