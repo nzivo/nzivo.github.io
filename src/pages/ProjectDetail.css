@@ -32,7 +32,8 @@
 }
 
 .project-detail-media {
-  height: 280px;
+  height: min(70vh, 640px);
+  min-height: 320px;
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, var(--surface-2), var(--surface));
   border: 1px solid var(--border);
@@ -56,6 +57,22 @@
 
 .project-detail-body h2 {
   font-size: 22px;
+}
+
+.project-detail-body h2:not(:first-child) {
+  margin-top: 32px;
+}
+
+.project-detail-sitelayout {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  padding: 20px;
+  overflow-x: auto;
+  white-space: pre;
 }
 
 .project-detail-notfound {

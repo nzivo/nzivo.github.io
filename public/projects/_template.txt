@@ -1,0 +1,31 @@
+// Copy this file, rename it to <your-project-slug>.txt, and drop it in
+// public/projects/. It will show up on the site automatically — no code
+// changes needed. Files starting with "_" (like this one) are ignored.
+//
+// The filename (minus .txt) becomes the project's slug and its URL:
+// /projects/<your-project-slug>
+//
+// Screenshots: drop image files into public/images/projects/<your-project-slug>/
+// (that folder is created for you automatically the next time the site
+// builds or the dev server runs) — they become the slideshow on the full
+// project page, in filename order (1.jpg, 2.jpg, ...), and the first one is
+// used as the card thumbnail. No images yet? Leave the folder empty and a
+// placeholder is shown instead.
+{
+  title: 'Project Title',
+  category: 'Frontend', // Frontend | Backend | Fullstack | Design
+  tags: ['Tech', 'Stack', 'Here'],
+  summary: 'One sentence shown on the project card.',
+  description: 'One or two sentences shown on the full project page.',
+  live: '#', // live demo URL, or null to hide the button
+  repo: '#', // repo URL, or null to hide the button
+  featured: false, // true = show in the homepage featured section
+
+  // Optional: an ASCII sitemap/IA outline, rendered as a preformatted block
+  // on the project page. Delete this whole key if you don't need it.
+  siteLayout: `
+Home (/)
+  ├─ Section A
+  └─ Section B
+`,
+}

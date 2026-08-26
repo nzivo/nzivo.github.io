@@ -1,0 +1,41 @@
+{
+    slug: 'peni-mobile-app',
+    title: 'Peni Mobile App',
+    category: 'Frontend',
+    tags: ['React Native', 'Expo', 'React Navigation', 'NFC', 'QR Code', 'WebView'],
+    summary: "An Expo/React Native app that gives customers, merchants, and agents native mobile access to Peni's wallets, card-tap payments, and QR-based cash services.",
+    description:
+      'Built on Expo and React Navigation, the app swaps between three role-scoped tab navigators (customer, merchant, agent) after login, with a KYC gate that blocks access to the tab shell until a submission is approved. NFC-based and simulated card-tap top-ups run through react-native-nfc-manager, QR-based agent cash in/out uses react-native-qrcode-svg, and provider checkout flows (M-Pesa, Paystack, Coinbase) complete inside an in-app WebView so a payment always resolves to a clear, callback-confirmed state.',
+    images: [],
+    live: '#',
+    repo: 'https://github.com/nzivo/peni/tree/main/mobile_app',
+    featured: true,
+    siteLayout: `
+Login (Stack: Login) — unauthenticated
+  KYC Gate (Stack: KYC) — shown when signed in but KYC is not yet approved
+  Role-based tab shell (Stack: UserTabs | MerchantTabs | AgentTabs)
+    ├─ Customer — UserTabs
+    │    ├─ Home            tab: Home              balance, quick actions
+    │    ├─ Wallet          tab: Wallet             balance, transfers
+    │    ├─ Card Top Up     sidebar: CardPayments   NFC / simulated card tap
+    │    ├─ Payments        sidebar: Payments       transaction history
+    │    ├─ QR Services     sidebar: QRServices     QR-based cash in/out
+    │    ├─ Agent           tab: Agent              agent-assisted services
+    │    └─ Profile         tab: Profile
+    ├─ Merchant — MerchantTabs
+    │    ├─ Home                 tab: Merchant
+    │    ├─ Payments              tab: Payments             transaction history
+    │    ├─ Wallet Transactions   sidebar: WalletTransactions
+    │    ├─ Card Payments         sidebar: CardPayments
+    │    ├─ Withdrawals           tab: Withdrawals
+    │    ├─ Agents                sidebar: Agents           manage agent network
+    │    └─ Profile               tab: Profile
+    └─ Agent — AgentTabs
+         ├─ Home            tab: Home
+         ├─ Wallet          tab: Wallet
+         ├─ Withdrawals     tab: Withdrawals
+         ├─ Card Payments   sidebar: CardPayments
+         └─ Profile         tab: Profile
+  Transaction Details (Stack: TransactionDetails) — pushed from any transaction list
+`,
+  }

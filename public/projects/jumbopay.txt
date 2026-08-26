@@ -1,0 +1,30 @@
+{
+    slug: 'jumbopay',
+    title: 'Jumbopay',
+    category: 'Frontend',
+    tags: ['React', 'React Router', 'Vite', 'CSS'],
+    summary: 'A marketing and product site for a fictional global payments platform, with a full auth flow and 5 switchable color themes.',
+    description:
+      'A marketing and product site for Jumbopay, a fictional global payments platform. Built with React, React Router, and Vite, it covers a full site of Home, About, Services (with individual service detail pages), Pricing, FAQ, and Blog, alongside Login/Signup/Forgot Password flows with an animated OTP step, a command-palette-style full-screen search, and 5 runtime-switchable color themes driven entirely by CSS variables.',
+    images: [],
+    live: 'https://jumbopay.vercel.app',
+    repo: 'https://github.com/nzivo/jumbopay',
+    featured: false,
+    siteLayout: `
+Home (/)
+  ├─ About (/about)
+  ├─ Services (/services)
+  │    └─ Service Detail (/services/:slug)
+  ├─ Pricing (/pricing)
+  ├─ FAQ (/faq)
+  ├─ Blog (/blog)
+  │    └─ Blog Post (/blog/:slug)
+  ├─ Contact (/contact)
+  ├─ Login (/login)
+  ├─ Signup (/signup)
+  ├─ Forgot Password (/forgot-password)
+  ├─ Privacy Policy (/privacy-policy)
+  ├─ Terms of Service (/terms-of-service)
+  └─ Cookies Settings (/cookies-settings)
+`,
+  }

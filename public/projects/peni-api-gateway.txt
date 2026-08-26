@@ -1,0 +1,50 @@
+{
+    slug: 'peni-api-gateway',
+    title: 'Peni API Gateway',
+    category: 'Backend',
+    tags: ['FastAPI', 'Python', 'JWT', 'Redis', 'RabbitMQ', 'PostgreSQL', 'Microservices', 'httpx'],
+    summary: 'A FastAPI gateway that is the single entry point for a microservices payment platform, handling JWT auth, KYC gating, and request routing across independently deployable services.',
+    description:
+      "The API gateway in front of Peni's FastAPI microservices — user, wallet, and payment — each backed by its own PostgreSQL database. It validates JWTs on every protected route, injects X-User-Id/Email/Type/Roles headers before proxying to the owning service, and enforces role-gated access for KYC review, admin, and settlement endpoints. Redis backs a cache-aside layer for KYC status and card-tap mode with a 60s TTL that fails open to a live call if the cache is unreachable, and RabbitMQ decouples provider webhook responses (M-Pesa, Paystack, Coinbase) from wallet crediting via a settlement-requested queue consumed by a dedicated Settlement Worker, with retry-once-then-dead-letter semantics and an inline-crediting fallback if the broker is down.",
+    images: [],
+    live: '#',
+    repo: 'https://github.com/nzivo/peni/tree/main/backend/gateway',
+    featured: true,
+    siteLayout: `
+API Gateway (:8000) — single entry point, JWT auth + X-User-* header injection
+  Auth                        → user_service :8001
+    ├─ POST /auth/login              public
+    └─ POST /auth/refresh            public
+  Users
+    ├─ POST /users                   public — registration
+    ├─ GET  /users                   auth required — list
+    ├─ GET  /users/me                auth required
+    └─ /users/{path}                 auth required — passthrough CRUD
+  KYC                         → user_service :8001, status cached in Redis
+    ├─ POST /kyc, /kyc/upload        auth required — submit / upload docs
+    ├─ GET  /kyc/status, /kyc/me     auth required — cache-aside, 60s TTL
+    └─ /admin/kyc*                   admin — list, get, approve, reject
+  Merchants & Admin
+    ├─ /merchants/agents{path}       merchant — agent management
+    └─ /admin/{path}                 admin — role management passthrough
+  Wallets                     → wallet_service :8002
+    ├─ /sub-wallets/{id}                              agent sub-wallet balance
+    ├─ /sub-wallets/{id}/topup                        merchant tops up an agent sub-wallet
+    ├─ /sub-wallets/{id}/cash-deposit|cash-withdraw    agent-assisted cash in/out
+    ├─ /merchant/{id}/sub-wallets                     merchant's agent wallets
+    ├─ /withdrawal-requests*                          create, approve, list by sub-wallet
+    └─ /wallets{path}                                 passthrough wallet CRUD
+  Payments                    → payment_service :8003
+    ├─ /payments{path}                                passthrough payment CRUD
+    ├─ /payment-settings/card-tap*                    admin — global & per-user card-tap mode
+    ├─ /card-payments/tap                             simulated card tap
+    ├─ /mpesa/deposit|callback|timeout|simulate-deposit
+    ├─ /coinbase/charge|webhook
+    ├─ /paystack/callback
+    └─ /settlements/summary                           admin — settlement rollups by provider/date
+  Cross-cutting
+    ├─ Redis cache-aside   kyc:{user_id}, card_tap_mode:* — 60s TTL, fails open to a live call
+    └─ RabbitMQ            settlement.requested queue → Settlement Worker (async wallet credit,
+                            retry-once + DLQ); webhook falls back to inline crediting if the broker is down
+`,
+  }

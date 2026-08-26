@@ -4,12 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/generate-blog-index.mjs",
+    "predev": "node scripts/generate-blog-index.mjs && node scripts/generate-project-index.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/generate-blog-index.mjs",
+    "prebuild": "node scripts/generate-blog-index.mjs && node scripts/generate-project-index.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "blog:index": "node scripts/generate-blog-index.mjs"
+    "blog:index": "node scripts/generate-blog-index.mjs",
+    "project:index": "node scripts/generate-project-index.mjs"
   },
   "dependencies": {
     "pdfjs-dist": "^6.2.108",

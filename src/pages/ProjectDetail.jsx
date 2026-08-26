@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { projects } from '../data/projects'
+import ProjectSlideshow from '../components/ProjectSlideshow.jsx'
 import './ProjectDetail.css'
 
 export default function ProjectDetail() {
@@ -52,13 +53,18 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        <div className="project-detail-media" aria-hidden="true">
-          <span>{project.title.charAt(0)}</span>
-        </div>
+        <ProjectSlideshow images={project.images} title={project.title} />
 
         <div className="project-detail-body">
           <h2>Overview</h2>
           <p>{project.description}</p>
+
+          {project.siteLayout && (
+            <>
+              <h2>Site layout</h2>
+              <pre className="project-detail-sitelayout">{project.siteLayout.trim()}</pre>
+            </>
+          )}
         </div>
       </div>
     </div>

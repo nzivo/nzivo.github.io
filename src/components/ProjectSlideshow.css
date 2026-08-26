@@ -1,0 +1,76 @@
+.project-slideshow {
+  margin-bottom: 40px;
+}
+
+.project-slideshow-viewport {
+  position: relative;
+  height: min(70vh, 640px);
+  min-height: 320px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.project-slideshow-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.project-slideshow-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.project-slideshow-nav:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.project-slideshow-nav.prev {
+  left: 12px;
+}
+
+.project-slideshow-nav.next {
+  right: 12px;
+}
+
+.project-slideshow-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.project-slideshow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border-strong);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.project-slideshow-dot.is-active {
+  background: var(--accent);
+  transform: scale(1.2);
+}

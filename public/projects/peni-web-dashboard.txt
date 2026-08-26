@@ -1,0 +1,41 @@
+{
+    slug: 'peni-web-dashboard',
+    title: 'Peni Web Dashboard',
+    category: 'Frontend',
+    tags: ['React', 'Vite', 'Redux Toolkit', 'React Router', 'Tailwind CSS', 'Axios'],
+    summary: "A role-gated React dashboard for Peni's four user types — customer, merchant, agent, and admin — covering wallets, payments, agent networks, and KYC/RBAC administration.",
+    description:
+      'Built with React, Vite, Redux Toolkit, and React Router, the web dashboard renders an entirely different route tree per user_type behind a single shared shell: customers manage wallet balances and agent-assisted cash in/out, merchants oversee their agent network and withdrawal requests, agents track sub-wallet balances and payouts, and system admins get user management, RBAC role assignment, card-tap policy controls, and KYC review. Auth state and session bootstrapping run through a Redux authSlice, with private and role-based route guards enforcing access before any protected page mounts.',
+    images: [],
+    live: '#',
+    repo: 'https://github.com/nzivo/peni/tree/main/frontend',
+    featured: true,
+    siteLayout: `
+Login (/login)
+  App Shell (/) — role-gated routing, resolved from the signed-in user's user_type
+    ├─ Customer  (user_type: customer)
+    │    ├─ Dashboard          (/)                    balance, recent activity
+    │    ├─ Wallet             (/wallet)               balance, transfers, top-up
+    │    ├─ Payments           (/payments)             payment history
+    │    └─ Agent Services     (/agent-services)       cash in/out via agent
+    ├─ Merchant  (user_type: merchant)
+    │    ├─ Dashboard              (/)                        overview
+    │    ├─ Agents                 (/agents)                  manage agent network
+    │    ├─ Payments                (/payments)                payment history
+    │    ├─ Wallet Transactions     (/wallet-transactions)     ledger view
+    │    └─ Withdrawals             (/withdrawals)             withdrawal requests
+    ├─ Agent  (user_type: agent)
+    │    ├─ Dashboard          (/)                    sub-wallet overview
+    │    ├─ Wallet             (/wallet)               sub-wallet balance & cash in/out
+    │    └─ Withdrawals        (/withdrawals)          request/track withdrawals
+    ├─ Admin  (user_type: system_admin)
+    │    ├─ Dashboard          (/)                    platform-wide overview
+    │    ├─ Users              (/users)                user management
+    │    ├─ Card Payments      (/card-payments)        card-tap policy controls
+    │    ├─ Roles              (/roles)                RBAC role management
+    │    └─ KYC Review         (/kyc-review)           approve/reject submissions
+    └─ Shared (any authenticated role)
+         ├─ KYC Submission     (/kyc)
+         └─ Profile            (/profile)
+`,
+  }

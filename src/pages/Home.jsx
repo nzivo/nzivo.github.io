@@ -37,7 +37,7 @@ const heroIcons = [
 const currentYear = new Date().getFullYear()
 const experienceYears = currentYear - 2016
 
-const featured = projects.filter((p) => p.featured)
+const latestProjects = projects.slice(0, 3)
 const recentPosts = blogPosts.slice(0, 3)
 
 export default function Home() {
@@ -130,7 +130,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="project-grid">
-            {featured.map((p) => (
+            {latestProjects.map((p) => (
               <ProjectCard key={p.slug} project={p} />
             ))}
           </div>

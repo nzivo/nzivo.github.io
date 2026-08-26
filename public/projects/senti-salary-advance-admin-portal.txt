@@ -1,0 +1,41 @@
+{
+    slug: 'senti-salary-advance-admin-portal',
+    title: 'Senti Salary Advance Admin Portal',
+    category: 'Frontend',
+    tags: ['React 19', 'Vite', 'React Router', 'Tailwind CSS', 'Axios', 'RBAC'],
+    summary: "The production admin portal for Senti's CRB compliance, sanctions screening, and salary-advance operations, serving institutional staff across Kenya.",
+    description:
+      "A React 19 + Vite single-page admin portal for Senti's compliance and salary-advance operations team. It covers CRB listing, CSV, and manual-submission workflows, sanctions/PEP screening with risk scoring and an approve/decline review flow, customer and company onboarding, salary-advance company and loan-rate management, employee activation and offboarding, PayKit repayment-callback tracking, and RBAC-gated role/permission administration — all behind a route-first guard stack (auth, feature-toggle, and permission guards) inside a shared dashboard shell, with per-section feature toggles that hide disabled areas from both the sidebar and direct URL access.",
+    images: [],
+    live: 'https://new-dashboard.senti.co.ke',
+    repo: '#',
+    featured: true,
+    siteLayout: `
+Login (/login)
+  Dashboard (/dashboard) — sidebar shell + top bar
+    ├─ Onboarding
+    │    ├─ Customers                /compliance/customers
+    │    └─ Customer Screening       /onboarding/customer-screening
+    ├─ Compliance
+    │    ├─ CRB Dashboard            /compliance/crb-dashboard
+    │    ├─ CRB Listing              /compliance/crb-listing
+    │    ├─ CSV Management           /compliance/csv-management
+    │    ├─ Manual Submission        /compliance/manual-submission
+    │    ├─ SMS Logs                 /compliance/sms-logs
+    │    ├─ Sanctions Dashboard      /compliance/sanctions-dashboard
+    │    ├─ Sanction Screening       /compliance/sanction-screening
+    │    └─ Single Screening         /compliance/single-screening
+    ├─ Salary Advance
+    │    ├─ Companies                All · Onboarding · Loan Rates
+    │    ├─ Employees                All · :id/details · Rejected Rows · SMS Delivery Logs
+    │    ├─ Loans                    loan management
+    │    ├─ Reconciliation           repayment/disbursement matching
+    │    └─ Master Table Settings    /salary-advance/settings/master-tables/:tableName
+    ├─ Users
+    │    ├─ RBAC Config              roles, permissions, role-permission mappings
+    │    ├─ RBAC User Assignments    per-user role assignment
+    │    └─ My Profile               account details, session permissions, password
+    └─ Settings
+         └─ Feature Toggles         per-section enable/disable, gates sidebar + routes
+`,
+  }

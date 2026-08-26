@@ -1,0 +1,39 @@
+{
+    slug: 'senti-salary-advance-backend',
+    title: 'Senti Salary Advance Backend',
+    category: 'Backend',
+    tags: ['FastAPI', 'Python', 'MySQL', 'JWT', 'RBAC', 'APScheduler', 'Metropol', 'TransUnion'],
+    summary: "A FastAPI backend that powers Senti's salary-advance platform — loan lifecycle, RBAC-gated company/employee management, reconciliation, and automated CRB (Metropol & TransUnion) blacklisting with SMS notifications.",
+    description:
+      "The backend service behind Senti's micro-credit salary-advance product: JWT-authenticated REST APIs for company onboarding, employee and loan management, maker-checker reconciliation, and RBAC administration, all backed by MySQL. APScheduler-driven jobs generate CSVs for loans exactly 91 days overdue and submit them daily to both Metropol and TransUnion CRBs, tracked independently per bureau so SMS notifications only fire once a customer has been listed with both. An OS-level file lock guards the scheduler against duplicate cron firing across multiple Uvicorn workers, and PayKit disbursement callbacks handle Hakikisha identity verification with fail-closed authentication.",
+    images: [],
+    live: '#',
+    repo: '#',
+    featured: true,
+    siteLayout: `
+FastAPI Backend (:8000) — JWT auth, RBAC-gated routes
+  Auth                      login, profile
+  Dashboard & Submissions   stats, recent CRB submissions, SMS logs
+  CSV Management            template, generate-now, upload, download, status
+  CRB Submission            manual + scheduled Metropol/TransUnion submission
+  Screening                 sanctions/PEP profile screening + history
+  Salary Advance (/api/salary-advance)
+    ├─ Auth                  employee PIN login/reset, USSD T&C acceptance
+    ├─ Master Data            sectors, counties, sub-counties, feature toggles
+    ├─ Companies               CRUD, document upload, status actions, activity log
+    ├─ Company Fees            loan rate CRUD, fee assignments
+    ├─ Employees                CRUD, activation, offboarding, bulk upload, Hakikisha
+    ├─ Loans                    employee stats, loan dashboard, status revert
+    ├─ Reconciliation           dashboard, preview/confirm, maker-checker proof queue, undo diagnostics
+    ├─ Notifications             in-app notification list/read
+    └─ PayKit                   Hakikisha identity-verification callback (fails closed)
+  RBAC (/api/rbac)           users, roles, permissions, assignments
+  Health & Scheduler         service/DB health, scheduler status
+
+Scheduled Jobs (APScheduler, file-lock guarded per host)
+  07:00   Generate CSV — loans 91 days overdue
+  08:00   Submit to Metropol + TransUnion
+  09:00   61-day warning SMS
+  10:00   Self-activation reminder SMS
+`,
+  }

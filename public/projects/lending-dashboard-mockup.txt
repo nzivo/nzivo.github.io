@@ -1,0 +1,31 @@
+{
+    slug: 'lending-dashboard-mockup',
+    title: 'Lending Dashboard Mockup',
+    category: 'Frontend',
+    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'shadcn/ui'],
+    summary: "A Next.js/shadcn UI concept exploration for a micro-credit salary advance admin portal, built to prototype the information architecture before the production build.",
+    description:
+      "An early UI mockup for Senti's admin dashboard, built with Next.js App Router and shadcn/ui to explore the information architecture ahead of the production portal: partner company onboarding and rate configuration, employee and loan management, USSD/WhatsApp channel flows, portfolio and risk reporting, and disbursement reconciliation, all behind a responsive sidebar layout with light/dark theming. The production admin portal ended up shipping with a different UI — see [Senti Salary Advance Admin Portal](/projects/senti-salary-advance-admin-portal).",
+    images: [],
+    live: 'https://lending-dashboard-4hix-am7lqurxm-nzivos-projects.vercel.app',
+    repo: 'https://github.com/nzivo/lending-dashboard',
+    featured: false,
+    siteLayout: `
+Login (/)
+  Dashboard (/dashboard) — sidebar shell + top bar
+    ├─ Overview           KPIs, monthly revenue chart, recent loans table
+    ├─ Portfolio          outstanding balance, risk breakdown, per-company table
+    ├─ Companies
+    │    ├─ All Companies   list, filters, company detail drawer
+    │    ├─ Onboarding      new-company onboarding flow
+    │    └─ Loan Rates      per-company interest rate & limit config
+    ├─ Employees           employee records across companies
+    ├─ Loans               loan applications & disbursements
+    ├─ Channel Flows
+    │    ├─ USSD Flows      USSD menu/flow configuration
+    │    └─ WhatsApp Flows  WhatsApp bot flow configuration
+    ├─ Reconciliation      repayment/disbursement matching
+    ├─ Offboarding         employee/company offboarding
+    └─ Settings            profile, notifications, security, system defaults
+`,
+  }

@@ -1,0 +1,31 @@
+{
+    slug: 'senti-salary-advance-ussd-app',
+    title: 'Senti Salary Advance USSD App',
+    category: 'Backend',
+    tags: ['FastAPI', 'Python', 'MySQL', 'USSD', 'M-Pesa STK Push', 'Session Management'],
+    summary: 'A standalone FastAPI USSD service (*359*99#) that lets employees request salary advances, repay loans via M-Pesa STK push, and check balances entirely over USSD.',
+    description:
+      "A level-driven USSD state machine built on FastAPI that plugs into the Senti salary-advance backend for authentication, PIN lifecycle, disbursement, and repayment. Each dialed session resolves or creates a MySQL-backed session record, routes through per-level handlers — Terms & Conditions, PIN login/reset, main menu, loan request, repayment, balance check — and calls the backend over HTTP for the transactional steps: loan disbursement and repayment STK push. The GET /ussd route stays synchronous on purpose so FastAPI's threadpool absorbs blocking DB/HTTP calls without serializing concurrent sessions behind a single event loop, and a pooled MySQL connection pool avoids a fresh handshake per query.",
+    images: [],
+    live: '#',
+    repo: '#',
+    featured: false,
+    siteLayout: `
+USSD Gateway — *359*99# (GET /ussd)
+  level_99   Terms & Conditions gate       1 View · 2 Accept · 3 Decline
+  level_90   T&Cs viewer (paginated)       0 Accept & Continue
+  level_91   T&Cs declined                 1 Review · 2 Exit
+  level_1    PIN login / OTP entry         lockout throttling, Forgot PIN
+  level_10   New PIN capture               first login / after Forgot PIN
+  level_11   Confirm new PIN                → backend reset
+  level_2    Main Menu                     1 Request Loan · 2 Repay Loan · 3 Check Balance · 4 Exit
+    ├─ level_4   Request Loan — Screen A     eligible amount · 1 full · 2 custom · 0 back
+    │    └─ level_40  Custom amount entry
+    ├─ level_5   Confirm loan request         → disbursement submission
+    ├─ level_6   Repay Loan — Screen A       outstanding balance · 1 full · 2 partial · 0 back
+    │    └─ level_8   Partial amount entry
+    ├─ level_7   Confirm repayment             → M-Pesa STK push initiation
+    └─ level_3   Check Balance                outstanding loan, available credit, next due date
+  96          Logout — ends session immediately, from any screen
+`,
+  }
