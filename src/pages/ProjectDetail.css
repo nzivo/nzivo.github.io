@@ -1,9 +1,21 @@
+.project-detail-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
 .project-detail-back {
   display: inline-block;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--text-dim);
-  margin-bottom: 32px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 .project-detail-back:hover {

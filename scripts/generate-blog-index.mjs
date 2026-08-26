@@ -11,6 +11,10 @@ const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const blogDir = path.join(root, 'public', 'blog')
 const outFile = path.join(root, 'src', 'data', 'blog.js')
 
+const siteConfig = JSON.parse(readFileSync(path.join(root, 'site.config.json'), 'utf8'))
+const GOATCOUNTER_CODE = siteConfig.goatcounterCode
+const goatcounterConfigured = Boolean(GOATCOUNTER_CODE) && GOATCOUNTER_CODE !== 'YOUR_GOATCOUNTER_CODE'
+
 function decodeEntities(str) {
   return str
     .replace(/&middot;/g, '·')
@@ -37,8 +41,72 @@ function titleCaseFromSlug(slug) {
     .join(' ')
 }
 
+// These posts are standalone static HTML files rendered outside the React
+// app, so a "back" button can't reuse app routing — it's injected directly
+// into the file as a fixed-position link, styled inline so it looks right
+// regardless of each post's own theme. Idempotent: skips files that already
+// have it, so re-running doesn't touch mtime (which drives post ordering).
+const BACK_LINK_MARKER = '<!-- injected:back-to-blog -->'
+
+function ensureBackLink(filePath, html) {
+  if (html.includes(BACK_LINK_MARKER)) return html
+
+  const bodyMatch = html.match(/<body[^>]*>/)
+  if (!bodyMatch) return html
+
+  const backLink = `${BACK_LINK_MARKER}
+<a href="/blog" style="position:fixed;top:16px;left:16px;z-index:2147483647;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;background:rgba(18,16,22,0.88);color:#fff;font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;text-decoration:none;box-shadow:0 2px 10px rgba(0,0,0,.3);">← Back to blog</a>
+`
+
+  const insertAt = bodyMatch.index + bodyMatch[0].length
+  const updated = html.slice(0, insertAt) + '\n' + backLink + html.slice(insertAt)
+  writeFileSync(filePath, updated)
+  return updated
+}
+
+// Tracks a pageview and shows a "N views" badge on each post, both via
+// GoatCounter (see src/lib/goatcounter.js for the React-side equivalent used
+// on project pages). No-ops entirely — nothing is injected — until a real
+// code is set in site.config.json, so re-running after that fills it in.
+const GOATCOUNTER_MARKER = '<!-- injected:goatcounter -->'
+
+function ensureGoatCounter(filePath, html) {
+  if (!goatcounterConfigured || html.includes(GOATCOUNTER_MARKER)) return html
+
+  const bodyMatch = html.match(/<body[^>]*>/)
+  if (!bodyMatch) return html
+
+  const base = `https://${GOATCOUNTER_CODE}.goatcounter.com`
+  const block = `${GOATCOUNTER_MARKER}
+<script data-goatcounter="${base}/count" async src="//gc.zgo.at/count.js"></script>
+<span id="gc-view-count" style="position:fixed;top:16px;left:150px;z-index:2147483647;display:none;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(18,16,22,0.88);color:#fff;font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.3);"></span>
+<script>
+(function () {
+  var path = location.pathname.split('/').map(encodeURIComponent).join('/')
+  fetch('${base}/counter/' + path + '.json')
+    .then(function (r) { return r.ok ? r.json() : null })
+    .then(function (d) {
+      if (!d || !d.count) return
+      var el = document.getElementById('gc-view-count')
+      el.textContent = d.count + ' views'
+      el.style.display = 'inline-flex'
+    })
+    .catch(function () {})
+})()
+</script>
+`
+
+  const insertAt = bodyMatch.index + bodyMatch[0].length
+  const updated = html.slice(0, insertAt) + '\n' + block + html.slice(insertAt)
+  writeFileSync(filePath, updated)
+  return updated
+}
+
 function extractPost(file) {
-  const html = readFileSync(path.join(blogDir, file), 'utf8')
+  const filePath = path.join(blogDir, file)
+  let html = readFileSync(filePath, 'utf8')
+  html = ensureBackLink(filePath, html)
+  html = ensureGoatCounter(filePath, html)
   const slug = file.replace(/\.html$/, '')
 
   const title =
@@ -52,7 +120,7 @@ function extractPost(file) {
     clean((html.match(/class="sub"[^>]*>([\s\S]*?)<\/p>/) || [])[1] || '') ||
     clean((html.match(/<p[^>]*>([\s\S]*?)<\/p>/) || [])[1] || '')
 
-  const mtime = statSync(path.join(blogDir, file)).mtimeMs
+  const mtime = statSync(filePath).mtimeMs
 
   return { slug, file: `/blog/${file}`, title, category, summary, mtime }
 }
