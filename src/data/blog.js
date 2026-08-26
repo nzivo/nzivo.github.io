@@ -5,6 +5,13 @@
 
 export const blogPosts = [
   {
+    slug: "cola-wars",
+    file: "/blog/cola-wars.html",
+    title: "Cola Wars",
+    category: "",
+    summary: "ColaNova vs. PopFizz — a fictitious rivalry benchmarked against the real FY2022 results of Coca-Cola and PepsiCo, to find out how the actual two largest beverage companies compete.",
+  },
+  {
     slug: "emissionsgate",
     file: "/blog/emissionsgate.html",
     title: "Emissionsgate",
