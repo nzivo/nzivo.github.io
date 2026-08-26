@@ -51,9 +51,13 @@ export default function Home() {
             <span className="eyebrow">Designer &amp; Developer</span>
             <h1>I build interfaces and the backends that power them.</h1>
             <p className="hero-lede">
-              John Nzivo — frontend, backend, and full-stack work, plus the
-              design that ties it together. Available for project-based work and
-              ongoing engagements.
+              A fintech engineer and systems architect with{" "}
+              {experienceYears - 3}+ {}
+              years building lending platforms, payment gateways, and
+              cross-border money transfer systems used across Africa. I've led
+              engineering teams, architected Mpesa and remittance integrations,
+              and served as both hands-on developer and technical governance
+              lead.
             </p>
             <div className="hero-actions">
               <Link to="/projects" className="btn btn-primary">
@@ -71,9 +75,12 @@ export default function Home() {
             </div>
             <div className="hero-portrait-meta">
               <p className="hero-name">John Nzivo</p>
-              <p className="hero-title">Consultant</p>
+              <p className="hero-title">
+                Software Engineer | Executive MBA | Team Leader | Technology
+                Manager | Architect and Developer
+              </p>
               <p className="hero-experience">
-                <strong>{experienceYears}+ yrs</strong> experience in
+                <strong>{experienceYears - 3}+ yrs</strong> experience in
               </p>
               <div className="hero-icons">
                 {heroIcons.map((item) => (
