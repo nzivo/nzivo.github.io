@@ -26,17 +26,28 @@ const RANGE_DAYS = 30
 
 const configured = Boolean(CODE) && CODE !== 'YOUR_GOATCOUNTER_CODE' && Boolean(TOKEN)
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+// GoatCounter rate-limits the API to 4 req/s. Retries once on 429 (their
+// error body includes a suggested wait) before giving up.
 async function apiGet(pathname, params = {}) {
   const url = new URL(`https://${CODE}.goatcounter.com/api/v0${pathname}`)
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v)
 
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-  })
-  if (!res.ok) {
-    throw new Error(`GoatCounter API ${pathname} -> ${res.status} ${await res.text()}`)
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+    })
+    if (res.ok) return res.json()
+
+    const body = await res.text()
+    if (res.status === 429 && attempt === 0) {
+      const waitMs = Number((body.match(/try again in ([\d.]+)ms/) || [])[1]) || 1200
+      await sleep(waitMs)
+      continue
+    }
+    throw new Error(`GoatCounter API ${pathname} -> ${res.status} ${body}`)
   }
-  return res.json()
 }
 
 function sampleSnapshot(reason) {
@@ -87,13 +98,17 @@ async function realSnapshot() {
   const start = new Date(end.getTime() - RANGE_DAYS * 24 * 60 * 60 * 1000)
   const range = { start: start.toISOString(), end: end.toISOString() }
 
-  const [total, hits, referrers, locations, browsers] = await Promise.all([
-    apiGet('/stats/total', { ...range }),
-    apiGet('/stats/hits', { ...range, limit: 10 }),
-    apiGet('/stats/toprefs', { ...range, limit: 6 }),
-    apiGet('/stats/locations', { ...range, limit: 6 }),
-    apiGet('/stats/browsers', { ...range, limit: 6 }),
-  ])
+  // Sequential with a small gap, not Promise.all — GoatCounter caps this at
+  // 4 req/s and five parallel calls tripped it (429).
+  const total = await apiGet('/stats/total', { ...range })
+  await sleep(300)
+  const hits = await apiGet('/stats/hits', { ...range, limit: 10 })
+  await sleep(300)
+  const referrers = await apiGet('/stats/toprefs', { ...range, limit: 6 })
+  await sleep(300)
+  const locations = await apiGet('/stats/locations', { ...range, limit: 6 })
+  await sleep(300)
+  const browsers = await apiGet('/stats/browsers', { ...range, limit: 6 })
 
   return {
     sample: false,
