@@ -13,6 +13,50 @@ export const categories = ['All', 'Frontend', 'Backend', 'Fullstack', 'Design']
 
 export const projects = [
   {
+    slug: "autotrack",
+    title: "AutoTrack",
+    category: "Fullstack",
+    tags: ["FastAPI", "Python", "PostgreSQL", "SQLAlchemy (async)", "RabbitMQ", "Redis", "Next.js 15", "TypeScript", "Tailwind CSS", "Leaflet", "Docker"],
+    summary: "A multi-tenant vehicle-maintenance platform that gives every car a shared, verifiable service history across drivers, fleets and repair shops.",
+    description: "A multi-tenant vehicle-maintenance and service-history platform built as a FastAPI + PostgreSQL backend with a Next.js 15 dashboard. AutoTrack is the platform operator; repair shops and vehicle-owning fleets are onboarded as tenants by its sales team, and drivers self-register as platform-wide customers who own their vehicles outright. Every vehicle carries one shared history: any shop can service it, but each shop can only edit, approve or void its own records, enforced by a shop_id check in every router, so the full record reads like a passport across owners and workshops. Shops log service records through a same-shop approval workflow, drivers report faults that mechanics move through to resolution, and maintenance flags (not due, due soon, overdue) are computed from each vehicle’s service interval. Shops issue intake sheets, estimates, signed work orders, invoices and warranties as branded, QR-coded PDFs that anyone can scan to check against the live record on a public verify page. On top sits AutoTrack Connect: per-shop and per-mechanic driver ratings, a 24-hour KSh 50 roadside-assistance pass with its own live verify page, a parts marketplace with photo galleries, and a Roadside SOS search that geolocates a broken-down driver and ranks nearby workshops on a Leaflet map, putting first the ones that service that vehicle’s make. Audit-log writes go through RabbitMQ to a separate worker so they stay off the request path, and Redis caches the dashboard summaries, invalidated on every write; the whole stack runs locally with Docker Compose.",
+    images: ["/images/projects/autotrack/1.png", "/images/projects/autotrack/2.png", "/images/projects/autotrack/3.png", "/images/projects/autotrack/4.png"],
+    live: null,
+    repo: null,
+    featured: false,
+    siteLayout: `
+Public
+  ├─ Sign in (/login)                    split-screen, brand panel
+  ├─ Driver sign-up (/register)
+  └─ Verify pages (API-rendered)  /verify/{code}, /verify/pass/{code}: QR targets, live status
+
+Tenant dashboard (/dashboard) — shops, fleets, drivers; nav filtered by role
+  ├─ Overview                    role-specific stats + maintenance-status donut
+  ├─ Vehicles                    register, list, maintenance flags
+  │    └─ Vehicle (/vehicles/:id)
+  │         ├─ Service history   cross-shop records, approve / reject (shop admin)
+  │         ├─ Fault reports     report → in progress → resolved
+  │         ├─ Documents         intake · estimate · work order · invoice · warranty → QR PDF
+  │         ├─ AutoTrack Connect roadside pass card, ratings
+  │         └─ Transfer          driver → driver, or fleet decommission to a driver
+  ├─ Service records             approval queue (shop) / history (driver, fleet)
+  ├─ Fault reports
+  ├─ Marketplace                 part listings → product page with photo gallery
+  ├─ Roadside SOS                geolocate → nearby shops on a map, make-matched first
+  └─ Mechanics / Drivers         roster + temp passwords; shop logo, location, makes serviced
+
+Platform console (/platform) — superadmin, sales, finance
+  ├─ Overview                    platform-wide stats, top-rated shops chart
+  ├─ Shops                       onboard (tenant + admin in one step), suspend
+  ├─ Fleets                      onboard, suspend
+  └─ Vehicle makes               catalog logos (superadmin)
+
+Backend
+  FastAPI (async SQLAlchemy 2.0, Alembic)  →  PostgreSQL 16
+  RabbitMQ  →  audit worker (immutable audit trail)
+  Redis     →  dashboard summary cache, invalidated on writes
+`,
+  },
+  {
     slug: "matengo-ordination",
     title: "Matengo Ordination",
     category: "Frontend",
