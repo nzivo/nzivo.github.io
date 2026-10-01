@@ -13,93 +13,31 @@ export const categories = ['All', 'Frontend', 'Backend', 'Fullstack', 'Design']
 
 export const projects = [
   {
-    slug: "senti-salary-advance-whatsapp-bot",
-    title: "Senti Salary Advance WhatsApp Bot",
-    category: "Backend",
-    tags: ["FastAPI", "Python", "WhatsApp Business API", "MySQL", "Redis", "AWS Rekognition", "M-Pesa STK Push", "SQLAlchemy (async)"],
-    summary: "A FastAPI webhook service that runs the entire Senti salary-advance journey — registration, KYC, loan requests, and repayment — as a conversation inside WhatsApp.",
-    description: "The WhatsApp channel for Senti's micro-credit product: a webhook-driven FastAPI service that turns incoming WhatsApp messages into a stateful registration and lending conversation. New users accept Terms & Conditions, confirm their MSISDN and email, then photograph the front and back of their Kenyan National ID; AWS Rekognition OCR extracts the ID number, name, date of birth and sex, and the extracted ID number is cross-checked against the profile record before the upload is accepted — a mismatch flags the profile for manual review instead of silently continuing. Once verified, employment status and income band capture completes onboarding and hands off to a menu for applying for a loan, checking balance, repaying via M-Pesa STK push, or reaching support, with an SMS-delivered OTP gating loan disbursement. A Redis-backed session layer tracks conversation state and short-lived tokens per MSISDN, deduplicates webhook callbacks by message ID, and dispatches into service-layer state machines (register_service, loan_service, payment_service) that talk to MySQL via async SQLAlchemy and to the core Senti API for accounts, loans, PIN and payouts. A companion set of admin endpoints lists and filters WhatsApp registrations, serves uploaded ID images, and lets an operator approve or cancel a pending registration.",
-    images: ["/images/projects/senti-salary-advance-whatsapp-bot/1.png", "/images/projects/senti-salary-advance-whatsapp-bot/2.png", "/images/projects/senti-salary-advance-whatsapp-bot/3.png", "/images/projects/senti-salary-advance-whatsapp-bot/4.png", "/images/projects/senti-salary-advance-whatsapp-bot/5.png", "/images/projects/senti-salary-advance-whatsapp-bot/6.png", "/images/projects/senti-salary-advance-whatsapp-bot/7.png"],
-    live: "#",
-    repo: "https://github.com/Roamtech-Solutions/lending-whatsapp-bot",
-    featured: true,
-    siteLayout: `
-WhatsApp Business API — inbound webhook (HTTPS POST, JSON)
-  POST /receive-whatsapp     dedupes by message_id, routes text/image/location by session
-  POST /send-whatsapp        queues an outbound WhatsApp message (background task)
-
-Conversation flow (register_service — per-MSISDN session state in Redis + MySQL)
-  Onboarding
-    ├─ Terms & Conditions       accept / decline
-    ├─ Number confirmation      use detected MSISDN or supply a Safaricom number
-    ├─ Email capture
-    ├─ ID front upload           → IDVerificationService OCR (AWS Rekognition)
-    ├─ ID back upload            → OCR id_number cross-checked against profile
-    │                              mismatch → id_verification = pending_review (upload blocked)
-    ├─ Alternative contact number (optional)
-    └─ Employment status + monthly income band
-  Main Menu — "You're all set!"
-    ├─ Apply for Loan            package → duration → amount → purpose → summary → confirm
-    │                              OTP via SMS → M-Pesa disbursement (payment_service)
-    ├─ Check Loan Balance         amount due, due date
-    ├─ Repay Loan                 full / partial → M-Pesa STK push → PIN entry
-    └─ Talk to Support
-
-Admin / review API (profiles router)
-  POST /upload-id-front, /upload-id-back   ID capture + OCR verification
-  GET  /whatsapp-registrations             list + filter registrations, per-step status
-  GET  /whatsapp-registrations/stats       funnel counts by onboarding step
-  POST /whatsapp-registrations/approve     approve a pending registration
-  POST /whatsapp-registrations/cancel      cancel a registration
-  GET  /id-images/{filename}               serve an uploaded ID image
-  GET  /health                             service + DB health
-
-External systems
-  MySQL (profiles, whatsapp_sessions, processed_callbacks)
-  Redis            session / profile / token TTL cache
-  AWS Rekognition  ID front & back OCR
-  Senti Core API   register, loans, PIN, payouts (api/v5/*)
-  SMS Gateway      OTP + PIN delivery
-`,
-  },
-  {
-    slug: "senti-salary-advance-admin-portal",
-    title: "Senti Salary Advance Admin Portal",
+    slug: "matengo-ordination",
+    title: "Matengo Ordination",
     category: "Frontend",
-    tags: ["React 19", "Vite", "React Router", "Tailwind CSS", "Axios", "RBAC"],
-    summary: "The production admin portal for Senti's CRB compliance, sanctions screening, and salary-advance operations, serving institutional staff across Kenya.",
-    description: "A React 19 + Vite single-page admin portal for Senti's compliance and salary-advance operations team. It covers CRB listing, CSV, and manual-submission workflows, sanctions/PEP screening with risk scoring and an approve/decline review flow, customer and company onboarding, salary-advance company and loan-rate management, employee activation and offboarding, PayKit repayment-callback tracking, and RBAC-gated role/permission administration — all behind a route-first guard stack (auth, feature-toggle, and permission guards) inside a shared dashboard shell, with per-section feature toggles that hide disabled areas from both the sidebar and direct URL access.",
-    images: ["/images/projects/senti-salary-advance-admin-portal/1.png", "/images/projects/senti-salary-advance-admin-portal/2.png", "/images/projects/senti-salary-advance-admin-portal/3.png", "/images/projects/senti-salary-advance-admin-portal/4.png", "/images/projects/senti-salary-advance-admin-portal/5.png", "/images/projects/senti-salary-advance-admin-portal/6.png", "/images/projects/senti-salary-advance-admin-portal/7.png", "/images/projects/senti-salary-advance-admin-portal/8.png"],
-    live: "https://new-dashboard.senti.co.ke",
-    repo: "#",
-    featured: true,
+    tags: ["HTML", "CSS", "JavaScript", "i18n", "Google Forms", "Vercel"],
+    summary: "A four-language invitation site for the diaconate and priestly ordinations of Felix Oyende Matengo in Rome, with a live countdown and RSVP.",
+    description: "A single-page invitation and information site for the ordinations of Felix Oyende Matengo in Rome, built in plain HTML, CSS, and JavaScript with no framework or build step. It walks guests through a personal letter, a timeline of the four celebrations (diaconate and priestly ordinations plus their thanksgiving Masses) with map links and door times, ways to offer prayer and support, accommodation suggestions near the venues, media links for the livestream and photo galleries, an FAQ, and an RSVP that opens a Google Form in the visitor’s language. A live countdown targets the next ordination and switches to a line of thanksgiving on the day; the whole page is translatable between English, Spanish, French, and Italian through a small i18n layer that remembers the visitor’s choice and accepts a ?lang= link; and every date, venue, and link is driven from one config object so the page can be updated without touching markup.",
+    images: [],
+    live: "https://matengo.vercel.app",
+    repo: "https://github.com/nzivo/matengo-ordination",
+    featured: false,
     siteLayout: `
-Login (/login)
-  Dashboard (/dashboard) — sidebar shell + top bar
-    ├─ Onboarding
-    │    ├─ Customers                /compliance/customers
-    │    └─ Customer Screening       /onboarding/customer-screening
-    ├─ Compliance
-    │    ├─ CRB Dashboard            /compliance/crb-dashboard
-    │    ├─ CRB Listing              /compliance/crb-listing
-    │    ├─ CSV Management           /compliance/csv-management
-    │    ├─ Manual Submission        /compliance/manual-submission
-    │    ├─ SMS Logs                 /compliance/sms-logs
-    │    ├─ Sanctions Dashboard      /compliance/sanctions-dashboard
-    │    ├─ Sanction Screening       /compliance/sanction-screening
-    │    └─ Single Screening         /compliance/single-screening
-    ├─ Salary Advance
-    │    ├─ Companies                All · Onboarding · Loan Rates
-    │    ├─ Employees                All · :id/details · Rejected Rows · SMS Delivery Logs
-    │    ├─ Loans                    loan management
-    │    ├─ Reconciliation           repayment/disbursement matching
-    │    └─ Master Table Settings    /salary-advance/settings/master-tables/:tableName
-    ├─ Users
-    │    ├─ RBAC Config              roles, permissions, role-permission mappings
-    │    ├─ RBAC User Assignments    per-user role assignment
-    │    └─ My Profile               account details, session permissions, password
-    └─ Settings
-         └─ Feature Toggles         per-section enable/disable, gates sidebar + routes
+Home (/)  — single page, anchor-linked nav, language picker (EN / ES / FR / IT)
+  ├─ Hero (#home)                     portrait, name, countdown to next ordination
+  ├─ Letter (#letter)                 "Dear friends," personal invitation
+  ├─ Celebrations in Rome (#celebrations)
+  │    ├─ Diaconate Ordination         Basilica of Saint Eugene
+  │    ├─ Thanksgiving Mass            Our Lady of Peace
+  │    ├─ Priestly Ordination          Basilica of Saint Eugene
+  │    └─ Thanksgiving Mass            Our Lady of Peace
+  ├─ Prayer and Support (#support)    Mass, Rosary, Memorare, Cavabianca, direct collaboration
+  ├─ Accommodation (#accommodation)   Prati & Flaminio, near St. Peter's, Aurelia, alternatives
+  ├─ Media (#media)                   live broadcast, photos & videos, shared upload album
+  ├─ FAQ (#faq)
+  ├─ Confirm Attendance (#rsvp)       → Google Form (opened in the visitor's language)
+  └─ Contact (footer)
 `,
   },
   {
@@ -133,71 +71,52 @@ Login (/)
 `,
   },
   {
-    slug: "senti-salary-advance-ussd-app",
-    title: "Senti Salary Advance USSD App",
+    slug: "peni-api-gateway",
+    title: "Peni API Gateway",
     category: "Backend",
-    tags: ["FastAPI", "Python", "MySQL", "USSD", "M-Pesa STK Push", "Session Management"],
-    summary: "A standalone FastAPI USSD service (*359*99#) that lets employees request salary advances, repay loans via M-Pesa STK push, and check balances entirely over USSD.",
-    description: "A level-driven USSD state machine built on FastAPI that plugs into the Senti salary-advance backend for authentication, PIN lifecycle, disbursement, and repayment. Each dialed session resolves or creates a MySQL-backed session record, routes through per-level handlers — Terms & Conditions, PIN login/reset, main menu, loan request, repayment, balance check — and calls the backend over HTTP for the transactional steps: loan disbursement and repayment STK push. The GET /ussd route stays synchronous on purpose so FastAPI's threadpool absorbs blocking DB/HTTP calls without serializing concurrent sessions behind a single event loop, and a pooled MySQL connection pool avoids a fresh handshake per query.",
-    images: ["/images/projects/senti-salary-advance-ussd-app/1.png", "/images/projects/senti-salary-advance-ussd-app/2.png", "/images/projects/senti-salary-advance-ussd-app/3.png", "/images/projects/senti-salary-advance-ussd-app/4.png", "/images/projects/senti-salary-advance-ussd-app/5.png", "/images/projects/senti-salary-advance-ussd-app/6.png", "/images/projects/senti-salary-advance-ussd-app/7.png", "/images/projects/senti-salary-advance-ussd-app/8.png"],
+    tags: ["FastAPI", "Python", "JWT", "Redis", "RabbitMQ", "PostgreSQL", "Microservices", "httpx"],
+    summary: "A FastAPI gateway that is the single entry point for a microservices payment platform, handling JWT auth, KYC gating, and request routing across independently deployable services.",
+    description: "The API gateway in front of Peni's FastAPI microservices — user, wallet, and payment — each backed by its own PostgreSQL database. It validates JWTs on every protected route, injects X-User-Id/Email/Type/Roles headers before proxying to the owning service, and enforces role-gated access for KYC review, admin, and settlement endpoints. Redis backs a cache-aside layer for KYC status and card-tap mode with a 60s TTL that fails open to a live call if the cache is unreachable, and RabbitMQ decouples provider webhook responses (M-Pesa, Paystack, Coinbase) from wallet crediting via a settlement-requested queue consumed by a dedicated Settlement Worker, with retry-once-then-dead-letter semantics and an inline-crediting fallback if the broker is down.",
+    images: ["/images/projects/peni-api-gateway/1.png"],
     live: "#",
-    repo: "#",
-    featured: false,
-    siteLayout: `
-USSD Gateway — *359*99# (GET /ussd)
-  level_99   Terms & Conditions gate       1 View · 2 Accept · 3 Decline
-  level_90   T&Cs viewer (paginated)       0 Accept & Continue
-  level_91   T&Cs declined                 1 Review · 2 Exit
-  level_1    PIN login / OTP entry         lockout throttling, Forgot PIN
-  level_10   New PIN capture               first login / after Forgot PIN
-  level_11   Confirm new PIN                → backend reset
-  level_2    Main Menu                     1 Request Loan · 2 Repay Loan · 3 Check Balance · 4 Exit
-    ├─ level_4   Request Loan — Screen A     eligible amount · 1 full · 2 custom · 0 back
-    │    └─ level_40  Custom amount entry
-    ├─ level_5   Confirm loan request         → disbursement submission
-    ├─ level_6   Repay Loan — Screen A       outstanding balance · 1 full · 2 partial · 0 back
-    │    └─ level_8   Partial amount entry
-    ├─ level_7   Confirm repayment             → M-Pesa STK push initiation
-    └─ level_3   Check Balance                outstanding loan, available credit, next due date
-  96          Logout — ends session immediately, from any screen
-`,
-  },
-  {
-    slug: "senti-salary-advance-backend",
-    title: "Senti Salary Advance Backend",
-    category: "Backend",
-    tags: ["FastAPI", "Python", "MySQL", "JWT", "RBAC", "APScheduler", "Metropol", "TransUnion"],
-    summary: "A FastAPI backend that powers Senti's salary-advance platform — loan lifecycle, RBAC-gated company/employee management, reconciliation, and automated CRB (Metropol & TransUnion) blacklisting with SMS notifications.",
-    description: "The backend service behind Senti's micro-credit salary-advance product: JWT-authenticated REST APIs for company onboarding, employee and loan management, maker-checker reconciliation, and RBAC administration, all backed by MySQL. APScheduler-driven jobs generate CSVs for loans exactly 91 days overdue and submit them daily to both Metropol and TransUnion CRBs, tracked independently per bureau so SMS notifications only fire once a customer has been listed with both. An OS-level file lock guards the scheduler against duplicate cron firing across multiple Uvicorn workers, and PayKit disbursement callbacks handle Hakikisha identity verification with fail-closed authentication.",
-    images: [],
-    live: "#",
-    repo: "#",
+    repo: "https://github.com/nzivo/peni/tree/main/backend/gateway",
     featured: true,
     siteLayout: `
-FastAPI Backend (:8000) — JWT auth, RBAC-gated routes
-  Auth                      login, profile
-  Dashboard & Submissions   stats, recent CRB submissions, SMS logs
-  CSV Management            template, generate-now, upload, download, status
-  CRB Submission            manual + scheduled Metropol/TransUnion submission
-  Screening                 sanctions/PEP profile screening + history
-  Salary Advance (/api/salary-advance)
-    ├─ Auth                  employee PIN login/reset, USSD T&C acceptance
-    ├─ Master Data            sectors, counties, sub-counties, feature toggles
-    ├─ Companies               CRUD, document upload, status actions, activity log
-    ├─ Company Fees            loan rate CRUD, fee assignments
-    ├─ Employees                CRUD, activation, offboarding, bulk upload, Hakikisha
-    ├─ Loans                    employee stats, loan dashboard, status revert
-    ├─ Reconciliation           dashboard, preview/confirm, maker-checker proof queue, undo diagnostics
-    ├─ Notifications             in-app notification list/read
-    └─ PayKit                   Hakikisha identity-verification callback (fails closed)
-  RBAC (/api/rbac)           users, roles, permissions, assignments
-  Health & Scheduler         service/DB health, scheduler status
-
-Scheduled Jobs (APScheduler, file-lock guarded per host)
-  07:00   Generate CSV — loans 91 days overdue
-  08:00   Submit to Metropol + TransUnion
-  09:00   61-day warning SMS
-  10:00   Self-activation reminder SMS
+API Gateway (:8000) — single entry point, JWT auth + X-User-* header injection
+  Auth                        → user_service :8001
+    ├─ POST /auth/login              public
+    └─ POST /auth/refresh            public
+  Users
+    ├─ POST /users                   public — registration
+    ├─ GET  /users                   auth required — list
+    ├─ GET  /users/me                auth required
+    └─ /users/{path}                 auth required — passthrough CRUD
+  KYC                         → user_service :8001, status cached in Redis
+    ├─ POST /kyc, /kyc/upload        auth required — submit / upload docs
+    ├─ GET  /kyc/status, /kyc/me     auth required — cache-aside, 60s TTL
+    └─ /admin/kyc*                   admin — list, get, approve, reject
+  Merchants & Admin
+    ├─ /merchants/agents{path}       merchant — agent management
+    └─ /admin/{path}                 admin — role management passthrough
+  Wallets                     → wallet_service :8002
+    ├─ /sub-wallets/{id}                              agent sub-wallet balance
+    ├─ /sub-wallets/{id}/topup                        merchant tops up an agent sub-wallet
+    ├─ /sub-wallets/{id}/cash-deposit|cash-withdraw    agent-assisted cash in/out
+    ├─ /merchant/{id}/sub-wallets                     merchant's agent wallets
+    ├─ /withdrawal-requests*                          create, approve, list by sub-wallet
+    └─ /wallets{path}                                 passthrough wallet CRUD
+  Payments                    → payment_service :8003
+    ├─ /payments{path}                                passthrough payment CRUD
+    ├─ /payment-settings/card-tap*                    admin — global & per-user card-tap mode
+    ├─ /card-payments/tap                             simulated card tap
+    ├─ /mpesa/deposit|callback|timeout|simulate-deposit
+    ├─ /coinbase/charge|webhook
+    ├─ /paystack/callback
+    └─ /settlements/summary                           admin — settlement rollups by provider/date
+  Cross-cutting
+    ├─ Redis cache-aside   kyc:{user_id}, card_tap_mode:* — 60s TTL, fails open to a live call
+    └─ RabbitMQ            settlement.requested queue → Settlement Worker (async wallet credit,
+                            retry-once + DLQ); webhook falls back to inline crediting if the broker is down
 `,
   },
   {
@@ -247,7 +166,7 @@ Login (Stack: Login) — unauthenticated
     tags: ["React", "Vite", "Redux Toolkit", "React Router", "Tailwind CSS", "Axios"],
     summary: "A role-gated React dashboard for Peni's four user types — customer, merchant, agent, and admin — covering wallets, payments, agent networks, and KYC/RBAC administration.",
     description: "Built with React, Vite, Redux Toolkit, and React Router, the web dashboard renders an entirely different route tree per user_type behind a single shared shell: customers manage wallet balances and agent-assisted cash in/out, merchants oversee their agent network and withdrawal requests, agents track sub-wallet balances and payouts, and system admins get user management, RBAC role assignment, card-tap policy controls, and KYC review. Auth state and session bootstrapping run through a Redux authSlice, with private and role-based route guards enforcing access before any protected page mounts.",
-    images: [],
+    images: ["/images/projects/peni-web-dashboard/1.png", "/images/projects/peni-web-dashboard/2.png", "/images/projects/peni-web-dashboard/3.png", "/images/projects/peni-web-dashboard/4.png", "/images/projects/peni-web-dashboard/5.png", "/images/projects/peni-web-dashboard/6.png", "/images/projects/peni-web-dashboard/7.png", "/images/projects/peni-web-dashboard/8.png", "/images/projects/peni-web-dashboard/9.png", "/images/projects/peni-web-dashboard/10.png", "/images/projects/peni-web-dashboard/11.png"],
     live: "#",
     repo: "https://github.com/nzivo/peni/tree/main/frontend",
     featured: true,
@@ -281,52 +200,161 @@ Login (/login)
 `,
   },
   {
-    slug: "peni-api-gateway",
-    title: "Peni API Gateway",
-    category: "Backend",
-    tags: ["FastAPI", "Python", "JWT", "Redis", "RabbitMQ", "PostgreSQL", "Microservices", "httpx"],
-    summary: "A FastAPI gateway that is the single entry point for a microservices payment platform, handling JWT auth, KYC gating, and request routing across independently deployable services.",
-    description: "The API gateway in front of Peni's FastAPI microservices — user, wallet, and payment — each backed by its own PostgreSQL database. It validates JWTs on every protected route, injects X-User-Id/Email/Type/Roles headers before proxying to the owning service, and enforces role-gated access for KYC review, admin, and settlement endpoints. Redis backs a cache-aside layer for KYC status and card-tap mode with a 60s TTL that fails open to a live call if the cache is unreachable, and RabbitMQ decouples provider webhook responses (M-Pesa, Paystack, Coinbase) from wallet crediting via a settlement-requested queue consumed by a dedicated Settlement Worker, with retry-once-then-dead-letter semantics and an inline-crediting fallback if the broker is down.",
-    images: [],
-    live: "#",
-    repo: "https://github.com/nzivo/peni/tree/main/backend/gateway",
+    slug: "senti-salary-advance-admin-portal",
+    title: "Senti Salary Advance Admin Portal",
+    category: "Frontend",
+    tags: ["React 19", "Vite", "React Router", "Tailwind CSS", "Axios", "RBAC"],
+    summary: "The production admin portal for Senti's CRB compliance, sanctions screening, and salary-advance operations, serving institutional staff across Kenya.",
+    description: "A React 19 + Vite single-page admin portal for Senti's compliance and salary-advance operations team. It covers CRB listing, CSV, and manual-submission workflows, sanctions/PEP screening with risk scoring and an approve/decline review flow, customer and company onboarding, salary-advance company and loan-rate management, employee activation and offboarding, PayKit repayment-callback tracking, and RBAC-gated role/permission administration — all behind a route-first guard stack (auth, feature-toggle, and permission guards) inside a shared dashboard shell, with per-section feature toggles that hide disabled areas from both the sidebar and direct URL access.",
+    images: ["/images/projects/senti-salary-advance-admin-portal/1.png", "/images/projects/senti-salary-advance-admin-portal/2.png", "/images/projects/senti-salary-advance-admin-portal/3.png", "/images/projects/senti-salary-advance-admin-portal/4.png", "/images/projects/senti-salary-advance-admin-portal/5.png", "/images/projects/senti-salary-advance-admin-portal/6.png", "/images/projects/senti-salary-advance-admin-portal/7.png", "/images/projects/senti-salary-advance-admin-portal/8.png"],
+    live: "https://new-dashboard.senti.co.ke",
+    repo: "#",
     featured: true,
     siteLayout: `
-API Gateway (:8000) — single entry point, JWT auth + X-User-* header injection
-  Auth                        → user_service :8001
-    ├─ POST /auth/login              public
-    └─ POST /auth/refresh            public
-  Users
-    ├─ POST /users                   public — registration
-    ├─ GET  /users                   auth required — list
-    ├─ GET  /users/me                auth required
-    └─ /users/{path}                 auth required — passthrough CRUD
-  KYC                         → user_service :8001, status cached in Redis
-    ├─ POST /kyc, /kyc/upload        auth required — submit / upload docs
-    ├─ GET  /kyc/status, /kyc/me     auth required — cache-aside, 60s TTL
-    └─ /admin/kyc*                   admin — list, get, approve, reject
-  Merchants & Admin
-    ├─ /merchants/agents{path}       merchant — agent management
-    └─ /admin/{path}                 admin — role management passthrough
-  Wallets                     → wallet_service :8002
-    ├─ /sub-wallets/{id}                              agent sub-wallet balance
-    ├─ /sub-wallets/{id}/topup                        merchant tops up an agent sub-wallet
-    ├─ /sub-wallets/{id}/cash-deposit|cash-withdraw    agent-assisted cash in/out
-    ├─ /merchant/{id}/sub-wallets                     merchant's agent wallets
-    ├─ /withdrawal-requests*                          create, approve, list by sub-wallet
-    └─ /wallets{path}                                 passthrough wallet CRUD
-  Payments                    → payment_service :8003
-    ├─ /payments{path}                                passthrough payment CRUD
-    ├─ /payment-settings/card-tap*                    admin — global & per-user card-tap mode
-    ├─ /card-payments/tap                             simulated card tap
-    ├─ /mpesa/deposit|callback|timeout|simulate-deposit
-    ├─ /coinbase/charge|webhook
-    ├─ /paystack/callback
-    └─ /settlements/summary                           admin — settlement rollups by provider/date
-  Cross-cutting
-    ├─ Redis cache-aside   kyc:{user_id}, card_tap_mode:* — 60s TTL, fails open to a live call
-    └─ RabbitMQ            settlement.requested queue → Settlement Worker (async wallet credit,
-                            retry-once + DLQ); webhook falls back to inline crediting if the broker is down
+Login (/login)
+  Dashboard (/dashboard) — sidebar shell + top bar
+    ├─ Onboarding
+    │    ├─ Customers                /compliance/customers
+    │    └─ Customer Screening       /onboarding/customer-screening
+    ├─ Compliance
+    │    ├─ CRB Dashboard            /compliance/crb-dashboard
+    │    ├─ CRB Listing              /compliance/crb-listing
+    │    ├─ CSV Management           /compliance/csv-management
+    │    ├─ Manual Submission        /compliance/manual-submission
+    │    ├─ SMS Logs                 /compliance/sms-logs
+    │    ├─ Sanctions Dashboard      /compliance/sanctions-dashboard
+    │    ├─ Sanction Screening       /compliance/sanction-screening
+    │    └─ Single Screening         /compliance/single-screening
+    ├─ Salary Advance
+    │    ├─ Companies                All · Onboarding · Loan Rates
+    │    ├─ Employees                All · :id/details · Rejected Rows · SMS Delivery Logs
+    │    ├─ Loans                    loan management
+    │    ├─ Reconciliation           repayment/disbursement matching
+    │    └─ Master Table Settings    /salary-advance/settings/master-tables/:tableName
+    ├─ Users
+    │    ├─ RBAC Config              roles, permissions, role-permission mappings
+    │    ├─ RBAC User Assignments    per-user role assignment
+    │    └─ My Profile               account details, session permissions, password
+    └─ Settings
+         └─ Feature Toggles         per-section enable/disable, gates sidebar + routes
+`,
+  },
+  {
+    slug: "senti-salary-advance-backend",
+    title: "Senti Salary Advance Backend",
+    category: "Backend",
+    tags: ["FastAPI", "Python", "MySQL", "JWT", "RBAC", "APScheduler", "Metropol", "TransUnion"],
+    summary: "A FastAPI backend that powers Senti's salary-advance platform — loan lifecycle, RBAC-gated company/employee management, reconciliation, and automated CRB (Metropol & TransUnion) blacklisting with SMS notifications.",
+    description: "The backend service behind Senti's micro-credit salary-advance product: JWT-authenticated REST APIs for company onboarding, employee and loan management, maker-checker reconciliation, and RBAC administration, all backed by MySQL. APScheduler-driven jobs generate CSVs for loans exactly 91 days overdue and submit them daily to both Metropol and TransUnion CRBs, tracked independently per bureau so SMS notifications only fire once a customer has been listed with both. An OS-level file lock guards the scheduler against duplicate cron firing across multiple Uvicorn workers, and PayKit disbursement callbacks handle Hakikisha identity verification with fail-closed authentication.",
+    images: [],
+    live: "#",
+    repo: "#",
+    featured: true,
+    siteLayout: `
+FastAPI Backend (:8000) — JWT auth, RBAC-gated routes
+  Auth                      login, profile
+  Dashboard & Submissions   stats, recent CRB submissions, SMS logs
+  CSV Management            template, generate-now, upload, download, status
+  CRB Submission            manual + scheduled Metropol/TransUnion submission
+  Screening                 sanctions/PEP profile screening + history
+  Salary Advance (/api/salary-advance)
+    ├─ Auth                  employee PIN login/reset, USSD T&C acceptance
+    ├─ Master Data            sectors, counties, sub-counties, feature toggles
+    ├─ Companies               CRUD, document upload, status actions, activity log
+    ├─ Company Fees            loan rate CRUD, fee assignments
+    ├─ Employees                CRUD, activation, offboarding, bulk upload, Hakikisha
+    ├─ Loans                    employee stats, loan dashboard, status revert
+    ├─ Reconciliation           dashboard, preview/confirm, maker-checker proof queue, undo diagnostics
+    ├─ Notifications             in-app notification list/read
+    └─ PayKit                   Hakikisha identity-verification callback (fails closed)
+  RBAC (/api/rbac)           users, roles, permissions, assignments
+  Health & Scheduler         service/DB health, scheduler status
+
+Scheduled Jobs (APScheduler, file-lock guarded per host)
+  07:00   Generate CSV — loans 91 days overdue
+  08:00   Submit to Metropol + TransUnion
+  09:00   61-day warning SMS
+  10:00   Self-activation reminder SMS
+`,
+  },
+  {
+    slug: "senti-salary-advance-ussd-app",
+    title: "Senti Salary Advance USSD App",
+    category: "Backend",
+    tags: ["FastAPI", "Python", "MySQL", "USSD", "M-Pesa STK Push", "Session Management"],
+    summary: "A standalone FastAPI USSD service (*359*99#) that lets employees request salary advances, repay loans via M-Pesa STK push, and check balances entirely over USSD.",
+    description: "A level-driven USSD state machine built on FastAPI that plugs into the Senti salary-advance backend for authentication, PIN lifecycle, disbursement, and repayment. Each dialed session resolves or creates a MySQL-backed session record, routes through per-level handlers — Terms & Conditions, PIN login/reset, main menu, loan request, repayment, balance check — and calls the backend over HTTP for the transactional steps: loan disbursement and repayment STK push. The GET /ussd route stays synchronous on purpose so FastAPI's threadpool absorbs blocking DB/HTTP calls without serializing concurrent sessions behind a single event loop, and a pooled MySQL connection pool avoids a fresh handshake per query.",
+    images: ["/images/projects/senti-salary-advance-ussd-app/1.png", "/images/projects/senti-salary-advance-ussd-app/2.png", "/images/projects/senti-salary-advance-ussd-app/3.png", "/images/projects/senti-salary-advance-ussd-app/4.png", "/images/projects/senti-salary-advance-ussd-app/5.png", "/images/projects/senti-salary-advance-ussd-app/6.png", "/images/projects/senti-salary-advance-ussd-app/7.png", "/images/projects/senti-salary-advance-ussd-app/8.png"],
+    live: "#",
+    repo: "#",
+    featured: false,
+    siteLayout: `
+USSD Gateway — *359*99# (GET /ussd)
+  level_99   Terms & Conditions gate       1 View · 2 Accept · 3 Decline
+  level_90   T&Cs viewer (paginated)       0 Accept & Continue
+  level_91   T&Cs declined                 1 Review · 2 Exit
+  level_1    PIN login / OTP entry         lockout throttling, Forgot PIN
+  level_10   New PIN capture               first login / after Forgot PIN
+  level_11   Confirm new PIN                → backend reset
+  level_2    Main Menu                     1 Request Loan · 2 Repay Loan · 3 Check Balance · 4 Exit
+    ├─ level_4   Request Loan — Screen A     eligible amount · 1 full · 2 custom · 0 back
+    │    └─ level_40  Custom amount entry
+    ├─ level_5   Confirm loan request         → disbursement submission
+    ├─ level_6   Repay Loan — Screen A       outstanding balance · 1 full · 2 partial · 0 back
+    │    └─ level_8   Partial amount entry
+    ├─ level_7   Confirm repayment             → M-Pesa STK push initiation
+    └─ level_3   Check Balance                outstanding loan, available credit, next due date
+  96          Logout — ends session immediately, from any screen
+`,
+  },
+  {
+    slug: "senti-salary-advance-whatsapp-bot",
+    title: "Senti Salary Advance WhatsApp Bot",
+    category: "Backend",
+    tags: ["FastAPI", "Python", "WhatsApp Business API", "MySQL", "Redis", "AWS Rekognition", "M-Pesa STK Push", "SQLAlchemy (async)"],
+    summary: "A FastAPI webhook service that runs the entire Senti salary-advance journey — registration, KYC, loan requests, and repayment — as a conversation inside WhatsApp.",
+    description: "The WhatsApp channel for Senti's micro-credit product: a webhook-driven FastAPI service that turns incoming WhatsApp messages into a stateful registration and lending conversation. New users accept Terms & Conditions, confirm their MSISDN and email, then photograph the front and back of their Kenyan National ID; AWS Rekognition OCR extracts the ID number, name, date of birth and sex, and the extracted ID number is cross-checked against the profile record before the upload is accepted — a mismatch flags the profile for manual review instead of silently continuing. Once verified, employment status and income band capture completes onboarding and hands off to a menu for applying for a loan, checking balance, repaying via M-Pesa STK push, or reaching support, with an SMS-delivered OTP gating loan disbursement. A Redis-backed session layer tracks conversation state and short-lived tokens per MSISDN, deduplicates webhook callbacks by message ID, and dispatches into service-layer state machines (register_service, loan_service, payment_service) that talk to MySQL via async SQLAlchemy and to the core Senti API for accounts, loans, PIN and payouts. A companion set of admin endpoints lists and filters WhatsApp registrations, serves uploaded ID images, and lets an operator approve or cancel a pending registration.",
+    images: ["/images/projects/senti-salary-advance-whatsapp-bot/1.png", "/images/projects/senti-salary-advance-whatsapp-bot/2.png", "/images/projects/senti-salary-advance-whatsapp-bot/3.png", "/images/projects/senti-salary-advance-whatsapp-bot/4.png", "/images/projects/senti-salary-advance-whatsapp-bot/5.png", "/images/projects/senti-salary-advance-whatsapp-bot/6.png", "/images/projects/senti-salary-advance-whatsapp-bot/7.png"],
+    live: "#",
+    repo: "https://github.com/Roamtech-Solutions/lending-whatsapp-bot",
+    featured: true,
+    siteLayout: `
+WhatsApp Business API — inbound webhook (HTTPS POST, JSON)
+  POST /receive-whatsapp     dedupes by message_id, routes text/image/location by session
+  POST /send-whatsapp        queues an outbound WhatsApp message (background task)
+
+Conversation flow (register_service — per-MSISDN session state in Redis + MySQL)
+  Onboarding
+    ├─ Terms & Conditions       accept / decline
+    ├─ Number confirmation      use detected MSISDN or supply a Safaricom number
+    ├─ Email capture
+    ├─ ID front upload           → IDVerificationService OCR (AWS Rekognition)
+    ├─ ID back upload            → OCR id_number cross-checked against profile
+    │                              mismatch → id_verification = pending_review (upload blocked)
+    ├─ Alternative contact number (optional)
+    └─ Employment status + monthly income band
+  Main Menu — "You're all set!"
+    ├─ Apply for Loan            package → duration → amount → purpose → summary → confirm
+    │                              OTP via SMS → M-Pesa disbursement (payment_service)
+    ├─ Check Loan Balance         amount due, due date
+    ├─ Repay Loan                 full / partial → M-Pesa STK push → PIN entry
+    └─ Talk to Support
+
+Admin / review API (profiles router)
+  POST /upload-id-front, /upload-id-back   ID capture + OCR verification
+  GET  /whatsapp-registrations             list + filter registrations, per-step status
+  GET  /whatsapp-registrations/stats       funnel counts by onboarding step
+  POST /whatsapp-registrations/approve     approve a pending registration
+  POST /whatsapp-registrations/cancel      cancel a registration
+  GET  /id-images/{filename}               serve an uploaded ID image
+  GET  /health                             service + DB health
+
+External systems
+  MySQL (profiles, whatsapp_sessions, processed_callbacks)
+  Redis            session / profile / token TTL cache
+  AWS Rekognition  ID front & back OCR
+  Senti Core API   register, loans, PIN, payouts (api/v5/*)
+  SMS Gateway      OTP + PIN delivery
 `,
   },
   {
