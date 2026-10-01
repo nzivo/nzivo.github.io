@@ -19,7 +19,7 @@ export const projects = [
     tags: ["HTML", "CSS", "JavaScript", "i18n", "Google Forms", "Vercel"],
     summary: "A four-language invitation site for the diaconate and priestly ordinations of Felix Oyende Matengo in Rome, with a live countdown and RSVP.",
     description: "A single-page invitation and information site for the ordinations of Felix Oyende Matengo in Rome, built in plain HTML, CSS, and JavaScript with no framework or build step. It walks guests through a personal letter, a timeline of the four celebrations (diaconate and priestly ordinations plus their thanksgiving Masses) with map links and door times, ways to offer prayer and support, accommodation suggestions near the venues, media links for the livestream and photo galleries, an FAQ, and an RSVP that opens a Google Form in the visitor’s language. A live countdown targets the next ordination and switches to a line of thanksgiving on the day; the whole page is translatable between English, Spanish, French, and Italian through a small i18n layer that remembers the visitor’s choice and accepts a ?lang= link; and every date, venue, and link is driven from one config object so the page can be updated without touching markup.",
-    images: [],
+    images: ["/images/projects/matengo-ordination/1.png"],
     live: "https://matengo.vercel.app",
     repo: "https://github.com/nzivo/matengo-ordination",
     featured: false,
